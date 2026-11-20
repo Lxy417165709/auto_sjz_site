@@ -61,24 +61,40 @@
               v-for="doc in group.docs"
               :id="doc.slug"
               :key="doc.slug"
-              class="mt-6 scroll-mt-24 rounded-3xl border border-slate-200 p-6 sm:p-8"
+              class="mt-6 scroll-mt-24 rounded-2xl border border-[#dfe6f3] bg-white p-6 sm:p-8"
             >
               <div class="flex flex-wrap items-center gap-3">
                 <span class="font-mono text-[11px] text-slate-400">DOC {{ String(docs.indexOf(doc) + 1).padStart(2, '0') }}</span>
                 <span class="tag">{{ doc.audience === 'developer' ? '开发' : '业务' }}</span>
                 <span v-if="doc.updated" class="text-[11px] text-slate-400">更新于 {{ doc.updated }}</span>
               </div>
-              <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">{{ doc.title }}</h2>
+              <h2 class="mt-2 text-[22px] font-semibold tracking-[-0.025em] text-[#07152e]">{{ doc.title }}</h2>
               <p class="mt-2 text-sm leading-6 text-slate-500">{{ doc.summary }}</p>
 
               <div v-for="section in doc.sections" :key="section.heading" class="mt-6">
-                <h3 class="text-sm font-semibold text-slate-900">{{ section.heading }}</h3>
+                <h3 class="text-sm font-semibold text-[#07152e]">{{ section.heading }}</h3>
                 <div class="prose-doc mt-2">
                   <p v-for="p in section.paragraphs" :key="p">{{ p }}</p>
                   <ul v-if="section.bullets?.length">
                     <li v-for="b in section.bullets" :key="b">{{ b }}</li>
                   </ul>
                 </div>
+                <ol v-if="section.steps?.length" class="doc-steps">
+                  <li v-for="(step, stepIndex) in section.steps" :key="step.title" class="doc-step">
+                    <span class="doc-step-no">{{ stepIndex + 1 }}</span>
+                    <div class="min-w-0">
+                      <p class="doc-step-title">{{ step.title }}</p>
+                      <ul class="doc-step-items">
+                        <li v-for="item in step.items" :key="item.text">
+                          {{ item.text }}
+                          <a v-if="item.href" :href="item.href" target="_blank" rel="noopener" class="doc-step-link">
+                            {{ item.linkLabel || '打开链接' }} ↗
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ol>
               </div>
             </article>
           </section>
@@ -127,3 +143,70 @@ function reload() {
   void loadSite()
 }
 </script>
+
+<style scoped>
+.doc-steps {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.doc-step {
+  display: flex;
+  gap: 12px;
+  border: 1px solid #dfe6f3;
+  border-radius: 14px;
+  background: #f8faff;
+  padding: 14px 16px;
+}
+.doc-step-no {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #eef3ff;
+  color: #2447d6;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+.doc-step-title {
+  color: #07152e;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.doc-step-items {
+  margin-top: 5px;
+  display: grid;
+  gap: 4px;
+  color: #5f6c82;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.doc-step-items li {
+  position: relative;
+  padding-left: 13px;
+}
+.doc-step-items li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #8fb0ff;
+}
+.doc-step-link {
+  margin-left: 6px;
+  color: #2447d6;
+  font-weight: 500;
+  text-underline-offset: 3px;
+}
+.doc-step-link:hover {
+  text-decoration: underline;
+}
+</style>

@@ -99,6 +99,18 @@ type Section struct {
 	Heading    string   `json:"heading"`
 	Paragraphs []string `json:"paragraphs"`
 	Bullets    []string `json:"bullets"`
+	Steps      []Step   `json:"steps,omitempty"`
+}
+
+type Step struct {
+	Title string     `json:"title"`
+	Items []StepItem `json:"items"`
+}
+
+type StepItem struct {
+	Text      string `json:"text"`
+	Href      string `json:"href,omitempty"`
+	LinkLabel string `json:"linkLabel,omitempty"`
 }
 
 // Load 从目录读取四个 JSON 文件；任一文件缺失或格式错误都会直接失败，避免线上出现空白站。

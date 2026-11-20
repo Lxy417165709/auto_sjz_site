@@ -18,6 +18,43 @@
         ]
       },
       {
+        "heading": "设备准备",
+        "paragraphs": [
+          "每台设备在接入云控前，先完成下面三项准备。"
+        ],
+        "steps": [
+          {
+            "title": "配置 Airscript",
+            "items": [
+              {
+                "text": "下载 Airscript 工具",
+                "href": "https://www.ascript.cn/docs/android/download/",
+                "linkLabel": "打开下载页"
+              },
+              {
+                "text": "安装后开启无障碍权限。"
+              }
+            ]
+          },
+          {
+            "title": "登录账号",
+            "items": [
+              {
+                "text": "登录 QQ 账号、微信账号。"
+              }
+            ]
+          },
+          {
+            "title": "摆放到桌面",
+            "items": [
+              {
+                "text": "将三角洲应用放到桌面第一页。"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "heading": "第一步：设备接入云控",
         "paragraphs": [
           "设备装好客户端后只填 discovery 地址，启动即自动注册；不需要逐台记录 Manager 的 IP。"

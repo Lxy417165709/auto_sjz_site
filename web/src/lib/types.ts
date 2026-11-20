@@ -59,10 +59,22 @@ export interface FAQItem {
   answer: string
 }
 
+export interface DocStepItem {
+  text: string
+  href?: string
+  linkLabel?: string
+}
+
+export interface DocStep {
+  title: string
+  items: DocStepItem[]
+}
+
 export interface DocSection {
   heading: string
   paragraphs: string[]
   bullets: string[]
+  steps?: DocStep[]
 }
 
 export interface Doc {
