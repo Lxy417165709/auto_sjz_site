@@ -233,3 +233,11 @@ cd /tmp/manager_ref/frontend && git pull && npm ci && npm run build:demo && rm -
 ```
 
 > 生产环境若把 demo 单独部署，可在构建官网时设置 `VITE_CONSOLE_DEMO_URL` 指向外部子应用地址，官网不用再带静态产物。
+
+Docker 构建多了一个 `console_demo` 阶段：从 `auto_sjz_manager` 的 `main_dev` 现场执行 `build:demo`，并覆盖进 `/app/web/console-demo`。所以 Manager 前端更新后，重新部署官网即可自动带上新界面，不需要再改官网代码。
+
+```bash
+docker compose build --build-arg MANAGER_REF=main_dev && docker compose up -d
+```
+
+需要锁定版本时把 `MANAGER_REF` 换成具体 commit 或 tag。
