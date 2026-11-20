@@ -2,374 +2,671 @@
   <div>
     <PageHero
       eyebrow="管理台演示"
-      title="配置与状态，都在中台里"
-      desc="下面是可以点的示意界面：左边切设备，右边看账号与配置；状态页可以筛选设备、查看账号运行情况和异常通知。数据为演示数据，实际操作以 Manager 为准。"
+      title="业务配置和业务状态，就长这样"
+      desc="配置页按「设备 → 账号 → 模块」组织，状态页按设备聚合账号数据。下面按 Manager 的两屏做成可点演示，账号与数值均为示意数据。"
     >
       <div class="flex flex-wrap gap-2">
-        <span class="tag">业务配置</span>
-        <span class="tag">业务状态</span>
+        <span class="tag">设备 → 账号 → 模块</span>
+        <span class="tag">按设备聚合</span>
+        <span class="tag">3 元 / 号 / 月</span>
         <span class="tag">可交互</span>
         <span class="tag">示意数据</span>
       </div>
     </PageHero>
 
     <div class="wrap py-10 sm:py-12">
-      <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-card">
-        <div class="flex flex-wrap items-center justify-between gap-3 bg-ink-900 px-4 py-3 text-white sm:px-6">
-          <div class="flex flex-none items-center gap-3">
-            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
+      <div class="demo-shell">
+        <div class="demo-topbar">
+          <div class="flex min-w-0 items-center gap-3">
+            <span class="brand-mark">
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M3 12h4l2-5 4 10 2-5h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </span>
-            <div>
-              <p class="text-sm font-semibold">auto_sjz Manager</p>
-              <p class="text-[10px] text-slate-400">演示环境 · 示意数据</p>
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-white">auto_sjz Manager</p>
+              <p class="truncate text-[10px] text-slate-400">演示环境 · 不写入真实管理台</p>
             </div>
           </div>
 
-          <div class="order-3 flex w-full justify-center rounded-full border border-white/15 bg-white/5 p-1 sm:order-none sm:w-auto">
+          <div class="demo-tabs">
             <button
               v-for="item in tabs"
               :key="item.key"
               type="button"
-              class="rounded-full px-3.5 py-1.5 text-[12px] transition"
-              :class="tab === item.key ? 'bg-white text-slate-900' : 'text-slate-300 hover:text-white'"
-              @click="tab = item.key"
+              class="demo-tab"
+              :class="{ active: activeTab === item.key }"
+              @click="activeTab = item.key"
             >
               {{ item.label }}
             </button>
           </div>
 
-          <div class="flex items-center gap-2 text-[11px] text-slate-400">
-            <span class="hidden sm:inline">刷新于 {{ lastRefreshLabel }}</span>
-            <button type="button" class="rounded-full border border-white/15 px-3 py-1 text-slate-300 transition hover:text-white" @click="refresh">
-              刷新
-            </button>
+          <div class="topbar-right">
+            <label class="mask-toggle">
+              <span>脱敏</span>
+              <button type="button" role="switch" :aria-checked="masked" class="switch" :class="{ on: masked }" @click="masked = !masked">
+                <i></i>
+              </button>
+            </label>
+            <span class="hidden text-[11px] text-slate-400 sm:inline">刷新于 {{ refreshLabel }}</span>
+            <button type="button" class="topbar-refresh" @click="refresh">刷新</button>
           </div>
         </div>
 
-        <div v-if="tab === 'config'" class="grid lg:grid-cols-[250px_1fr]">
-          <aside class="border-b border-slate-200 bg-white p-4 lg:border-b-0 lg:border-r">
-            <div class="flex items-center justify-between">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">设备与分组</p>
-              <span class="text-[11px] text-slate-400">{{ devices.length }} 台</span>
+        <!-- 业务配置 -->
+        <div v-if="activeTab === 'config'" class="accounts-page">
+          <aside class="acc-side">
+            <div class="side-head">
+              <span>设备与账号</span>
+              <div class="side-ops">
+                <button type="button" @click="expandAll">展开</button>
+                <button type="button" @click="collapseAll">收起</button>
+              </div>
             </div>
-            <input v-model.trim="deviceQuery" class="field mt-3 !py-2 text-[13px]" placeholder="搜索设备或分组" />
 
-            <div class="mt-3 space-y-1.5">
-              <div v-for="group in filteredGroups" :key="group.name">
+            <div v-for="device in devices" :key="device.id" class="device-group">
+              <div class="device-row" :class="{ 'is-off': !device.enabled }" @click="toggleDevice(device)">
+                <span class="dev-arrow" :class="{ open: isExpanded(device.id) }">▸</span>
+                <span class="dev-dot" :class="deviceDot(device)"></span>
+                <span class="dev-name" :title="device.name">{{ device.name }}</span>
+                <span v-if="device.approval === 'pending'" class="el-tag tag-warning flex-none">待审核</span>
                 <button
                   type="button"
-                  class="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-[12px] font-medium text-slate-600 hover:bg-slate-50"
-                  @click="toggleGroup(group.name)"
+                  class="dev-add"
+                  :disabled="device.approval === 'pending'"
+                  :title="device.approval === 'pending' ? '设备审核通过后才能添加账号' : '添加账号'"
+                  @click.stop="openAddAccount(device)"
                 >
-                  <span class="flex items-center gap-1.5">
-                    <span class="text-slate-400">{{ collapsed.includes(group.name) ? '▸' : '▾' }}</span>
-                    {{ group.name }}
-                  </span>
-                  <span class="text-[11px] text-slate-400">{{ group.devices.length }}</span>
+                  +账号
                 </button>
-
-                <div v-if="!collapsed.includes(group.name)" class="mt-1 space-y-1">
-                  <button
-                    v-for="device in group.devices"
-                    :key="device.id"
-                    type="button"
-                    class="flex w-full items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-left transition"
-                    :class="selectedDeviceId === device.id ? 'bg-brand-50 text-brand-800' : 'text-slate-600 hover:bg-slate-50'"
-                    @click="selectedDeviceId = device.id"
-                  >
-                    <span class="flex min-w-0 items-center gap-2">
-                      <span class="h-1.5 w-1.5 flex-none rounded-full" :class="deviceDot(device.status)"></span>
-                      <span class="truncate text-[13px]">{{ device.name }}</span>
-                    </span>
-                    <span class="flex-none text-[11px] text-slate-400">{{ device.accounts.length }} 号</span>
-                  </button>
-                </div>
+                <span class="dev-count">{{ device.accounts.length }}</span>
+                <button type="button" class="dev-act" :class="{ enable: !device.enabled }" @click.stop="toggleDeviceEnabled(device)">
+                  {{ device.enabled ? '禁用' : '开启' }}
+                </button>
               </div>
-              <p v-if="!filteredGroups.length" class="px-2 py-6 text-center text-[12px] text-slate-400">没有匹配的设备</p>
+
+              <div v-if="isExpanded(device.id)" class="acc-list">
+                <button
+                  v-for="account in device.accounts"
+                  :key="account.id"
+                  type="button"
+                  class="acc-item"
+                  :class="{ active: selectedAccountId === account.id, off: !account.enabled }"
+                  @click="selectAccount(device, account)"
+                >
+                  <span class="acc-dot" :class="accountDot(account)"></span>
+                  <span class="acc-label">{{ account.type }}：{{ displayAccount(account) }}</span>
+                  <span v-if="!account.enabled" class="off-tag">已禁</span>
+                  <span v-if="account.license === '已到期'" class="off-tag warn">待授权</span>
+                </button>
+                <p v-if="!device.accounts.length" class="empty-dev">
+                  {{ device.approval === 'pending' ? '等待设备接入并审核' : '暂无账号，点 +账号 添加' }}
+                </p>
+              </div>
             </div>
           </aside>
 
-          <section class="min-w-0 bg-white p-4 sm:p-6">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <h2 class="text-lg font-semibold text-slate-900">{{ selectedDevice.name }}</h2>
-                  <span class="rounded-full px-2 py-0.5 text-[11px]" :class="devicePill(selectedDevice.status)">{{ deviceLabel(selectedDevice.status) }}</span>
-                  <span class="tag">{{ selectedDevice.group }}</span>
+          <main class="acc-main">
+            <template v-if="selectedAccount">
+              <div class="det-head">
+                <div class="det-title">
+                  <span class="det-label">{{ accountView.type }}：{{ displayAccount(accountView) }}</span>
+                  <span class="dev-key" :title="currentDevice.key">{{ currentDevice.key }}</span>
+                  <span class="el-tag" :class="accountView.enabled ? 'tag-success' : 'tag-info'">{{ accountView.enabled ? '已启用' : '已停用' }}</span>
                 </div>
-                <p class="mt-1 text-[12px] text-slate-500">最近心跳 {{ selectedDevice.heartbeat }} · 今日执行 {{ selectedDevice.executions }} 次</p>
-              </div>
-              <button type="button" class="btn-primary !px-4 !py-2 text-[13px]" @click="addAccount">+ 添加账号</button>
-            </div>
-
-            <div class="mt-5 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-              <div class="rounded-2xl border border-slate-200">
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">
-                  <div>
-                    <p class="text-sm font-semibold text-slate-900">账号实例</p>
-                    <p class="mt-0.5 text-[11px] text-slate-500">
-                      {{ selectedDevice.accounts.length }} 个号 · {{ authorizedOf(selectedDevice) }} 份授权 · {{ authorizedOf(selectedDevice) * 3 }} 元/月
-                    </p>
-                  </div>
-                  <span class="text-[11px] text-slate-400">一个号一份授权</span>
-                </div>
-
-                <div class="divide-y divide-slate-100">
-                  <div v-for="account in selectedDevice.accounts" :key="account.id" class="flex flex-wrap items-center gap-3 px-4 py-3">
-                    <span class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-slate-100 text-[11px] font-medium text-slate-600">
-                      {{ account.platform.slice(0, 1) }}
-                    </span>
-                    <div class="min-w-[96px] flex-1">
-                      <p class="truncate text-[13px] font-medium text-slate-900">{{ account.name }}</p>
-                      <p class="text-[11px] text-slate-400">{{ account.platform }}</p>
-                    </div>
-
-                    <div class="flex flex-none flex-wrap items-center gap-2">
-                      <select v-model="account.module" class="field !w-[92px] !px-2 !py-1 text-[11px]" aria-label="账号模块">
-                        <option v-for="module in moduleOptions" :key="module" :value="module">{{ module }}</option>
-                      </select>
-
-                      <span class="rounded-full px-2 py-0.5 text-[10px]" :class="accountPill(account.status)">{{ accountStatusLabel(account.status) }}</span>
-
-                      <button
-                        type="button"
-                        role="switch"
-                        :aria-checked="account.status === 'running'"
-                        :disabled="account.status === 'pending'"
-                        class="relative h-5 w-9 flex-none rounded-full transition disabled:cursor-not-allowed disabled:opacity-40"
-                        :class="account.status === 'running' ? 'bg-accent-500' : 'bg-slate-200'"
-                        @click="toggleAccount(account)"
-                      >
-                        <span class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition" :class="account.status === 'running' ? 'left-[18px]' : 'left-0.5'"></span>
-                      </button>
-
-                      <button type="button" class="text-[11px] text-slate-400 transition hover:text-red-600" @click="removeAccount(account)">删除</button>
-                    </div>
-                  </div>
-                </div>
-
-                <p v-if="selectedDevice.accounts.some((a) => a.status === 'pending')" class="border-t border-slate-100 px-4 py-2.5 text-[11px] text-amber-700">
-                  有账号待授权：授权由 Auth 签发后才开始执行，演示环境不实际扣费。
-                </p>
-              </div>
-
-              <div class="rounded-2xl border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                  <p class="text-sm font-semibold text-slate-900">设备配置</p>
-                  <span class="text-[11px] text-slate-400">只存 Manager</span>
-                </div>
-
-                <label class="mt-4 block">
-                  <span class="text-[11px] font-medium text-slate-600">默认模块</span>
-                  <select v-model="config.module" class="field mt-1.5 !py-2 text-[13px]">
-                    <option v-for="module in moduleOptions" :key="module" :value="module">{{ module }}</option>
-                  </select>
-                </label>
-
-                <div class="mt-3 grid grid-cols-2 gap-3">
-                  <label class="block">
-                    <span class="text-[11px] font-medium text-slate-600">执行开始</span>
-                    <input v-model="config.start" type="time" class="field mt-1.5 !px-2.5 !py-2 text-[13px]" />
-                  </label>
-                  <label class="block">
-                    <span class="text-[11px] font-medium text-slate-600">执行结束</span>
-                    <input v-model="config.end" type="time" class="field mt-1.5 !px-2.5 !py-2 text-[13px]" />
-                  </label>
-                </div>
-
-                <div class="mt-3 flex items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5">
-                  <div>
-                    <p class="text-[12px] font-medium text-slate-800">失败重试</p>
-                    <p class="text-[10px] text-slate-400">执行失败后自动重试次数</p>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <button type="button" class="h-7 w-7 rounded-full border border-slate-200 text-slate-500 disabled:opacity-40" :disabled="config.retry <= 0" @click="config.retry--">−</button>
-                    <span class="w-5 text-center font-mono text-sm text-slate-900">{{ config.retry }}</span>
-                    <button type="button" class="h-7 w-7 rounded-full border border-slate-200 text-slate-500 disabled:opacity-40" :disabled="config.retry >= 5" @click="config.retry++">+</button>
-                  </div>
-                </div>
-
-                <div class="mt-3 space-y-2">
-                  <button type="button" class="flex w-full items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5" @click="config.auto = !config.auto">
-                    <span class="text-[12px] font-medium text-slate-800">自动执行</span>
-                    <span class="relative h-5 w-9 rounded-full transition" :class="config.auto ? 'bg-brand-600' : 'bg-slate-200'">
-                      <span class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition" :class="config.auto ? 'left-[18px]' : 'left-0.5'"></span>
-                    </span>
+                <div class="det-ops">
+                  <span class="lbl">启用</span>
+                  <button type="button" role="switch" :aria-checked="accountView.enabled" class="switch" :class="{ on: accountView.enabled }" @click="toggleAccount(accountView)">
+                    <i></i>
                   </button>
-                  <button type="button" class="flex w-full items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5" @click="config.notify = !config.notify">
-                    <span class="text-[12px] font-medium text-slate-800">异常通知</span>
-                    <span class="relative h-5 w-9 rounded-full transition" :class="config.notify ? 'bg-brand-600' : 'bg-slate-200'">
-                      <span class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition" :class="config.notify ? 'left-[18px]' : 'left-0.5'"></span>
-                    </span>
-                  </button>
+                  <button type="button" class="el-btn" @click="openAddModule">+ 添加模块</button>
+                  <button type="button" class="el-btn" @click="syncAccount">⇄ 同步配置</button>
+                  <button type="button" class="el-btn" @click="batchSync">⇉ 批量同步</button>
+                  <button type="button" class="el-btn danger-text" @click="askDeleteAccount">删除账号</button>
                 </div>
+              </div>
 
-                <div v-if="dirty" class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5">
-                  <p class="text-[11px] text-amber-800">有未保存修改，设备下次拉取快照后生效。</p>
-                  <div class="mt-2 flex gap-2">
-                    <button type="button" class="rounded-full bg-amber-600 px-3 py-1 text-[11px] font-medium text-white" @click="saveConfig">保存并下发</button>
-                    <button type="button" class="rounded-full border border-amber-300 px-3 py-1 text-[11px] text-amber-800" @click="resetConfig">放弃</button>
+              <div v-if="accountView.license === '已到期'" class="license-alert">
+                <div>
+                  <p class="font-medium text-amber-800">授权已到期，执行已停止</p>
+                  <p class="mt-0.5 text-[12px] leading-5 text-amber-700">账号、设备和模块配置都保留，续费后继续执行，不用重新登录。</p>
+                </div>
+                <button type="button" class="el-btn" @click="openRenew(accountView)">去续费</button>
+              </div>
+
+              <section class="mod-section">
+                <div class="mod-section-head">
+                  <div>
+                    <h4>账号模块</h4>
+                    <p>模块决定这个号「做什么」；仓库为设备级模块，同设备账号共用。</p>
+                  </div>
+                  <div class="flex flex-col items-end gap-1">
+                    <span class="mod-count">{{ accountView.modules.length }} 个模块</span>
+                    <span class="text-[10px] text-slate-400 md:hidden">表格可左右滑动</span>
                   </div>
                 </div>
-                <p v-else class="mt-4 text-[11px] text-slate-400">上次下发 2026-11-20 09:12</p>
-              </div>
+
+                <div v-if="accountView.modules.length" class="mod-grid">
+                  <section v-for="m in accountView.modules" :key="m.key" class="module-card" :class="{ 'is-off': !m.enabled }">
+                    <header class="mc-head">
+                      <div class="mc-title">
+                        <span class="mc-name">{{ moduleLabel(m.key) }}</span>
+                        <span v-if="m.scope === 'device'" class="el-tag tag-warning">设备级</span>
+                        <span v-if="m.trigger === 'exclusive'" class="el-tag tag-info">独占</span>
+                      </div>
+                      <div class="mc-ops">
+                        <span class="mc-label">优先级</span>
+                        <input v-model.number="m.priority" class="prio-input" type="number" min="0" max="999" @change="normalizePriority(m)" />
+                        <select v-model="m.trigger" class="mini-select" aria-label="触发方式">
+                          <option value="follow">跟随</option>
+                          <option value="auto">自动</option>
+                          <option value="exclusive">独占</option>
+                        </select>
+                        <button type="button" role="switch" :aria-checked="m.enabled" class="switch" :class="{ on: m.enabled }" @click="m.enabled = !m.enabled">
+                          <i></i>
+                        </button>
+                        <button type="button" class="el-btn-text danger" @click="removeModule(m)">删除模块</button>
+                      </div>
+                    </header>
+
+                    <div class="mc-body">
+                      <template v-if="m.key === 'profile'">
+                        <div class="pf-top">
+                          <div class="pf-cell">
+                            <span class="pf-label">角色名</span>
+                            <b class="pf-value">{{ masked ? displayChar(accountView.charName) : accountView.charName }}</b>
+                          </div>
+                          <div class="pf-cell center">
+                            <span class="pf-label">段位</span>
+                            <b class="pf-value brand">{{ accountView.rank }}</b>
+                          </div>
+                          <div class="pf-cell right">
+                            <span class="pf-label">等级</span>
+                            <b class="pf-value">Lv.{{ accountView.level }}</b>
+                          </div>
+                        </div>
+                        <div class="pf-nums">
+                          <div class="pf-cell">
+                            <span class="pf-label">哈弗币</span>
+                            <b class="pf-num success">{{ fmtNum(accountView.havoc) }} M</b>
+                          </div>
+                          <div class="pf-cell">
+                            <span class="pf-label">总资产</span>
+                            <b class="pf-num warning">{{ fmtNum(accountView.assets) }} M</b>
+                          </div>
+                          <div class="pf-cell">
+                            <span class="pf-label">仓库占比</span>
+                            <b class="pf-num">{{ accountView.ratio }}%</b>
+                          </div>
+                        </div>
+                      </template>
+
+                      <template v-else-if="m.key === 'afk'">
+                        <div class="afk-stats">
+                          <div class="afk-stat"><span>累计局数</span><b>{{ m.afk.totalGames }}</b></div>
+                          <div class="afk-stat"><span>上次结果</span><b class="success">{{ m.afk.lastResult }}</b></div>
+                          <div class="afk-stat"><span>上次结束</span><b class="muted">11-20 13:46</b></div>
+                        </div>
+                        <div class="pass-box">
+                          <div class="flex items-center justify-between gap-3">
+                            <span class="text-[12px] font-medium text-slate-700">🎫 本周通行证经验</span>
+                            <span class="text-[11px] text-slate-400">11-17 起</span>
+                          </div>
+                          <div class="mt-2 flex items-center justify-between text-[12px]">
+                            <b class="text-slate-800">{{ m.afk.passport.exp.toLocaleString() }} / {{ m.afk.passport.max.toLocaleString() }}</b>
+                            <span class="font-medium text-emerald-600">{{ Math.round((m.afk.passport.exp / m.afk.passport.max) * 100) }}%</span>
+                          </div>
+                          <div class="mini-progress mt-1.5">
+                            <span :style="{ width: Math.round((m.afk.passport.exp / m.afk.passport.max) * 100) + '%' }"></span>
+                          </div>
+                        </div>
+                        <div class="afk-row">
+                          <span class="mc-label">冷却时长（秒，10~3600）</span>
+                          <input v-model.number="m.afk.cooldown" class="prio-input !w-[76px]" type="number" min="10" max="3600" />
+                        </div>
+                        <div class="afk-times">
+                          <div class="flex items-center justify-between">
+                            <span class="mc-label">执行时段</span>
+                            <button type="button" class="el-btn-text" @click="addAfkWindow(m)">+ 添加时段</button>
+                          </div>
+                          <div v-for="(w, wi) in m.afk.windows" :key="wi" class="afk-win">
+                            <input v-model="w.start" type="text" maxlength="5" inputmode="numeric" placeholder="22:00" class="time-input" />
+                            <span class="text-slate-400">~</span>
+                            <input v-model="w.end" type="text" maxlength="5" inputmode="numeric" placeholder="08:00" class="time-input" />
+                            <span class="afk-win-text">{{ windowText(w) }}</span>
+                            <button type="button" class="el-btn-text danger" @click="removeAfkWindow(m, wi)">删除</button>
+                          </div>
+                        </div>
+                      </template>
+
+                      <template v-else-if="m.key === 'produce'">
+                        <div class="mc-table-scroll"><table class="mc-table">
+                          <thead>
+                            <tr><th style="width: 112px">特勤部门</th><th>产物</th><th style="width: 126px">当前制造</th><th style="width: 88px">倒计时</th><th style="width: 58px">启用</th><th style="width: 54px"></th></tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(item, ii) in m.produce.items" :key="ii">
+                              <td>{{ item.dept }}</td>
+                              <td>
+                                <select v-model="item.prop" class="mini-select !w-full !max-w-[150px]">
+                                  <option v-for="opt in produceOptions(item.dept)" :key="opt" :value="opt">{{ opt }}</option>
+                                </select>
+                              </td>
+                              <td><span class="mc-chip" :class="item.status === '制造中' ? 'busy' : 'done'">{{ item.name }}</span></td>
+                              <td class="muted">{{ item.left }}</td>
+                              <td><button type="button" role="switch" :aria-checked="item.enabled" class="switch !h-[15px] !w-[30px]" :class="{ on: item.enabled }" @click="item.enabled = !item.enabled"><i></i></button></td>
+                              <td><button type="button" class="el-btn-text danger" @click="removeProduceItem(m, ii)">移除</button></td>
+                            </tr>
+                          </tbody>
+                        </table></div>
+                        <div class="add-row"><button type="button" class="el-btn-text" @click="addProduceItem(m)">+ 添加生产物品</button></div>
+                      </template>
+
+                      <template v-else-if="m.key === 'sell'">
+                        <div class="mc-table-scroll"><table class="mc-table">
+                          <thead><tr><th>物品</th><th style="width: 112px">出售方式</th><th style="width: 100px">最低价</th><th style="width: 58px">启用</th><th style="width: 54px"></th></tr></thead>
+                          <tbody>
+                            <tr v-for="(item, ii) in m.sell.items" :key="ii">
+                              <td>{{ item.prop }}</td>
+                              <td>
+                                <select v-model="item.mode" class="mini-select !w-full">
+                                  <option value="market">集市最低价</option>
+                                  <option value="single">单件出售</option>
+                                  <option value="all">全部出售</option>
+                                </select>
+                              </td>
+                              <td><input v-model.number="item.price" class="prio-input !w-[74px]" type="number" min="0" /></td>
+                              <td><button type="button" role="switch" :aria-checked="item.enabled" class="switch !h-[15px] !w-[30px]" :class="{ on: item.enabled }" @click="item.enabled = !item.enabled"><i></i></button></td>
+                              <td><button type="button" class="el-btn-text danger" @click="removeSellItem(m, ii)">移除</button></td>
+                            </tr>
+                          </tbody>
+                        </table></div>
+                        <div class="add-row"><button type="button" class="el-btn-text" @click="addSellItem(m)">+ 添加出售物品</button></div>
+                      </template>
+
+                      <template v-else-if="m.key === 'buy'">
+                        <div class="mc-table-scroll"><table class="mc-table">
+                          <thead><tr><th>物品</th><th style="width: 58px">当前</th><th style="width: 64px">目标</th><th style="width: 76px">最高价</th><th style="width: 98px">定时</th><th style="width: 58px">启用</th></tr></thead>
+                          <tbody>
+                            <tr v-for="(item, ii) in m.buy.items" :key="ii">
+                              <td>{{ item.prop }}</td>
+                              <td class="muted">{{ item.current }}</td>
+                              <td><input v-model.number="item.target" class="prio-input !w-[56px]" type="number" min="0" /></td>
+                              <td><input v-model.number="item.maxPrice" class="prio-input !w-[68px]" type="number" min="0" /></td>
+                              <td>
+                                <select v-model="item.schedule" class="mini-select !w-full">
+                                  <option value="每2小时">每 2 小时</option>
+                                  <option value="每6小时">每 6 小时</option>
+                                  <option value="每天">每天</option>
+                                </select>
+                              </td>
+                              <td><button type="button" role="switch" :aria-checked="item.enabled" class="switch !h-[15px] !w-[30px]" :class="{ on: item.enabled }" @click="item.enabled = !item.enabled"><i></i></button></td>
+                            </tr>
+                          </tbody>
+                        </table></div>
+                        <div class="add-row"><button type="button" class="el-btn-text" @click="addBuyItem(m)">+ 添加购买物品</button></div>
+                      </template>
+
+                      <template v-else-if="m.key === 'stock'">
+                        <div class="mc-table-scroll"><table class="mc-table">
+                          <thead><tr><th>物品</th><th style="width: 64px">数量</th><th style="width: 100px">定时</th><th style="width: 78px">倒计时</th><th style="width: 58px">启用</th></tr></thead>
+                          <tbody>
+                            <tr v-for="(item, ii) in m.stock.items" :key="ii">
+                              <td>{{ item.prop }}</td>
+                              <td>{{ item.count }}</td>
+                              <td class="muted">{{ item.schedule }}</td>
+                              <td class="muted">{{ item.left }}</td>
+                              <td><button type="button" role="switch" :aria-checked="item.enabled" class="switch !h-[15px] !w-[30px]" :class="{ on: item.enabled }" @click="item.enabled = !item.enabled"><i></i></button></td>
+                            </tr>
+                          </tbody>
+                        </table></div>
+                      </template>
+
+                      <template v-else-if="m.key === 'exchange'">
+                        <div class="mc-table-scroll"><table class="mc-table">
+                          <thead><tr><th>物品</th><th style="width: 112px">渠道</th><th style="width: 82px">倒计时</th><th style="width: 58px">启用</th></tr></thead>
+                          <tbody>
+                            <tr v-for="(item, ii) in m.exchange.items" :key="ii">
+                              <td>{{ item.prop }}</td>
+                              <td>
+                                <select v-model="item.channel" class="mini-select !w-full"><option value="market">集市</option><option value="ammo">子弹</option></select>
+                              </td>
+                              <td class="muted">{{ item.left }}</td>
+                              <td><button type="button" role="switch" :aria-checked="item.enabled" class="switch !h-[15px] !w-[30px]" :class="{ on: item.enabled }" @click="item.enabled = !item.enabled"><i></i></button></td>
+                            </tr>
+                          </tbody>
+                        </table></div>
+                      </template>
+
+                      <template v-else-if="m.key === 'warehouse'">
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-[12px]">
+                          <span>已用 <b class="text-slate-800">{{ m.warehouse.used }}</b> / {{ m.warehouse.total }}</span>
+                          <span>占比 <b :style="{ color: ratioColor(m.warehouse.pct) }">{{ m.warehouse.pct }}%</b></span>
+                        </div>
+                        <div class="warehouse-bar mt-2"><span :style="{ width: m.warehouse.pct + '%', background: ratioColor(m.warehouse.pct) }"></span></div>
+                        <p class="mc-foot">数据更新于 11-20 14:30</p>
+                      </template>
+                    </div>
+                  </section>
+                </div>
+
+                <div v-else class="mod-empty">
+                  <span class="mod-empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                  <p class="mod-empty-title">还没有账号模块</p>
+                  <p class="mod-empty-desc">添加常用模块，或从其他账号同步已有配置。模块只改执行内容，不影响计费。</p>
+                  <div class="flex flex-wrap justify-center gap-2">
+                    <button type="button" class="el-btn el-btn-primary" @click="openAddModule">+ 添加模块</button>
+                    <button type="button" class="el-btn" @click="syncFromOther">从其他账号同步</button>
+                  </div>
+                </div>
+              </section>
+            </template>
+
+            <div v-else class="acc-empty">
+              <p class="text-sm font-medium text-slate-800">该设备还没有账号</p>
+              <p class="mt-1 text-[12px] leading-5 text-slate-500">账号是执行和计费单位，一个号一份授权，3 元/月；设备台数不计费。</p>
+              <button type="button" class="el-btn el-btn-primary mt-4" @click="openAddAccount(selectedDevice)">+ 添加账号</button>
             </div>
-          </section>
+          </main>
         </div>
 
-        <div v-else class="bg-white p-4 sm:p-6">
-          <div class="grid grid-cols-2 gap-3 xl:grid-cols-4">
-            <div v-for="kpi in kpis" :key="kpi.label" class="rounded-2xl border border-slate-200 px-4 py-3">
-              <p class="text-[11px] text-slate-500">{{ kpi.label }}</p>
-              <p class="mt-1 font-mono text-xl font-semibold" :class="kpi.tone">{{ kpi.value }}</p>
-              <p class="mt-0.5 text-[10px] text-slate-400">{{ kpi.hint }}</p>
+        <!-- 业务状态 -->
+        <div v-else class="status-page">
+          <div class="status-banner">
+            <div>
+              <h2>业务状态</h2>
+              <p>飞书多维表格数据 · 按设备聚合</p>
+            </div>
+            <div class="banner-actions">
+              <span class="hidden text-[11px] text-slate-400 md:inline">刷新于 {{ refreshLabel }}</span>
+              <label class="inline-flex items-center gap-2 text-[12px] text-slate-600">
+                <span>按设备分组</span>
+                <button type="button" role="switch" :aria-checked="grouped" class="switch" :class="{ on: grouped }" @click="grouped = !grouped"><i></i></button>
+              </label>
+              <button type="button" class="el-btn" @click="showTokens = true">授权令牌 <b class="text-[#409eff]">{{ availableTokens }}</b></button>
+              <button type="button" class="el-btn el-btn-primary" @click="refresh">刷新</button>
             </div>
           </div>
+          <p class="mb-2 text-[11px] text-slate-400 md:hidden">表格可左右滑动，查看完整字段 →</p>
 
-          <div v-if="!incidentDismissed" class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
-            <div class="flex items-start gap-2">
-              <span class="mt-0.5 h-2 w-2 flex-none rounded-full bg-red-500"></span>
-              <div>
-                <p class="text-[12px] font-medium text-red-800">设备 07 连续 3 次执行失败，已暂停自动执行</p>
-                <p class="text-[11px] text-red-600">建议检查账号登录状态与模块参数。</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button type="button" class="rounded-full bg-red-600 px-3 py-1 text-[11px] text-white" @click="focusIncident">查看设备</button>
-              <button type="button" class="rounded-full border border-red-300 px-3 py-1 text-[11px] text-red-700" @click="incidentDismissed = true">忽略</button>
-            </div>
-          </div>
-
-          <div class="mt-5 grid gap-5 xl:grid-cols-[1fr_300px]">
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <div class="flex flex-wrap gap-1.5">
-                  <button
-                    v-for="filter in filters"
-                    :key="filter.key"
-                    type="button"
-                    class="rounded-full px-3 py-1.5 text-[12px] transition"
-                    :class="statusFilter === filter.key ? 'bg-brand-600 text-white' : 'border border-slate-200 text-slate-600 hover:border-brand-200'"
-                    @click="statusFilter = filter.key"
-                  >
-                    {{ filter.label }}
-                  </button>
+          <template v-if="grouped">
+            <section v-for="device in groupedDevices" :key="device.id" class="biz-group">
+              <div class="group-head" @click="toggleGroup(device.id)">
+                <span class="group-chevron" :class="{ open: !isGroupCollapsed(device.id) }">▸</span>
+                <span class="device-title">{{ device.key }}</span>
+                <span class="text-[12px] text-slate-500">{{ device.accounts.length }} 个账号</span>
+                <span class="el-tag" :class="heartbeatClass(device)">{{ heartbeatText(device) }}</span>
+                <div class="device-chips">
+                  <span>{{ device.meta.os }} · {{ device.meta.model }}</span>
+                  <span>{{ device.meta.version }}</span>
+                  <span>电量 {{ device.meta.battery }}%{{ device.meta.charging ? ' ⚡' : '' }}</span>
+                  <span>温度 {{ device.meta.temp }}℃</span>
+                  <span>内存 {{ device.meta.memory }}%</span>
+                  <span>磁盘 {{ device.meta.disk }}%</span>
                 </div>
-                <input v-model.trim="statusQuery" class="field !w-44 !py-1.5 text-[12px]" placeholder="搜索设备 / 分组" />
+                <button type="button" class="el-btn ml-auto flex-none" @click.stop="cloudControl(device)">云控</button>
               </div>
 
-              <div class="mt-3 hidden overflow-x-auto rounded-2xl border border-slate-200 sm:block">
-                <table class="w-full min-w-[640px] text-left text-[12px]">
-                  <thead class="bg-slate-50 text-[11px] text-slate-500">
+              <div v-if="!isGroupCollapsed(device.id)" class="table-scroll">
+                <table class="biz-table grouped-table">
+                  <colgroup>
+                    <col style="width: 24px" /><col style="width: 58px" /><col style="width: 108px" /><col style="width: 44px" /><col style="width: 70px" /><col style="width: 80px" /><col style="width: 52px" /><col style="width: 64px" /><col style="width: 86px" /><col style="width: 86px" /><col style="width: 84px" /><col style="width: 102px" /><col style="width: 176px" />
+                  </colgroup>
+                  <thead>
                     <tr>
-                      <th class="px-4 py-2.5 font-medium">设备</th>
-                      <th class="px-4 py-2.5 font-medium">分组</th>
-                      <th class="px-4 py-2.5 font-medium">状态</th>
-                      <th class="px-4 py-2.5 font-medium">账号</th>
-                      <th class="px-4 py-2.5 font-medium">最近心跳</th>
-                      <th class="px-4 py-2.5 font-medium">今日执行</th>
+                      <th></th><th>账号类型</th><th>账号</th><th>序号</th><th>状态</th><th>角色名</th>
+                      <th><button type="button" class="th-sort" @click="setSort('level')">等级 <i>{{ sortMark('level') }}</i></button></th>
+                      <th>段位</th>
+                      <th><button type="button" class="th-sort" @click="setSort('havoc')">哈弗币(M) <i>{{ sortMark('havoc') }}</i></button></th>
+                      <th><button type="button" class="th-sort" @click="setSort('assets')">总资产(M) <i>{{ sortMark('assets') }}</i></button></th>
+                      <th><button type="button" class="th-sort" @click="setSort('ratio')">仓库占比 <i>{{ sortMark('ratio') }}</i></button></th>
+                      <th>更新时间</th><th>账号时效</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-slate-100">
-                    <tr
-                      v-for="device in statusDevices"
-                      :key="device.id"
-                      class="cursor-pointer transition hover:bg-slate-50"
-                      :class="selectedStatusId === device.id ? 'bg-brand-50/60' : ''"
-                      @click="selectedStatusId = device.id"
-                    >
-                      <td class="px-4 py-2.5 font-medium text-slate-900">{{ device.name }}</td>
-                      <td class="px-4 py-2.5 text-slate-500">{{ device.group }}</td>
-                      <td class="px-4 py-2.5">
-                        <span class="rounded-full px-2 py-0.5 text-[10px]" :class="devicePill(device.status)">{{ deviceLabel(device.status) }}</span>
-                      </td>
-                      <td class="px-4 py-2.5 text-slate-600">{{ runningOf(device) }} / {{ device.accounts.length }}</td>
-                      <td class="px-4 py-2.5 text-slate-500">{{ device.heartbeat }}</td>
-                      <td class="px-4 py-2.5 font-mono text-slate-600">{{ device.executions }}</td>
-                    </tr>
+                  <tbody>
+                    <template v-for="(account, index) in sortedAccounts(device.accounts)" :key="account.id">
+                      <tr class="data-row" :class="{ 'is-off': !account.enabled }" @click="toggleRow(account.id)">
+                        <td><span class="row-chevron" :class="{ open: isRowExpanded(account.id) }">▸</span></td>
+                        <td><span class="el-tag" :class="account.type === 'QQ' ? 'tag-primary' : 'tag-success'">{{ account.type }}</span></td>
+                        <td class="mono">{{ displayAccount(account) }}</td>
+                        <td class="muted">{{ String(index + 1).padStart(2, '0') }}</td>
+                        <td><span class="status-dot" :class="accountStatusClass(account.status)"></span>{{ account.status }}</td>
+                        <td>{{ masked ? displayChar(account.charName) : account.charName }}</td>
+                        <td>Lv.{{ account.level }}</td>
+                        <td>{{ account.rank }}</td>
+                        <td class="num">{{ fmtNum(account.havoc) }}</td>
+                        <td class="num">{{ fmtNum(account.assets) }}</td>
+                        <td>
+                          <span class="ratio-cell">
+                            <span class="mini-progress"><span :style="{ width: account.ratio + '%', background: ratioColor(account.ratio) }"></span></span>
+                            <span :style="{ color: ratioColor(account.ratio) }">{{ account.ratio }}%</span>
+                          </span>
+                        </td>
+                        <td class="muted">{{ account.updated }}</td>
+                        <td>
+                          <span class="el-tag" :class="licenseClass(account.license)">{{ account.license }}</span>
+                          <span class="ml-1 text-[10px] text-slate-400">{{ shortDate(account.expire) }}</span>
+                          <button type="button" class="el-btn-text ml-1" @click.stop="openRenew(account)">续费</button>
+                        </td>
+                      </tr>
+                      <tr v-if="isRowExpanded(account.id)" class="expand-row">
+                        <td colspan="13">
+                          <div class="expand-inner">
+                            <span class="text-[11px] font-semibold text-slate-500">生产物品</span>
+                            <span v-for="(p, pi) in account.produce" :key="pi" class="produce-chip" :class="{ done: p.status === '已完成' }">
+                              {{ p.name }} · {{ p.status }}<template v-if="p.left !== '—'"> · 剩余 {{ p.left }}</template>
+                            </span>
+                            <span class="ml-auto text-[10px] text-slate-400">设备 {{ device.key }} · 数据更新于 {{ account.updated }}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
-              <div class="mt-3 space-y-2 sm:hidden">
-                <button
-                  v-for="device in statusDevices"
-                  :key="device.id"
-                  type="button"
-                  class="w-full rounded-xl border px-3 py-2.5 text-left transition"
-                  :class="selectedStatusId === device.id ? 'border-brand-200 bg-brand-50/60' : 'border-slate-200 bg-white'"
-                  @click="selectedStatusId = device.id"
-                >
-                  <div class="flex items-center justify-between gap-2">
-                    <span class="text-[13px] font-medium text-slate-900">{{ device.name }}</span>
-                    <span class="rounded-full px-2 py-0.5 text-[10px]" :class="devicePill(device.status)">{{ deviceLabel(device.status) }}</span>
-                  </div>
-                  <p class="mt-1 text-[11px] text-slate-500">{{ device.group }} · 心跳 {{ device.heartbeat }}</p>
-                  <div class="mt-1.5 flex items-center gap-3 text-[11px] text-slate-500">
-                    <span>账号 {{ runningOf(device) }} / {{ device.accounts.length }}</span>
-                    <span>今日执行 {{ device.executions }}</span>
-                  </div>
-                </button>
-              </div>
+            </section>
 
-              <p v-if="!statusDevices.length" class="py-6 text-center text-[12px] text-slate-400">没有匹配的设备</p>
-
-              <div class="mt-4 rounded-2xl border border-slate-200 p-4">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p class="text-sm font-semibold text-slate-900">{{ selectedStatusDevice.name }} · 账号运行情况</p>
-                    <p class="mt-0.5 text-[11px] text-slate-500">
-                      {{ selectedStatusDevice.group }} · {{ deviceLabel(selectedStatusDevice.status) }} · 心跳 {{ selectedStatusDevice.heartbeat }}
-                    </p>
-                  </div>
-                  <button type="button" class="rounded-full border border-slate-300 px-3 py-1 text-[11px] text-slate-600 hover:border-brand-300" @click="pullSnapshot">
-                    重新拉取快照
-                  </button>
-                </div>
-                <div class="mt-3 grid gap-2 sm:grid-cols-2">
-                  <div v-for="account in selectedStatusDevice.accounts" :key="account.id" class="flex items-center justify-between gap-2 rounded-xl bg-slate-50 px-3 py-2">
-                    <div class="min-w-0">
-                      <p class="truncate text-[12px] text-slate-800">{{ account.name }}</p>
-                      <p class="text-[10px] text-slate-400">{{ account.module }}</p>
-                    </div>
-                    <span class="rounded-full px-2 py-0.5 text-[10px]" :class="accountPill(account.status)">{{ accountStatusLabel(account.status) }}</span>
-                  </div>
-                </div>
-              </div>
+            <div class="grand-total">
+              <span>全部合计：哈弗币 <b>{{ fmtNum(totalHavoc) }}</b> M · 总资产 <b>{{ fmtNum(totalAssets) }}</b> M</span>
+              <span class="text-[11px] text-slate-400">{{ totalAccounts }} 个账号 · {{ groupedDevices.length }} 台设备 · 在线 {{ onlineDevices }}/{{ groupedDevices.length }} · 月费 ¥{{ totalAccounts * 3 }}（3 元/号）</span>
             </div>
+          </template>
 
-            <aside class="rounded-2xl border border-slate-200 p-4">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-semibold text-slate-900">最近通知</p>
-                <button v-if="notifications.length" type="button" class="text-[11px] text-slate-400 hover:text-brand-600" @click="notifications = []">全部已读</button>
+          <template v-else>
+            <section class="biz-group ungrouped">
+              <div class="table-scroll">
+                <table class="biz-table ungrouped-table">
+                  <colgroup>
+                    <col style="width: 24px" /><col style="width: 100px" /><col style="width: 52px" /><col style="width: 100px" /><col style="width: 42px" /><col style="width: 64px" /><col style="width: 76px" /><col style="width: 50px" /><col style="width: 60px" /><col style="width: 82px" /><col style="width: 82px" /><col style="width: 78px" /><col style="width: 96px" /><col style="width: 168px" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th></th><th>设备</th><th>账号类型</th><th>账号</th><th>序号</th><th>状态</th><th>角色名</th>
+                      <th><button type="button" class="th-sort" @click="setSort('level')">等级 <i>{{ sortMark('level') }}</i></button></th>
+                      <th>段位</th>
+                      <th><button type="button" class="th-sort" @click="setSort('havoc')">哈弗币(M) <i>{{ sortMark('havoc') }}</i></button></th>
+                      <th><button type="button" class="th-sort" @click="setSort('assets')">总资产(M) <i>{{ sortMark('assets') }}</i></button></th>
+                      <th><button type="button" class="th-sort" @click="setSort('ratio')">仓库占比 <i>{{ sortMark('ratio') }}</i></button></th>
+                      <th>更新时间</th><th>账号时效</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template v-for="account in sortedAccounts(allAccounts)" :key="account.id">
+                      <tr class="data-row" :class="{ 'is-off': !account.enabled }" @click="toggleRow(account.id)">
+                        <td><span class="row-chevron" :class="{ open: isRowExpanded(account.id) }">▸</span></td>
+                        <td class="mono">{{ deviceKeyOf(account) }}</td>
+                        <td><span class="el-tag" :class="account.type === 'QQ' ? 'tag-primary' : 'tag-success'">{{ account.type }}</span></td>
+                        <td class="mono">{{ displayAccount(account) }}</td>
+                        <td class="muted">{{ String(account.seq).padStart(2, '0') }}</td>
+                        <td><span class="status-dot" :class="accountStatusClass(account.status)"></span>{{ account.status }}</td>
+                        <td>{{ masked ? displayChar(account.charName) : account.charName }}</td>
+                        <td>Lv.{{ account.level }}</td>
+                        <td>{{ account.rank }}</td>
+                        <td class="num">{{ fmtNum(account.havoc) }}</td>
+                        <td class="num">{{ fmtNum(account.assets) }}</td>
+                        <td>
+                          <span class="ratio-cell">
+                            <span class="mini-progress"><span :style="{ width: account.ratio + '%', background: ratioColor(account.ratio) }"></span></span>
+                            <span :style="{ color: ratioColor(account.ratio) }">{{ account.ratio }}%</span>
+                          </span>
+                        </td>
+                        <td class="muted">{{ account.updated }}</td>
+                        <td>
+                          <span class="el-tag" :class="licenseClass(account.license)">{{ account.license }}</span>
+                          <span class="ml-1 text-[10px] text-slate-400">{{ shortDate(account.expire) }}</span>
+                          <button type="button" class="el-btn-text ml-1" @click.stop="openRenew(account)">续费</button>
+                        </td>
+                      </tr>
+                      <tr v-if="isRowExpanded(account.id)" class="expand-row">
+                        <td colspan="14">
+                          <div class="expand-inner">
+                            <span class="text-[11px] font-semibold text-slate-500">生产物品</span>
+                            <span v-for="(p, pi) in account.produce" :key="pi" class="produce-chip" :class="{ done: p.status === '已完成' }">
+                              {{ p.name }} · {{ p.status }}<template v-if="p.left !== '—'"> · 剩余 {{ p.left }}</template>
+                            </span>
+                            <span class="ml-auto text-[10px] text-slate-400">设备 {{ deviceKeyOf(account) }} · 数据更新于 {{ account.updated }}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
               </div>
-              <ul class="mt-3 space-y-2.5">
-                <li v-for="note in notifications" :key="note.id" class="rounded-xl border border-slate-100 bg-slate-50/70 px-3 py-2">
-                  <div class="flex items-center justify-between gap-2">
-                    <span class="rounded-full px-1.5 py-0.5 text-[9px]" :class="notePill(note.type)">{{ note.type }}</span>
-                    <span class="text-[10px] text-slate-400">{{ note.time }}</span>
-                  </div>
-                  <p class="mt-1.5 text-[11px] leading-5 text-slate-600">{{ note.text }}</p>
-                </li>
-              </ul>
-              <p v-if="!notifications.length" class="mt-4 text-[11px] text-slate-400">没有待处理通知，状态正常。</p>
-              <p class="mt-4 border-t border-slate-100 pt-3 text-[10px] leading-5 text-slate-400">
-                通知渠道在部署时配置，演示页不连接真实消息通道。
-              </p>
-            </aside>
-          </div>
+            </section>
+
+            <div class="grand-total">
+              <span>全部合计：哈弗币 <b>{{ fmtNum(totalHavoc) }}</b> M · 总资产 <b>{{ fmtNum(totalAssets) }}</b> M</span>
+              <span class="text-[11px] text-slate-400">{{ totalAccounts }} 个账号 · {{ groupedDevices.length }} 台设备 · 在线 {{ onlineDevices }}/{{ groupedDevices.length }} · 月费 ¥{{ totalAccounts * 3 }}（3 元/号）</span>
+            </div>
+          </template>
         </div>
+
+        <div v-if="toastMsg" class="demo-toast">{{ toastMsg }}</div>
       </div>
 
       <p class="mt-4 text-[12px] leading-6 text-slate-400">
-        以上为交互示意，设备、账号与执行数据均为演示数据；实际界面、菜单与字段以当前 Manager 版本为准。
+        界面按 Manager 的业务配置与业务状态两屏还原，账号、角色与数值均为演示数据；点击操作只在本页生效，不会写入真实管理台。
       </p>
     </div>
 
-    <div class="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
-      <p v-if="toast" class="pointer-events-auto rounded-full bg-ink-900 px-4 py-2 text-[12px] text-white shadow-2xl">{{ toast }}</p>
+    <!-- 新增账号 -->
+    <div v-if="showAddAccount" class="modal-mask" @click.self="showAddAccount = false">
+      <div class="modal-panel">
+        <div class="modal-head">
+          <div><h3>新增账号</h3><p>账号是执行和计费单位，一个号一份授权。</p></div>
+          <button type="button" class="modal-close" @click="showAddAccount = false">×</button>
+        </div>
+        <div class="modal-body">
+          <label class="form-row"><span>设备</span>
+            <select v-model="addForm.deviceId" class="form-control" @change="addForm.copyFrom = ''">
+              <option v-for="d in devices.filter((x) => x.approval === 'approved')" :key="d.id" :value="d.id">{{ d.name }} · {{ d.key }}</option>
+            </select>
+          </label>
+          <div class="form-row"><span>类型</span>
+            <div class="segmented">
+              <button v-for="t in ['QQ', '微信']" :key="t" type="button" :class="{ active: addForm.type === t }" @click="addForm.type = t as 'QQ' | '微信'">{{ t }}</button>
+            </div>
+          </div>
+          <label class="form-row"><span>账号</span><input v-model.trim="addForm.number" class="form-control" placeholder="输入 QQ 号或微信号" /></label>
+          <label class="form-row"><span>复制配置</span>
+            <select v-model="addForm.copyFrom" class="form-control">
+              <option value="">不复制，使用默认模块</option>
+              <option v-for="a in copyCandidates" :key="a.id" :value="a.id">{{ a.type }}：{{ displayAccount(a) }}（{{ a.modules.length }} 个模块）</option>
+            </select>
+          </label>
+          <div class="form-row"><span>启用</span>
+            <button type="button" role="switch" :aria-checked="addForm.enabled" class="switch" :class="{ on: addForm.enabled }" @click="addForm.enabled = !addForm.enabled"><i></i></button>
+            <span class="text-[12px] text-slate-500">添加后立即参与执行</span>
+          </div>
+          <p v-if="addError" class="text-[12px] text-red-600">{{ addError }}</p>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="el-btn" @click="showAddAccount = false">取消</button>
+          <button type="button" class="el-btn el-btn-primary" @click="confirmAddAccount">确认添加</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 添加模块 -->
+    <div v-if="showAddModule" class="modal-mask" @click.self="showAddModule = false">
+      <div class="modal-panel">
+        <div class="modal-head">
+          <div><h3>添加模块</h3><p>模块只改执行内容，不加钱；计费仍按账号实例算。</p></div>
+          <button type="button" class="modal-close" @click="showAddModule = false">×</button>
+        </div>
+        <div class="modal-body !py-2">
+          <button v-for="item in availableModules" :key="item.key" type="button" class="module-cand" @click="addModule(item.key)">
+            <span class="flex-1 text-left"><b>{{ item.label }}</b><small>{{ item.desc }}</small></span>
+            <span class="el-btn-text">添加</span>
+          </button>
+          <p v-if="!availableModules.length" class="py-6 text-center text-[12px] text-slate-400">当前账号已添加全部模块</p>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="el-btn" @click="syncFromOther">从其他账号同步</button>
+          <button type="button" class="el-btn el-btn-primary" @click="showAddModule = false">完成</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 删除账号 -->
+    <div v-if="deleteTarget" class="modal-mask" @click.self="deleteTarget = null">
+      <div class="modal-panel !w-[420px]">
+        <div class="modal-head"><div><h3>删除账号</h3><p>账号与模块配置会从管理台移除。</p></div><button type="button" class="modal-close" @click="deleteTarget = null">×</button></div>
+        <div class="modal-body"><p class="text-[13px] leading-6 text-slate-600">确认删除 <b>{{ deleteTarget.type }}：{{ displayAccount(deleteTarget) }}</b>？授权与执行会同时停止，此操作不可撤销。</p></div>
+        <div class="modal-foot"><button type="button" class="el-btn" @click="deleteTarget = null">取消</button><button type="button" class="el-btn el-btn-danger" @click="confirmDeleteAccount">删除账号</button></div>
+      </div>
+    </div>
+
+    <!-- 续费 -->
+    <div v-if="renewTarget" class="modal-mask" @click.self="renewTarget = null">
+      <div class="modal-panel !w-[520px]">
+        <div class="modal-head"><div><h3>账号续费</h3><p>续费只延长授权，账号、设备与模块配置原样保留。</p></div><button type="button" class="modal-close" @click="renewTarget = null">×</button></div>
+        <div class="modal-body">
+          <div class="renew-grid">
+            <div><span>账号</span><b>{{ renewTarget.type }}：{{ displayAccount(renewTarget) }}</b></div>
+            <div><span>当前状态</span><span class="el-tag" :class="licenseClass(renewTarget.license)">{{ renewTarget.license }}</span></div>
+            <div><span>当前到期</span><b>{{ renewTarget.expire }}</b></div>
+            <div><span>可用令牌</span><b class="text-[#409eff]">{{ availableTokens }}</b></div>
+          </div>
+          <p class="mt-4 text-[12px] font-medium text-slate-700">选择续费时长</p>
+          <div class="renew-options">
+            <button v-for="opt in renewOptions" :key="opt.days" type="button" class="renew-option" :class="{ active: renewDays === opt.days }" @click="renewDays = opt.days">
+              <b>{{ opt.label }}</b><span>消耗 {{ opt.days }} 枚令牌</span>
+            </button>
+          </div>
+          <p class="mt-3 text-[12px] text-slate-500">续费后到期：<b class="text-slate-800">{{ renewPreview }}</b></p>
+          <p class="mt-2 text-[11px] leading-5 text-slate-400">时效由 Auth 统一签发，设备按签名租约到期；离线设备同样按绝对时间失效。</p>
+        </div>
+        <div class="modal-foot"><button type="button" class="el-btn" @click="renewTarget = null">取消</button><button type="button" class="el-btn el-btn-primary" @click="confirmRenew">确认续费</button></div>
+      </div>
+    </div>
+
+    <!-- 授权令牌 -->
+    <div v-if="showTokens" class="modal-mask" @click.self="showTokens = false">
+      <div class="modal-panel !w-[480px]">
+        <div class="modal-head"><div><h3>授权令牌</h3><p>令牌用于账号授权续期，演示环境不产生实际消耗。</p></div><button type="button" class="modal-close" @click="showTokens = false">×</button></div>
+        <div class="modal-body">
+          <div class="token-stats">
+            <div><b>{{ availableTokens }}</b><span>可用令牌</span></div>
+            <div><b>{{ usedTokens }}</b><span>本月已用</span></div>
+            <div><b>{{ expiringAccounts.length }}</b><span>7 天内到期</span></div>
+          </div>
+          <p class="mt-4 text-[12px] font-medium text-slate-700">即将到期</p>
+          <div class="mt-2 divide-y divide-slate-100 rounded-lg border border-slate-200">
+            <div v-for="a in expiringAccounts" :key="a.id" class="flex items-center justify-between gap-3 px-3 py-2 text-[12px]">
+              <span>{{ a.type }}：{{ displayAccount(a) }}</span>
+              <span class="text-slate-400">{{ shortDate(a.expire) }}</span>
+              <button type="button" class="el-btn-text" @click="showTokens = false; openRenew(a)">续费</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot"><button type="button" class="el-btn el-btn-primary" @click="showTokens = false">知道了</button></div>
+      </div>
     </div>
   </div>
 </template>
@@ -378,313 +675,820 @@
 import { computed, reactive, ref } from 'vue'
 import PageHero from '@/components/PageHero.vue'
 
-type DeviceStatus = 'online' | 'offline' | 'error'
-type AccountStatus = 'running' | 'stopped' | 'pending' | 'error'
 type TabKey = 'config' | 'status'
+type Trigger = 'follow' | 'auto' | 'exclusive'
+type ModuleKey = 'profile' | 'afk' | 'produce' | 'sell' | 'buy' | 'stock' | 'exchange' | 'warehouse'
+type AccountStatus = '运行中' | '挂机中' | '空闲' | '异常' | '已停用'
+type LicenseStatus = '有效' | '即将到期' | '已到期'
+
+interface ModuleCfg {
+  key: ModuleKey
+  enabled: boolean
+  priority: number
+  trigger: Trigger
+  scope?: 'device'
+  [key: string]: any
+}
+
+interface ProduceItem { name: string; status: string; left: string }
 
 interface Account {
   id: string
-  name: string
-  platform: string
-  module: string
+  deviceId: string
+  type: 'QQ' | '微信'
+  account: string
+  seq: number
+  enabled: boolean
   status: AccountStatus
+  charName: string
+  level: number
+  rank: string
+  havoc: number
+  assets: number
+  ratio: number
+  updated: string
+  license: LicenseStatus
+  expire: string
+  modules: ModuleCfg[]
+  produce: ProduceItem[]
 }
 
 interface Device {
   id: string
+  key: string
   name: string
   group: string
-  status: DeviceStatus
+  enabled: boolean
+  online: boolean
+  heartbeatSec: number
+  approval: 'approved' | 'pending'
+  meta: { os: string; model: string; version: string; battery: number; charging: boolean; temp: number; memory: number; disk: number }
   accounts: Account[]
-  heartbeat: string
-  executions: number
 }
 
-interface DeviceConfig {
-  module: string
-  start: string
-  end: string
-  retry: number
-  auto: boolean
-  notify: boolean
-}
-
-const moduleOptions = ['日常巡检', '内容发布', '消息回复', '数据采集']
 const tabs: { key: TabKey; label: string }[] = [
   { key: 'config', label: '业务配置' },
   { key: 'status', label: '业务状态' },
 ]
-const filters = [
-  { key: 'all', label: '全部' },
-  { key: 'online', label: '在线' },
-  { key: 'offline', label: '离线' },
-  { key: 'error', label: '异常' },
-]
 
-function buildAccounts(deviceIndex: number, count: number, deviceStatus: DeviceStatus): Account[] {
-  return Array.from({ length: count }, (_, i) => {
-    const n = i + 1
-    let status: AccountStatus = 'running'
-    if (n === count) status = 'stopped'
-    if (deviceStatus === 'offline') status = 'stopped'
-    if (deviceStatus === 'error') status = n === 1 ? 'error' : 'stopped'
-    if (deviceIndex === 1 && n === 2) status = 'pending'
-    return {
-      id: `d${deviceIndex}-a${n}`,
-      name: `账号 ${String(n).padStart(2, '0')}`,
-      platform: n % 3 === 0 ? '视频号' : '抖音',
-      module: moduleOptions[(deviceIndex + n) % moduleOptions.length],
-      status,
-    }
-  })
+const activeTab = ref<TabKey>('config')
+const masked = ref(false)
+const refreshedAt = ref(new Date())
+const toastMsg = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | undefined
+
+const refreshLabel = computed(() => {
+  const t = refreshedAt.value
+  return `${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}:${String(t.getSeconds()).padStart(2, '0')}`
+})
+
+function notify(message: string) {
+  toastMsg.value = message
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => (toastMsg.value = ''), 2600)
 }
 
-function buildDevice(index: number, group: string, status: DeviceStatus, executions: number, count = 5): Device {
+function refresh() {
+  refreshedAt.value = new Date()
+  notify('已刷新演示数据')
+}
+
+const moduleMeta: Record<ModuleKey, { label: string; desc: string; priority: number }> = {
+  profile: { label: '信息', desc: '角色名、等级、段位与资产采集', priority: 10 },
+  afk: { label: '挂机', desc: '自动对局、冷却与执行时段', priority: 120 },
+  produce: { label: '生产', desc: '特勤部门产物与制造队列', priority: 80 },
+  sell: { label: '出售', desc: '集市上架与最低价控制', priority: 60 },
+  buy: { label: '购买', desc: '按目标库存补货，限制最高价', priority: 40 },
+  stock: { label: '库存', desc: '定时盘点仓库物品数量', priority: 30 },
+  exchange: { label: '兑换', desc: '按渠道把物品兑换成资源', priority: 50 },
+  warehouse: { label: '仓库', desc: '设备级仓库容量与占用', priority: 200 },
+}
+
+function makeModule(key: ModuleKey): ModuleCfg {
+  const base: ModuleCfg = { key, enabled: true, priority: moduleMeta[key].priority, trigger: 'follow' }
+  if (key === 'warehouse') base.scope = 'device'
+  if (key === 'afk') {
+    base.afk = {
+      totalGames: 36,
+      lastResult: '撤离成功',
+      cooldown: 60,
+      passport: { exp: 12800, max: 16000 },
+      windows: [{ start: '22:00', end: '08:00' }],
+    }
+  }
+  if (key === 'produce') {
+    base.produce = {
+      items: [
+        { dept: '工作台', prop: '紫罗兰', name: '紫罗兰', status: '制造中', left: '02:41', enabled: true },
+        { dept: '制药台', prop: '医疗包', name: '医疗包', status: '制造中', left: '00:58', enabled: true },
+        { dept: '技术中心', prop: '战术手电', name: '空闲', status: '空闲', left: '—', enabled: true },
+      ],
+    }
+  }
+  if (key === 'sell') {
+    base.sell = {
+      items: [
+        { prop: '紫罗兰', mode: 'market', price: 1800, enabled: true },
+        { prop: '海盗弯刀', mode: 'market', price: 6200, enabled: true },
+      ],
+    }
+  }
+  if (key === 'buy') {
+    base.buy = {
+      items: [
+        { prop: '标准弹药', current: 12, target: 40, maxPrice: 820, schedule: '每2小时', enabled: true },
+        { prop: '高级护甲', current: 3, target: 10, maxPrice: 4200, schedule: '每6小时', enabled: true },
+      ],
+    }
+  }
+  if (key === 'stock') {
+    base.stock = { items: [{ prop: '金条', count: 18, schedule: '每6小时', left: '03:12', enabled: true }] }
+  }
+  if (key === 'exchange') {
+    base.exchange = { items: [{ prop: '赛季补给箱', channel: 'market', left: '01:20', enabled: true }] }
+  }
+  if (key === 'warehouse') {
+    base.warehouse = { used: 248, total: 400, pct: 62 }
+  }
+  return base
+}
+
+function makeAccount(base: Omit<Account, 'modules' | 'produce'>, moduleKeys: ModuleKey[]): Account {
   return {
-    id: `d${index}`,
-    name: `设备 ${String(index).padStart(2, '0')}`,
-    group,
-    status,
-    accounts: buildAccounts(index, count, status),
-    heartbeat: status === 'online' ? '刚刚' : status === 'error' ? '2 分钟前' : '18 分钟前',
-    executions,
+    ...base,
+    modules: moduleKeys.map(makeModule),
+    produce: [
+      { name: '紫罗兰', status: '制造中', left: '02:41' },
+      { name: '标准弹药', status: '排队中', left: '—' },
+      { name: '医疗包', status: '已完成', left: '×12' },
+    ],
   }
 }
 
 const devices = reactive<Device[]>([
-  buildDevice(1, '门店 A', 'online', 186),
-  buildDevice(2, '门店 A', 'online', 172),
-  buildDevice(3, '门店 A', 'online', 168),
-  buildDevice(4, '门店 A', 'online', 154),
-  buildDevice(5, '门店 B', 'online', 148),
-  buildDevice(6, '门店 B', 'online', 132),
-  buildDevice(7, '门店 B', 'error', 96),
-  buildDevice(8, '门店 B', 'online', 128),
-  buildDevice(9, '门店 C', 'online', 121),
-  buildDevice(10, '门店 C', 'online', 118),
-  buildDevice(11, '门店 C', 'offline', 0),
-  buildDevice(12, '测试组', 'offline', 43),
+  {
+    id: 'd1', key: 'a1b2c3d4e5f6', name: '门店A · 主机01', group: '门店 A', enabled: true, online: true, heartbeatSec: 8, approval: 'approved',
+    meta: { os: 'Android 14', model: '小米 14', version: 'v1.0.0(3f8a21c)', battery: 86, charging: true, temp: 31, memory: 62, disk: 71 },
+    accounts: [
+      makeAccount({ id: 'a1', deviceId: 'd1', type: 'QQ', account: '124578963', seq: 1, enabled: true, status: '运行中', charName: '林深', level: 62, rank: '钻石Ⅱ', havoc: 428.6, assets: 1286.3, ratio: 62, updated: '11-20 14:32', license: '有效', expire: '2026-12-05 18:00' }, ['profile', 'afk', 'produce', 'sell', 'buy', 'warehouse']),
+      makeAccount({ id: 'a2', deviceId: 'd1', type: '微信', account: 'wxid_lxy8821', seq: 2, enabled: true, status: '挂机中', charName: '陈默', level: 58, rank: '铂金Ⅰ', havoc: 312.4, assets: 942.8, ratio: 48, updated: '11-20 14:28', license: '即将到期', expire: '2026-11-23 12:00' }, ['profile', 'afk', 'produce', 'sell']),
+      makeAccount({ id: 'a3', deviceId: 'd1', type: 'QQ', account: '369258147', seq: 3, enabled: false, status: '已停用', charName: '周野', level: 41, rank: '黄金Ⅲ', havoc: 88.2, assets: 265.9, ratio: 31, updated: '11-19 22:10', license: '已到期', expire: '2026-11-18 09:00' }, ['profile', 'afk']),
+    ],
+  },
+  {
+    id: 'd2', key: 'b7c8d9e0f1a2', name: '门店A · 主机02', group: '门店 A', enabled: true, online: true, heartbeatSec: 34, approval: 'approved',
+    meta: { os: 'Android 13', model: 'Redmi K70', version: 'v1.0.0(3f8a21c)', battery: 72, charging: false, temp: 34, memory: 71, disk: 64 },
+    accounts: [
+      makeAccount({ id: 'b1', deviceId: 'd2', type: 'QQ', account: '741852963', seq: 1, enabled: true, status: '空闲', charName: '苏晚', level: 66, rank: '钻石Ⅰ', havoc: 501.2, assets: 1533.6, ratio: 70, updated: '11-20 14:31', license: '即将到期', expire: '2026-11-22 20:00' }, ['profile', 'afk', 'produce', 'sell', 'warehouse']),
+      makeAccount({ id: 'b2', deviceId: 'd2', type: '微信', account: 'wxid_sjz_009', seq: 2, enabled: true, status: '运行中', charName: '陆行', level: 55, rank: '铂金Ⅱ', havoc: 288.3, assets: 864.2, ratio: 45, updated: '11-20 14:20', license: '有效', expire: '2026-12-11 10:00' }, ['profile', 'afk', 'produce', 'buy']),
+      makeAccount({ id: 'b3', deviceId: 'd2', type: 'QQ', account: '159357486', seq: 3, enabled: true, status: '异常', charName: '江屿', level: 49, rank: '铂金Ⅲ', havoc: 196.7, assets: 602.5, ratio: 52, updated: '11-20 13:58', license: '有效', expire: '2026-12-18 15:00' }, ['profile', 'afk', 'sell', 'stock']),
+    ],
+  },
+  {
+    id: 'd3', key: 'c3d4e5f6a7b8', name: '门店B · 主机03', group: '门店 B', enabled: true, online: false, heartbeatSec: 999, approval: 'pending',
+    meta: { os: 'Android 14', model: '一加 12', version: '待接入', battery: 0, charging: false, temp: 0, memory: 0, disk: 0 },
+    accounts: [],
+  },
+  {
+    id: 'd4', key: 'd4e5f6a7b8c9', name: '门店B · 主机04', group: '门店 B', enabled: true, online: true, heartbeatSec: 12, approval: 'approved',
+    meta: { os: 'Android 14', model: '小米 14 Pro', version: 'v1.0.0(9b2ce71)', battery: 94, charging: true, temp: 29, memory: 54, disk: 58 },
+    accounts: [
+      makeAccount({ id: 'c1', deviceId: 'd4', type: 'QQ', account: '852741963', seq: 1, enabled: true, status: '运行中', charName: '顾北', level: 60, rank: '钻石Ⅲ', havoc: 402.1, assets: 1198.4, ratio: 58, updated: '11-20 14:33', license: '有效', expire: '2026-12-02 09:00' }, ['profile', 'afk', 'produce', 'sell', 'buy', 'warehouse']),
+      makeAccount({ id: 'c2', deviceId: 'd4', type: '微信', account: 'wxid_blue77', seq: 2, enabled: true, status: '挂机中', charName: '沈知', level: 57, rank: '铂金Ⅰ', havoc: 276.9, assets: 812.7, ratio: 41, updated: '11-20 14:27', license: '有效', expire: '2026-12-09 17:00' }, ['profile', 'afk', 'produce', 'buy']),
+      makeAccount({ id: 'c3', deviceId: 'd4', type: 'QQ', account: '963852741', seq: 3, enabled: false, status: '已停用', charName: '韩川', level: 38, rank: '黄金Ⅱ', havoc: 61.5, assets: 188.3, ratio: 27, updated: '11-19 18:45', license: '已到期', expire: '2026-11-19 10:00' }, ['profile', 'afk']),
+    ],
+  },
+  {
+    id: 'd5', key: 'e5f6a7b8c9d0', name: '测试组 · 主机05', group: '测试组', enabled: true, online: false, heartbeatSec: 128, approval: 'approved',
+    meta: { os: 'Android 13', model: '真我 GT5', version: 'v1.0.0(3f8a21c)', battery: 41, charging: false, temp: 36, memory: 78, disk: 83 },
+    accounts: [
+      makeAccount({ id: 'e1', deviceId: 'd5', type: 'QQ', account: '321654987', seq: 1, enabled: true, status: '运行中', charName: '许星河', level: 64, rank: '钻石Ⅱ', havoc: 455.8, assets: 1362.9, ratio: 66, updated: '11-20 14:05', license: '有效', expire: '2026-12-15 12:00' }, ['profile', 'afk', 'produce', 'sell', 'buy', 'warehouse']),
+      makeAccount({ id: 'e2', deviceId: 'd5', type: '微信', account: 'wxid_test01', seq: 2, enabled: true, status: '空闲', charName: '叶青', level: 52, rank: '铂金Ⅲ', havoc: 231.4, assets: 704.8, ratio: 39, updated: '11-20 14:02', license: '即将到期', expire: '2026-11-24 08:00' }, ['profile', 'afk', 'produce', 'stock']),
+      makeAccount({ id: 'e3', deviceId: 'd5', type: 'QQ', account: '654987321', seq: 3, enabled: true, status: '运行中', charName: '温言', level: 59, rank: '钻石Ⅳ', havoc: 366.2, assets: 1089.5, ratio: 54, updated: '11-20 14:12', license: '有效', expire: '2026-12-20 16:00' }, ['profile', 'afk', 'produce', 'sell', 'exchange']),
+    ],
+  },
 ])
 
-const tab = ref<TabKey>('config')
-const deviceQuery = ref('')
-const statusQuery = ref('')
-const statusFilter = ref('all')
-const collapsed = ref<string[]>([])
+const allAccounts = computed(() => devices.flatMap((d) => d.accounts))
+const groupedDevices = computed(() => devices.filter((d) => d.accounts.length > 0))
+const onlineDevices = computed(() => groupedDevices.value.filter((d) => d.online).length)
+const totalAccounts = computed(() => allAccounts.value.length)
+const totalHavoc = computed(() => allAccounts.value.reduce((sum, a) => sum + a.havoc, 0))
+const totalAssets = computed(() => allAccounts.value.reduce((sum, a) => sum + a.assets, 0))
+
 const selectedDeviceId = ref('d1')
-const selectedStatusId = ref('d7')
-const incidentDismissed = ref(false)
-const lastRefresh = ref(new Date())
+const selectedAccountId = ref('a1')
+const expandedDevices = ref<string[]>(['d1'])
 
-const groups = computed(() => {
-  const map = new Map<string, Device[]>()
+const selectAccount = (device: Device, account: Account) => {
+  selectedDeviceId.value = device.id
+  selectedAccountId.value = account.id
+}
+
+const selectedAccount = computed<Account | null>(() => {
   for (const device of devices) {
-    const list = map.get(device.group) ?? []
-    list.push(device)
-    map.set(device.group, list)
+    const found = device.accounts.find((a) => a.id === selectedAccountId.value)
+    if (found) return found
   }
-  return Array.from(map, ([name, list]) => ({ name, devices: list }))
+  return null
 })
 
-const filteredGroups = computed(() => {
-  const query = deviceQuery.value.toLowerCase()
-  if (!query) return groups.value
-  return groups.value
-    .map((group) => ({
-      name: group.name,
-      devices: group.devices.filter((device) => device.name.toLowerCase().includes(query) || group.name.toLowerCase().includes(query)),
-    }))
-    .filter((group) => group.devices.length)
-})
+const emptyAccount: Account = {
+  id: '', deviceId: '', type: 'QQ', account: '', seq: 0, enabled: false, status: '已停用', charName: '', level: 0, rank: '', havoc: 0, assets: 0, ratio: 0, updated: '', license: '已到期', expire: '', modules: [], produce: [],
+}
+const accountView = computed(() => selectedAccount.value ?? emptyAccount)
+const selectedDevice = computed(() => devices.find((d) => d.id === selectedAccount.value?.deviceId) ?? devices[0])
+const currentDevice = computed(() => selectedDevice.value)
 
-const selectedDevice = computed(() => devices.find((device) => device.id === selectedDeviceId.value) ?? devices[0])
-const selectedStatusDevice = computed(() => devices.find((device) => device.id === selectedStatusId.value) ?? devices[0])
-
-const configs = reactive<Record<string, DeviceConfig>>({})
-const savedConfigs = reactive<Record<string, DeviceConfig>>({})
-
-for (const device of devices) {
-  const config: DeviceConfig = { module: '日常巡检', start: '09:00', end: '22:00', retry: 2, auto: true, notify: true }
-  configs[device.id] = { ...config }
-  savedConfigs[device.id] = { ...config }
+const isExpanded = (id: string) => expandedDevices.value.includes(id)
+function toggleDevice(device: Device) {
+  expandedDevices.value = isExpanded(device.id) ? expandedDevices.value.filter((id) => id !== device.id) : [...expandedDevices.value, device.id]
+}
+function expandAll() { expandedDevices.value = devices.map((d) => d.id) }
+function collapseAll() { expandedDevices.value = [] }
+function toggleDeviceEnabled(device: Device) {
+  device.enabled = !device.enabled
+  notify(`${device.name} 已${device.enabled ? '开启' : '禁用'}（演示）`)
 }
 
-const config = computed(() => configs[selectedDevice.value.id])
-const dirty = computed(() => JSON.stringify(configs[selectedDevice.value.id]) !== JSON.stringify(savedConfigs[selectedDevice.value.id]))
-
-const toast = ref('')
-let toastTimer: ReturnType<typeof setTimeout> | undefined
-
-function showToast(text: string) {
-  toast.value = text
-  if (toastTimer) clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => {
-    toast.value = ''
-  }, 2400)
+function displayRaw(value: string) {
+  if (!masked.value) return value
+  if (value.length <= 5) return value
+  return `${value.slice(0, 3)}****${value.slice(-3)}`
 }
+const displayAccount = (account: Account) => displayRaw(account.account)
+const displayChar = (name: string) => (name.length > 1 ? `${name.slice(0, 1)}**` : name)
 
-function toggleGroup(name: string) {
-  if (collapsed.value.includes(name)) {
-    collapsed.value = collapsed.value.filter((item) => item !== name)
-  } else {
-    collapsed.value = [...collapsed.value, name]
-  }
+function deviceDot(device: Device) {
+  if (device.approval === 'pending') return 'pending'
+  if (!device.online) return 'off'
+  return 'on'
 }
-
-function addAccount() {
-  const device = selectedDevice.value
-  const n = device.accounts.length + 1
-  device.accounts.push({
-    id: `${device.id}-a${n}-${Date.now()}`,
-    name: `账号 ${String(n).padStart(2, '0')}`,
-    platform: '抖音',
-    module: '日常巡检',
-    status: 'pending',
-  })
-  showToast(`已添加账号，待授权后开始执行（3 元/号/月）`)
-}
-
-function removeAccount(account: Account) {
-  const device = selectedDevice.value
-  const index = device.accounts.findIndex((item) => item.id === account.id)
-  if (index === -1) return
-  device.accounts.splice(index, 1)
-  showToast(`已删除 ${account.name}，下个计费周期减少 3 元`)
+function accountDot(account: Account) {
+  if (!account.enabled || account.license === '已到期') return 'off'
+  if (account.license === '即将到期') return 'soon'
+  return 'on'
 }
 
 function toggleAccount(account: Account) {
-  if (account.status === 'pending') {
-    showToast('待授权账号需要先在 Auth 完成授权')
+  account.enabled = !account.enabled
+  account.status = account.enabled ? '空闲' : '已停用'
+  notify(`${displayAccount(account)} 已${account.enabled ? '启用' : '停用'}（演示）`)
+}
+
+function syncAccount() { notify('已从设备最近一次配置快照同步（演示）') }
+function batchSync() { notify(`已按设备分组批量同步 ${currentDevice.value.accounts.length} 个账号（演示）`) }
+
+const showAddAccount = ref(false)
+const addError = ref('')
+const addForm = reactive({ deviceId: 'd1', type: 'QQ' as 'QQ' | '微信', number: '', copyFrom: '', enabled: true })
+const copyCandidates = computed(() => devices.find((d) => d.id === addForm.deviceId)?.accounts ?? [])
+
+function openAddAccount(device: Device) {
+  if (device.approval === 'pending') {
+    notify('设备还需审核通过，才能添加账号')
     return
   }
-  account.status = account.status === 'running' ? 'stopped' : 'running'
-  showToast(account.status === 'running' ? `${account.name} 已恢复执行` : `${account.name} 已暂停执行`)
+  addForm.deviceId = device.id
+  addForm.type = 'QQ'
+  addForm.number = ''
+  addForm.copyFrom = ''
+  addForm.enabled = true
+  addError.value = ''
+  showAddAccount.value = true
 }
 
-function saveConfig() {
-  const device = selectedDevice.value
-  savedConfigs[device.id] = { ...configs[device.id] }
-  showToast('配置已保存，设备下次拉取快照后生效')
+function fmtDateTime(date: Date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  const hh = String(date.getHours()).padStart(2, '0')
+  const mm = String(date.getMinutes()).padStart(2, '0')
+  return `${y}-${m}-${d} ${hh}:${mm}`
 }
 
-function resetConfig() {
-  const device = selectedDevice.value
-  configs[device.id] = { ...savedConfigs[device.id] }
-  showToast('已放弃未保存的修改')
-}
-
-const statusDevices = computed(() => {
-  const query = statusQuery.value.toLowerCase()
-  return devices.filter((device) => {
-    const matchFilter = statusFilter.value === 'all' || device.status === statusFilter.value
-    const matchQuery = !query || device.name.toLowerCase().includes(query) || device.group.toLowerCase().includes(query)
-    return matchFilter && matchQuery
-  })
-})
-
-function runningOf(device: Device) {
-  if (device.status !== 'online') return 0
-  return device.accounts.filter((account) => account.status === 'running').length
-}
-
-function authorizedOf(device: Device) {
-  return device.accounts.filter((account) => account.status !== 'pending').length
-}
-
-const authorizedTotal = computed(() => devices.reduce((sum, device) => sum + authorizedOf(device), 0))
-
-const kpis = computed(() => [
-  {
-    label: '在线设备',
-    value: `${devices.filter((device) => device.status === 'online').length} / ${devices.length}`,
-    hint: '离线设备不计费但仍保留配置',
-    tone: 'text-slate-900',
-  },
-  {
-    label: '运行账号',
-    value: `${devices.reduce((sum, device) => sum + runningOf(device), 0)} / ${devices.reduce((sum, device) => sum + device.accounts.length, 0)}`,
-    hint: `按号计费，本月 ${authorizedTotal.value * 3} 元`,
-    tone: 'text-brand-700',
-  },
-  {
-    label: '今日执行',
-    value: devices.reduce((sum, device) => sum + device.executions, 0).toLocaleString('zh-CN'),
-    hint: '设备上报的执行次数合计',
-    tone: 'text-slate-900',
-  },
-  {
-    label: '待处理',
-    value: `${devices.filter((device) => device.status !== 'online').length} 项`,
-    hint: '离线与执行异常待确认',
-    tone: 'text-red-600',
-  },
-])
-
-function focusIncident() {
-  statusFilter.value = 'error'
-  statusQuery.value = ''
-  selectedStatusId.value = 'd7'
-  tab.value = 'status'
-  showToast('已筛选异常设备，定位到设备 07')
-}
-
-function pullSnapshot() {
-  showToast(`${selectedStatusDevice.value.name} 已发起快照拉取，等待设备响应`)
-}
-
-const notifications = ref([
-  { id: 'n1', type: '授权', text: '门店 A / 账号 03 授权将在 3 天后到期。', time: '10:24' },
-  { id: 'n2', type: '异常', text: '设备 07 连续 3 次执行失败，已暂停自动执行。', time: '09:48' },
-  { id: 'n3', type: '设备', text: '设备 09 离线超过 10 分钟，最后一次心跳 09:31。', time: '09:31' },
-])
-
-const lastRefreshLabel = computed(() =>
-  lastRefresh.value.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),
-)
-
-function refresh() {
-  lastRefresh.value = new Date()
-  for (const device of devices) {
-    if (device.status === 'online') device.heartbeat = '刚刚'
+function confirmAddAccount() {
+  const number = addForm.number.trim()
+  if (!number) { addError.value = '请输入账号'; return }
+  if (allAccounts.value.some((a) => a.account === number)) { addError.value = '该账号已存在，请勿重复添加'; return }
+  const device = devices.find((d) => d.id === addForm.deviceId)
+  if (!device) { addError.value = '设备不存在'; return }
+  const source = addForm.copyFrom ? allAccounts.value.find((a) => a.id === addForm.copyFrom) : null
+  const modules = source ? (JSON.parse(JSON.stringify(source.modules)) as ModuleCfg[]) : [makeModule('profile'), makeModule('afk')]
+  const expire = new Date(Date.now() + 30 * 86400000)
+  const account: Account = {
+    id: `new-${Date.now()}`, deviceId: device.id, type: addForm.type, account: number, seq: device.accounts.length + 1,
+    enabled: addForm.enabled, status: addForm.enabled ? '空闲' : '已停用', charName: '未采集', level: 0, rank: '未定级',
+    havoc: 0, assets: 0, ratio: 0, updated: fmtDateTime(new Date()).slice(5, 16), license: '有效', expire: fmtDateTime(expire),
+    modules, produce: [],
   }
-  showToast('状态已刷新')
+  device.accounts.push(account)
+  if (!isExpanded(device.id)) expandedDevices.value.push(device.id)
+  selectedDeviceId.value = device.id
+  selectedAccountId.value = account.id
+  showAddAccount.value = false
+  notify(`已添加 ${account.type}：${displayAccount(account)}（演示）`)
 }
 
-function deviceLabel(status: DeviceStatus) {
-  return status === 'online' ? '在线' : status === 'offline' ? '离线' : '异常'
+const deleteTarget = ref<Account | null>(null)
+function askDeleteAccount() { deleteTarget.value = selectedAccount.value }
+function confirmDeleteAccount() {
+  const account = deleteTarget.value
+  if (!account) return
+  const device = devices.find((d) => d.id === account.deviceId)
+  if (device) device.accounts = device.accounts.filter((a) => a.id !== account.id)
+  if (selectedAccountId.value === account.id) {
+    const next = device?.accounts[0] ?? allAccounts.value[0]
+    selectedAccountId.value = next?.id ?? ''
+    if (next) selectedDeviceId.value = next.deviceId
+  }
+  deleteTarget.value = null
+  notify('账号已删除（演示）')
 }
 
-function accountStatusLabel(status: AccountStatus) {
-  return { running: '运行中', stopped: '已停止', pending: '待授权', error: '异常' }[status]
+const showAddModule = ref(false)
+const addModuleFor = ref<Account | null>(null)
+const moduleCatalog: { key: ModuleKey; label: string; desc: string }[] = [
+  { key: 'profile', label: '信息', desc: '采集角色名、等级、段位与资产' },
+  { key: 'afk', label: '挂机', desc: '自动对局、冷却与执行时段' },
+  { key: 'produce', label: '生产', desc: '按特勤部门排产与制造' },
+  { key: 'sell', label: '出售', desc: '集市上架与最低价控制' },
+  { key: 'buy', label: '购买', desc: '补货到目标库存，限制最高价' },
+  { key: 'stock', label: '库存', desc: '定时盘点仓库物品数量' },
+  { key: 'exchange', label: '兑换', desc: '按渠道把物品兑换成资源' },
+  { key: 'warehouse', label: '仓库', desc: '设备级仓库容量与占用' },
+]
+const availableModules = computed(() => {
+  const target = addModuleFor.value
+  if (!target) return moduleCatalog
+  return moduleCatalog.filter((item) => !target.modules.some((m) => m.key === item.key))
+})
+function openAddModule() {
+  addModuleFor.value = selectedAccount.value
+  showAddModule.value = true
+}
+function addModule(key: ModuleKey) {
+  if (!addModuleFor.value) return
+  addModuleFor.value.modules.push(makeModule(key))
+  notify(`已添加「${moduleLabel(key)}」模块（演示）`)
+}
+function removeModule(module: ModuleCfg) {
+  if (!selectedAccount.value) return
+  selectedAccount.value.modules = selectedAccount.value.modules.filter((m) => m.key !== module.key)
+}
+function syncFromOther() {
+  const target = addModuleFor.value ?? selectedAccount.value
+  if (!target) return
+  const source = allAccounts.value.find((a) => a.id !== target.id && a.deviceId === target.deviceId && a.modules.length)
+  if (!source) { notify('同设备下没有可复制的账号配置'); return }
+  target.modules = JSON.parse(JSON.stringify(source.modules)) as ModuleCfg[]
+  showAddModule.value = false
+  notify(`已从 ${displayAccount(source)} 同步模块配置（演示）`)
 }
 
-function devicePill(status: DeviceStatus) {
-  return status === 'online'
-    ? 'bg-accent-500/15 text-accent-600'
-    : status === 'error'
-      ? 'bg-red-100 text-red-700'
-      : 'bg-slate-100 text-slate-500'
+const moduleLabel = (key: ModuleKey) => moduleMeta[key].label
+function normalizePriority(module: ModuleCfg) {
+  const value = Number(module.priority)
+  module.priority = Number.isFinite(value) ? Math.min(999, Math.max(0, Math.round(value))) : 0
+}
+function addAfkWindow(module: ModuleCfg) { module.afk.windows.push({ start: '09:00', end: '12:00' }) }
+function removeAfkWindow(module: ModuleCfg, index: number) { module.afk.windows.splice(index, 1) }
+function windowText(window: { start: string; end: string }) {
+  const [sh, sm] = window.start.split(':').map(Number)
+  const [eh, em] = window.end.split(':').map(Number)
+  const minutes = (eh * 60 + em - (sh * 60 + sm) + 1440) % 1440
+  return `${Math.floor(minutes / 60)} 小时 ${minutes % 60} 分`
+}
+function produceOptions(dept: string) {
+  if (dept === '制药台') return ['医疗包', '止痛药', '肾上腺素']
+  if (dept === '技术中心') return ['战术手电', '激光指示器', '防弹插板']
+  return ['紫罗兰', '标准弹药', '高级护甲']
+}
+function addProduceItem(module: ModuleCfg) {
+  module.produce.items.push({ dept: '工作台', prop: '紫罗兰', name: '空闲', status: '空闲', left: '—', enabled: true })
+}
+function removeProduceItem(module: ModuleCfg, index: number) { module.produce.items.splice(index, 1) }
+function addSellItem(module: ModuleCfg) { module.sell.items.push({ prop: '新物品', mode: 'market', price: 0, enabled: true }) }
+function removeSellItem(module: ModuleCfg, index: number) { module.sell.items.splice(index, 1) }
+function addBuyItem(module: ModuleCfg) { module.buy.items.push({ prop: '新物品', current: 0, target: 10, maxPrice: 0, schedule: '每2小时', enabled: true }) }
+
+const grouped = ref(true)
+const collapsedGroups = ref<string[]>([])
+const isGroupCollapsed = (id: string) => collapsedGroups.value.includes(id)
+function toggleGroup(id: string) {
+  collapsedGroups.value = isGroupCollapsed(id) ? collapsedGroups.value.filter((x) => x !== id) : [...collapsedGroups.value, id]
 }
 
-function accountPill(status: AccountStatus) {
-  return status === 'running'
-    ? 'bg-accent-500/15 text-accent-600'
-    : status === 'error'
-      ? 'bg-red-100 text-red-700'
-      : status === 'pending'
-        ? 'bg-amber-100 text-amber-700'
-        : 'bg-slate-100 text-slate-500'
+const sortKey = ref<'level' | 'havoc' | 'assets' | 'ratio'>('havoc')
+const sortDir = ref<1 | -1>(-1)
+function setSort(key: 'level' | 'havoc' | 'assets' | 'ratio') {
+  if (sortKey.value === key) sortDir.value = sortDir.value === 1 ? -1 : 1
+  else { sortKey.value = key; sortDir.value = -1 }
+}
+function sortMark(key: string) {
+  if (sortKey.value !== key) return ''
+  return sortDir.value === -1 ? '↓' : '↑'
+}
+function sortedAccounts(list: Account[]) {
+  return [...list].sort((a, b) => (a[sortKey.value] - b[sortKey.value]) * sortDir.value)
 }
 
-function deviceDot(status: DeviceStatus) {
-  return status === 'online' ? 'bg-accent-500' : status === 'error' ? 'bg-red-500' : 'bg-slate-300'
+function heartbeatText(device: Device) {
+  if (!device.online) return '离线 · 2 分钟'
+  if (device.heartbeatSec <= 30) return `心跳 ${device.heartbeatSec}s`
+  if (device.heartbeatSec <= 60) return `心跳 ${device.heartbeatSec}s`
+  return `心跳 ${Math.floor(device.heartbeatSec / 60)}m`
+}
+function heartbeatClass(device: Device) {
+  if (!device.online) return 'tag-danger'
+  if (device.heartbeatSec <= 30) return 'tag-success'
+  if (device.heartbeatSec <= 60) return 'tag-warning'
+  return 'tag-danger'
+}
+function deviceKeyOf(account: Account) {
+  return devices.find((d) => d.id === account.deviceId)?.key ?? '—'
+}
+function cloudControl(device: Device) {
+  notify(`已向 ${device.key} 发送云控指令（演示）`)
 }
 
-function notePill(type: string) {
-  return type === '异常'
-    ? 'bg-red-100 text-red-700'
-    : type === '授权'
-      ? 'bg-amber-100 text-amber-700'
-      : 'bg-slate-200 text-slate-600'
+function accountStatusClass(status: AccountStatus) {
+  if (status === '运行中') return 'run'
+  if (status === '挂机中') return 'hang'
+  if (status === '异常') return 'error'
+  if (status === '空闲') return 'idle'
+  return 'off'
+}
+function licenseClass(license: LicenseStatus) {
+  if (license === '有效') return 'tag-success'
+  if (license === '即将到期') return 'tag-warning'
+  return 'tag-danger'
+}
+function ratioColor(value: number) {
+  if (value >= 75) return '#f56c6c'
+  if (value >= 50) return '#e6a23c'
+  return '#67c23a'
+}
+
+const expandedRows = ref<string[]>([])
+const isRowExpanded = (id: string) => expandedRows.value.includes(id)
+function toggleRow(id: string) {
+  expandedRows.value = isRowExpanded(id) ? expandedRows.value.filter((x) => x !== id) : [...expandedRows.value, id]
+}
+
+const availableTokens = ref(59)
+const usedTokens = ref(31)
+const expiringAccounts = computed(() => allAccounts.value.filter((a) => a.license === '即将到期'))
+const showTokens = ref(false)
+
+const renewTarget = ref<Account | null>(null)
+const renewDays = ref(30)
+const renewOptions = [
+  { days: 7, label: '7 天' },
+  { days: 30, label: '30 天' },
+  { days: 90, label: '90 天' },
+]
+function openRenew(account: Account) {
+  renewTarget.value = account
+  renewDays.value = 30
+}
+function parseExpire(value: string) {
+  const ts = Date.parse(value.replace(' ', 'T'))
+  return Number.isNaN(ts) ? Date.now() : ts
+}
+const renewPreview = computed(() => {
+  const target = renewTarget.value
+  if (!target) return ''
+  const base = Math.max(Date.now(), parseExpire(target.expire))
+  return fmtDateTime(new Date(base + renewDays.value * 86400000))
+})
+function confirmRenew() {
+  const account = renewTarget.value
+  if (!account) return
+  if (availableTokens.value < renewDays.value) {
+    notify('可用令牌不足，无法完成续费（演示）')
+    return
+  }
+  const base = Math.max(Date.now(), parseExpire(account.expire))
+  account.expire = fmtDateTime(new Date(base + renewDays.value * 86400000))
+  account.license = '有效'
+  availableTokens.value -= renewDays.value
+  usedTokens.value += renewDays.value
+  renewTarget.value = null
+  notify(`已为 ${displayAccount(account)} 续费 ${renewDays.value} 天（演示）`)
+}
+
+function fmtNum(value: number) {
+  return value.toLocaleString('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+}
+function shortDate(value: string) {
+  return value.length >= 16 ? value.slice(5, 16) : value
 }
 </script>
+
+<style scoped>
+.demo-shell {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid #dcdfe6;
+  background: #f5f7fa;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 18px 40px -24px rgba(15, 23, 42, 0.24);
+}
+.demo-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #0b1220;
+  padding: 12px 16px;
+}
+.brand-mark {
+  display: inline-flex;
+  height: 32px;
+  width: 32px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #2447d6;
+  color: #fff;
+}
+.demo-tabs {
+  order: 3;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3px;
+}
+@media (min-width: 640px) {
+  .demo-tabs { order: 0; width: auto; }
+}
+.demo-tab {
+  border-radius: 999px;
+  padding: 6px 15px;
+  font-size: 12px;
+  color: #cbd5e1;
+  transition: all 0.15s ease;
+}
+.demo-tab.active { background: #fff; color: #0f172a; }
+.topbar-right { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.mask-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: #94a3b8; }
+.topbar-refresh {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 4px 12px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+.topbar-refresh:hover { color: #fff; border-color: rgba(255, 255, 255, 0.32); }
+
+.accounts-page {
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 14px;
+}
+@media (max-width: 1023px) {
+  .accounts-page { grid-template-columns: minmax(0, 1fr); }
+  .acc-side { min-height: 0 !important; max-height: 360px !important; }
+}
+.acc-side {
+  min-height: 680px;
+  max-height: 780px;
+  overflow-y: auto;
+  border: 1px solid #e4e7ed;
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px;
+  scrollbar-width: thin;
+}
+.side-head { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 8px; font-size: 13px; font-weight: 600; color: #303133; }
+.side-ops { display: flex; gap: 2px; }
+.side-ops button { padding: 0 4px; font-size: 11px; font-weight: 500; color: #409eff; }
+.device-group { border-radius: 8px; margin-bottom: 3px; }
+.device-row { display: flex; align-items: center; gap: 4px; padding: 7px 6px; cursor: pointer; border-radius: 6px; font-size: 12px; }
+.device-row:hover { background: #f5f7fa; }
+.device-row.is-off { opacity: 0.62; }
+.dev-arrow { font-size: 12px; color: #909399; transition: transform 0.15s ease; }
+.dev-arrow.open { transform: rotate(90deg); }
+.dev-dot { height: 6px; width: 6px; flex: none; border-radius: 50%; background: #c0c4cc; }
+.dev-dot.on { background: #35b37e; box-shadow: 0 0 0 2px rgba(53, 179, 126, 0.16); }
+.dev-dot.off { background: #e25555; box-shadow: 0 0 0 2px rgba(226, 85, 85, 0.14); }
+.dev-dot.pending { background: #e6a23c; box-shadow: 0 0 0 2px rgba(230, 162, 60, 0.16); }
+.dev-name { min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: #303133; }
+.dev-add { flex: none; margin-left: -2px; padding: 0 2px; font-size: 10px; color: #409eff; }
+.dev-add:disabled { color: #c0c4cc; cursor: not-allowed; }
+.dev-count { flex: 0 0 18px; text-align: center; font-size: 10px; color: #909399; }
+.dev-act { flex: none; margin-left: auto; font-size: 10px; color: #909399; opacity: 0.8; }
+.dev-act:hover { color: #f56c6c; opacity: 1; }
+.dev-act.enable { color: #67c23a; }
+.acc-list { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 4px 18px; }
+.acc-item { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 6px; font-size: 12px; color: #606266; text-align: left; }
+.acc-item:hover { background: #f5f7fa; }
+.acc-item.active { background: #ecf5ff; color: #409eff; font-weight: 600; }
+.acc-item.off { opacity: 0.6; }
+.acc-dot { height: 7px; width: 7px; flex: none; border-radius: 50%; background: #d3dbe7; }
+.acc-dot.on { background: #4c9a5f; box-shadow: 0 0 0 2px rgba(76, 154, 95, 0.18); }
+.acc-dot.soon { background: #f2b73c; box-shadow: 0 0 0 2px rgba(242, 183, 60, 0.16); }
+.acc-dot.off { background: #c0c4cc; }
+.acc-label { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.off-tag { flex: none; font-size: 10px; color: #909399; }
+.off-tag.warn { color: #e6a23c; }
+.empty-dev { padding: 4px 6px 8px; font-size: 11px; line-height: 1.6; color: #a8abb2; }
+
+.acc-main { display: flex; min-width: 0; flex-direction: column; gap: 12px; }
+.det-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid #e4e7ed; border-radius: 10px; background: #fff; padding: 11px 14px; }
+.det-title { display: flex; min-width: 0; flex-wrap: wrap; align-items: center; gap: 8px; }
+.det-label { font-size: 15px; font-weight: 600; color: #303133; }
+.dev-key { display: inline-flex; height: 24px; width: 112px; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px; border: 1px solid #d9ecff; background: #ecf5ff; padding: 0 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; color: #409eff; text-overflow: ellipsis; white-space: nowrap; }
+.det-ops { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px; margin-left: auto; }
+.lbl { font-size: 11px; color: #909399; }
+.license-alert { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid #faecd8; border-radius: 10px; background: #fdf6ec; padding: 10px 14px; }
+
+.mod-section { border: 1px solid #e4e7ed; border-radius: 10px; background: #fff; padding: 13px 14px 15px; }
+.mod-section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.mod-section-head h4 { margin: 0; font-size: 13px; font-weight: 600; color: #303133; }
+.mod-section-head p { margin: 3px 0 0; font-size: 11px; line-height: 1.6; color: #909399; }
+.mod-count { flex: none; font-size: 11px; color: #909399; }
+.mod-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.module-card { border: 1px solid #e4e7ed; border-radius: 10px; background: #fff; overflow: hidden; transition: opacity 0.15s ease; }
+.module-card.is-off { opacity: 0.72; }
+.mc-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid #f2f3f5; background: #fafafa; padding: 8px 12px; }
+.mc-title { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.mc-name { font-size: 13px; font-weight: 600; color: #303133; }
+.mc-ops { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mc-label { font-size: 11px; color: #909399; }
+.mc-body { padding: 12px; }
+.mc-foot { margin: 10px 0 0; font-size: 10px; color: #a8abb2; }
+
+.pf-top { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; border-bottom: 1px solid #f2f3f5; padding-bottom: 10px; }
+.pf-cell { display: flex; flex-direction: column; gap: 2px; }
+.pf-cell.center { align-items: center; }
+.pf-cell.right { align-items: flex-end; }
+.pf-label { font-size: 10px; color: #909399; }
+.pf-value { font-size: 14px; font-weight: 600; color: #303133; }
+.pf-value.brand { color: #409eff; }
+.pf-nums { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 10px; }
+.pf-num { font-size: 14px; font-weight: 700; color: #303133; font-variant-numeric: tabular-nums; }
+.pf-num.success { color: #67c23a; }
+.pf-num.warning { color: #e6a23c; }
+
+.afk-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.afk-stat { display: flex; flex-direction: column; gap: 2px; border-radius: 6px; background: #fafafa; padding: 7px 9px; }
+.afk-stat span { font-size: 10px; color: #909399; }
+.afk-stat b { font-size: 13px; color: #303133; }
+.afk-stat b.success { color: #67c23a; }
+.afk-stat b.muted { font-size: 11px; font-weight: 500; color: #909399; }
+.pass-box { margin-top: 10px; border: 1px solid #ebeef5; border-radius: 8px; background: #fcfcfd; padding: 9px 11px; }
+.afk-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; }
+.afk-times { margin-top: 10px; border-top: 1px solid #f2f3f5; padding-top: 9px; }
+.afk-win { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; font-size: 11px; }
+.afk-win-text { color: #909399; }
+
+.mc-table-scroll { overflow-x: auto; }
+.mc-table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.mc-table th { border-bottom: 1px solid #ebeef5; padding: 6px 6px; text-align: left; font-size: 11px; font-weight: 500; color: #909399; white-space: nowrap; }
+.mc-table td { border-bottom: 1px solid #f2f3f5; padding: 6px; color: #606266; }
+.mc-chip { display: inline-flex; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px; padding: 1px 6px; font-size: 10px; }
+.mc-chip.busy { background: #ecf5ff; color: #409eff; }
+.mc-chip.done { background: #f4f4f5; color: #909399; }
+.add-row { margin-top: 7px; }
+.mod-empty { display: flex; min-height: 220px; flex-direction: column; align-items: center; justify-content: center; gap: 7px; border: 1px dashed #dcdfe6; border-radius: 12px; background: #fafafa; padding: 26px 20px; text-align: center; }
+.mod-empty-icon { display: flex; height: 48px; width: 48px; align-items: center; justify-content: center; border-radius: 14px; border: 1px solid #d9ecff; background: #ecf5ff; color: #409eff; }
+.mod-empty-icon svg { height: 24px; width: 24px; }
+.mod-empty-title { font-size: 14px; font-weight: 600; color: #303133; }
+.mod-empty-desc { max-width: 380px; font-size: 12px; line-height: 1.7; color: #909399; }
+.acc-empty { display: flex; min-height: 280px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #e4e7ed; border-radius: 10px; background: #fff; padding: 30px; text-align: center; }
+
+.status-page { padding: 14px; }
+.status-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; padding: 2px 2px 0; }
+.status-banner h2 { margin: 0; font-size: 18px; font-weight: 600; color: #303133; }
+.status-banner p { margin: 3px 0 0; font-size: 12px; color: #909399; }
+.banner-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.biz-group { margin-bottom: 12px; overflow: hidden; border: 1px solid #e4e7ed; border-radius: 10px; background: #fff; }
+.group-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-bottom: 1px solid #ebeef5; background: #fafafa; padding: 9px 12px; cursor: pointer; }
+.group-head:hover { background: #f5f7fa; }
+.group-chevron { font-size: 12px; color: #909399; transition: transform 0.15s ease; }
+.group-chevron.open { transform: rotate(90deg); }
+.device-title { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; color: #303133; }
+.device-chips { display: flex; min-width: 0; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.device-chips span { border-radius: 3px; background: #fff; padding: 2px 6px; font-size: 10px; line-height: 1.5; color: #909399; border: 1px solid #ebeef5; }
+.table-scroll { overflow-x: auto; }
+.grouped-table { min-width: 1034px; }
+.ungrouped-table { min-width: 1090px; }
+.biz-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.biz-table th { border-bottom: 1px solid #ebeef5; background: #fff; padding: 8px 7px; text-align: left; font-size: 11px; font-weight: 500; color: #909399; white-space: nowrap; }
+.biz-table td { overflow: hidden; border-bottom: 1px solid #f2f3f5; padding: 8px 7px; color: #606266; text-overflow: ellipsis; white-space: nowrap; }
+.data-row { cursor: pointer; }
+.data-row:hover td { background: #fafcff; }
+.data-row.is-off { opacity: 0.6; }
+.data-row .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+.data-row .muted { color: #909399; }
+.data-row .num { font-variant-numeric: tabular-nums; }
+.row-chevron { display: inline-block; color: #c0c4cc; font-size: 11px; transition: transform 0.15s ease; }
+.row-chevron.open { transform: rotate(90deg); }
+.status-dot { display: inline-block; height: 6px; width: 6px; margin-right: 4px; border-radius: 50%; background: #c0c4cc; vertical-align: 1px; }
+.status-dot.run { background: #67c23a; }
+.status-dot.hang { background: #409eff; }
+.status-dot.idle { background: #909399; }
+.status-dot.error { background: #f56c6c; }
+.status-dot.off { background: #c0c4cc; }
+.ratio-cell { display: flex; align-items: center; gap: 5px; }
+.mini-progress { display: inline-block; height: 6px; width: 48px; overflow: hidden; border-radius: 4px; background: #ebeef5; }
+.mini-progress span { display: block; height: 100%; border-radius: 4px; background: #409eff; }
+.warehouse-bar { height: 8px; overflow: hidden; border-radius: 4px; background: #ebeef5; }
+.warehouse-bar span { display: block; height: 100%; border-radius: 4px; background: #409eff; transition: width 0.2s ease; }
+.expand-row td { border-bottom: 1px solid #ebeef5; background: #fafcff; padding: 10px 14px; white-space: normal; }
+.expand-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.produce-chip { border: 1px solid #ebeef5; border-radius: 4px; background: #fff; padding: 2px 7px; font-size: 10px; color: #606266; }
+.produce-chip.done { color: #909399; background: #f4f4f5; }
+.th-sort { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: inherit; }
+.th-sort:hover { color: #409eff; }
+.th-sort i { font-style: normal; font-size: 9px; color: #409eff; }
+.grand-total { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid #e4e7ed; border-radius: 10px; background: #fff; padding: 10px 14px; font-size: 12px; color: #606266; }
+.grand-total b { color: #303133; font-variant-numeric: tabular-nums; }
+
+.el-tag { display: inline-flex; flex: none; align-items: center; border: 1px solid; border-radius: 4px; padding: 0 5px; font-size: 10px; line-height: 18px; white-space: nowrap; }
+.tag-primary { border-color: #d9ecff; background: #ecf5ff; color: #409eff; }
+.tag-success { border-color: #e1f3d8; background: #f0f9eb; color: #67c23a; }
+.tag-warning { border-color: #faecd8; background: #fdf6ec; color: #e6a23c; }
+.tag-danger { border-color: #fde2e2; background: #fef0f0; color: #f56c6c; }
+.tag-info { border-color: #e9e9eb; background: #f4f4f5; color: #909399; }
+
+.switch { position: relative; display: inline-flex; height: 16px; width: 32px; flex: none; align-items: center; border-radius: 999px; background: #dcdfe6; transition: background 0.15s ease; }
+.switch.on { background: #409eff; }
+.switch i { position: absolute; left: 2px; top: 2px; height: 12px; width: 12px; border-radius: 50%; background: #fff; transition: left 0.15s ease; }
+.switch.on i { left: 18px; }
+.prio-input, .time-input { height: 26px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; padding: 0 5px; font-size: 11px; color: #606266; outline: none; }
+.prio-input { width: 54px; text-align: center; }
+.prio-input:focus, .time-input:focus, .mini-select:focus, .form-control:focus { border-color: #409eff; }
+.time-input { width: 88px; }
+.mini-select { height: 26px; max-width: 100%; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; padding: 0 4px; font-size: 11px; color: #606266; outline: none; }
+
+.el-btn { display: inline-flex; height: 28px; flex: none; align-items: center; justify-content: center; gap: 4px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; padding: 0 10px; font-size: 11px; color: #606266; transition: all 0.15s ease; }
+.el-btn:hover { border-color: #c6e2ff; background: #ecf5ff; color: #409eff; }
+.el-btn-primary { border-color: #409eff; background: #409eff; color: #fff; }
+.el-btn-primary:hover { border-color: #66b1ff; background: #66b1ff; color: #fff; }
+.el-btn-danger { border-color: #f56c6c; background: #f56c6c; color: #fff; }
+.el-btn-danger:hover { border-color: #f78989; background: #f78989; color: #fff; }
+.el-btn-text { flex: none; padding: 0 4px; font-size: 11px; color: #409eff; }
+.el-btn-text:hover { color: #66b1ff; }
+.el-btn-text.danger, .danger-text { color: #f56c6c; }
+.el-btn-text.danger:hover, .danger-text:hover { color: #f78989; }
+
+.demo-toast { position: fixed; bottom: 28px; left: 50%; z-index: 80; transform: translateX(-50%); border-radius: 8px; background: rgba(15, 23, 42, 0.92); padding: 9px 18px; font-size: 12px; color: #fff; box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.4); }
+
+.modal-mask { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.45); padding: 16px; }
+.modal-panel { width: 560px; max-width: 100%; max-height: 88vh; overflow-y: auto; border-radius: 12px; background: #fff; box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.4); }
+.modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; border-bottom: 1px solid #ebeef5; padding: 16px 18px 13px; }
+.modal-head h3 { margin: 0; font-size: 16px; font-weight: 600; color: #303133; }
+.modal-head p { margin: 3px 0 0; font-size: 11px; line-height: 1.5; color: #909399; }
+.modal-close { flex: none; font-size: 18px; line-height: 1; color: #909399; }
+.modal-close:hover { color: #409eff; }
+.modal-body { padding: 14px 18px; }
+.modal-foot { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; border-top: 1px solid #ebeef5; padding: 12px 18px; }
+.form-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; font-size: 12px; color: #606266; }
+.form-row > span:first-child { width: 70px; flex: none; color: #909399; }
+.form-control { width: 100%; height: 32px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; padding: 0 9px; font-size: 12px; color: #303133; outline: none; }
+.segmented { display: inline-flex; border: 1px solid #dcdfe6; border-radius: 4px; overflow: hidden; }
+.segmented button { padding: 5px 14px; font-size: 12px; color: #606266; background: #fff; }
+.segmented button.active { background: #409eff; color: #fff; }
+.module-cand { display: flex; width: 100%; align-items: center; gap: 10px; border-bottom: 1px solid #f2f3f5; padding: 9px 2px; text-align: left; }
+.module-cand:hover { background: #fafcff; }
+.module-cand b { display: block; font-size: 13px; color: #303133; }
+.module-cand small { display: block; margin-top: 2px; font-size: 11px; color: #909399; }
+.renew-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.renew-grid > div { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; border-radius: 6px; background: #fafafa; padding: 8px 10px; }
+.renew-grid span:first-child { font-size: 10px; color: #909399; }
+.renew-grid b { font-size: 12px; color: #303133; }
+.renew-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+.renew-option { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; border: 1px solid #dcdfe6; border-radius: 6px; padding: 9px 11px; text-align: left; }
+.renew-option b { font-size: 13px; color: #303133; }
+.renew-option span { font-size: 10px; color: #909399; }
+.renew-option.active { border-color: #409eff; background: #ecf5ff; }
+.renew-option.active b { color: #409eff; }
+.token-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.token-stats > div { display: flex; flex-direction: column; align-items: center; gap: 2px; border-radius: 8px; background: #fafafa; padding: 10px; }
+.token-stats b { font-size: 20px; color: #303133; font-variant-numeric: tabular-nums; }
+.token-stats span { font-size: 10px; color: #909399; }
+
+@media (max-width: 640px) {
+  .status-page, .accounts-page { padding: 10px; }
+  .mc-head { align-items: flex-start; }
+  .mc-ops { width: 100%; justify-content: flex-start; gap: 5px; }
+  .mc-ops .prio-input { width: 48px; }
+  .mc-ops .mini-select { width: 58px; }
+  .mc-ops .el-btn-text.danger { margin-left: auto; }
+  .demo-topbar { padding: 10px 12px; }
+  .status-banner h2 { font-size: 16px; }
+  .device-chips span:nth-child(n + 4) { display: none; }
+  .grand-total { font-size: 11px; }
+  .renew-grid { grid-template-columns: 1fr; }
+  .renew-options { grid-template-columns: 1fr; }
+}
+</style>
