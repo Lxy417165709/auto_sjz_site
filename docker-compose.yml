@@ -1,0 +1,21 @@
+services:
+  site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: auto_sjz_site:local
+    container_name: auto_sjz_site
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      # 上线必须换成真实域名，否则 sitemap / canonical 指向 localhost
+      SITE_BASE_URL: "${SITE_BASE_URL:-http://localhost:8080}"
+      # Manager 地址；留空时「登录 / 购买」退回联系页
+      MANAGER_URL: "${MANAGER_URL:-}"
+      LEAD_STORE_PATH: "/data/leads.jsonl"
+      LEAD_WEBHOOK_URL: "${LEAD_WEBHOOK_URL:-}"
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ./data:/data

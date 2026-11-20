@@ -1,0 +1,112 @@
+[
+  {
+    "slug": "quickstart",
+    "title": "快速开始：Docker 部署",
+    "summary": "从零跑起一套最小可用的 auto_sjz：discovery + Manager 根节点 + 一台接入设备。",
+    "updated": "2026-11",
+    "sections": [
+      {
+        "heading": "前置条件",
+        "paragraphs": [
+          "一台能被设备访问的服务器，已安装 Docker 与 Docker Compose。",
+          "部署仓库按根节点、子节点分开维护 compose 编排，Root 与子节点可以部署在不同机器上。"
+        ],
+        "bullets": ["服务器开放 Manager 端口与 discovery 端口", "设备侧可以访问 discovery 地址", "准备好授权租约（license lease）"]
+      },
+      {
+        "heading": "部署顺序",
+        "paragraphs": [
+          "先启动 discovery，再启动 Manager 根节点，最后让设备接入。顺序反了设备会解析不到地址，表现为反复重试注册。"
+        ],
+        "bullets": [
+          "启动 discovery（默认 5003），确认监听正常",
+          "启动 Manager 根节点（默认 5001），确认管理后台可登录",
+          "在 Manager 中登记设备可访问的对外地址",
+          "设备首次启动时配置 discovery 地址，由 discovery 返回 Manager 地址"
+        ]
+      },
+      {
+        "heading": "验证接入",
+        "paragraphs": [
+          "设备启动后会向 discovery 请求 Manager 地址，随后向 Manager 注册并拉取配置快照。",
+          "在 Manager 侧看到设备上线、快照成功下发，即表示链路打通；设备本地会落一份 JSON 配置，业务按该配置执行。"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "architecture",
+    "title": "系统架构与端口",
+    "summary": "设备端、discovery、Manager 三者的职责边界与默认端口规划。",
+    "updated": "2026-11",
+    "sections": [
+      {
+        "heading": "链路",
+        "paragraphs": [
+          "设备端启动后先访问 discovery，解析出 Manager 地址；再向 Manager 注册并拉取快照，写入本地 JSON 后执行业务。设备不写死 IP，Manager 地址变更只需更新 discovery 登记。"
+        ]
+      },
+      {
+        "heading": "职责划分",
+        "bullets": [
+          "设备端：执行自动化业务，本地缓存配置快照，离线只读不改配置",
+          "discovery：只负责地址解析，不承载业务配置",
+          "Manager：配置唯一权威源，负责节点管理、设备注册与快照下发",
+          "Auth：授权时效唯一权威，负责订单、token 与授权租约签发"
+        ]
+      },
+      {
+        "heading": "默认端口",
+        "bullets": [
+          "Manager 根节点：5001",
+          "Manager 子节点：5102、5202 等（按节点规划递增）",
+          "discovery：5003",
+          "Manager 与 discovery 不要求同机，只要网络互相可达且设备能访问注册出去的地址"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "license",
+    "title": "授权与计费",
+    "summary": "按账号实例计量，Auth 签发租约，设备本地验签并按绝对到期时间执行。",
+    "updated": "2026-11",
+    "sections": [
+      {
+        "heading": "计量单位",
+        "paragraphs": ["授权以账号实例为最小单位。一台设备配置 5 个账号，即占用 5 份授权；设备台数不参与计费。"]
+      },
+      {
+        "heading": "时效判定",
+        "paragraphs": [
+          "Auth 是授权时效的唯一权威。Manager 下发由 Auth 签名的授权租约，设备本地验签后按租约中的绝对到期时间执行，在线、离线、关机三种状态使用同一个时间点。"
+        ],
+        "bullets": ["到期不删除账号、不退出登录、不改动业务配置", "离线不会顺延授权", "续费由新租约覆盖，设备侧不需要重新配置"]
+      },
+      {
+        "heading": "数据落表",
+        "paragraphs": ["订单、授权 token 与 account_licenses 记录落在 Manager/Auth 侧，官网不保存任何账号、订单或支付信息。"]
+      }
+    ]
+  },
+  {
+    "slug": "snapshot",
+    "title": "配置下发与快照",
+    "summary": "Manager 统一维护配置，设备以快照为准，避免多点修改导致状态漂移。",
+    "updated": "2026-11",
+    "sections": [
+      {
+        "heading": "单一权威源",
+        "paragraphs": ["所有配置变更都在 Manager 完成。设备不提供本地改配置入口，离线期间保持最后一次成功下发的快照。"]
+      },
+      {
+        "heading": "快照流程",
+        "bullets": ["设备注册后向 Manager 请求最新快照", "Manager 返回该设备的配置集合", "设备写入本地 JSON，业务按新配置执行", "下发失败保留旧快照，恢复后自动对齐"]
+      },
+      {
+        "heading": "多节点",
+        "paragraphs": ["设备规模变大时按根节点 + 子节点拆分接入，子节点独立编排部署，配置仍由 Manager 统一管理。"]
+      }
+    ]
+  }
+]

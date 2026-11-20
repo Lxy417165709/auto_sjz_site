@@ -1,0 +1,56 @@
+[
+  {
+    "id": "billing-per-account",
+    "group": "计费",
+    "question": "一台设备登录 5 个账号，怎么计费？",
+    "answer": "按账号实例计费，这台设备占用 5 份授权。设备本身不计费，10 台设备各 5 个账号就是 50 份授权。"
+  },
+  {
+    "id": "expire-behavior",
+    "group": "授权",
+    "question": "授权到期后，账号会被删除或强制退出吗？",
+    "answer": "不会。到期只影响自动化执行，账号不会被删除、不会退出登录，设备上的配置也保持不变，续费后即可继续使用。"
+  },
+  {
+    "id": "expire-time",
+    "group": "授权",
+    "question": "设备离线或关机，到期时间会顺延吗？",
+    "answer": "不会。Auth 签发租约时写入绝对到期时间，设备本地验签后按该时间点执行，在线、离线、关机都按同一个时间失效。"
+  },
+  {
+    "id": "expire-source",
+    "group": "授权",
+    "question": "到期时间以什么为准？",
+    "answer": "以 Auth 签发的租约中的到期时间为准，设备侧验签后直接按绝对时间判定，不依赖设备本地时间续期。"
+  },
+  {
+    "id": "discovery",
+    "group": "接入",
+    "question": "discovery 是什么？必须和 Manager 部署在同一台机器吗？",
+    "answer": "discovery 是设备用来解析 Manager 地址的服务，设备启动后先访问 discovery 拿到 Manager 地址，再注册和拉取配置。discovery、Manager、设备三者不要求同机，只要 Manager 能访问 discovery，设备能访问 Manager 对外注册的地址即可。"
+  },
+  {
+    "id": "ports",
+    "group": "接入",
+    "question": "默认端口是怎么规划的？",
+    "answer": "Manager 根节点使用 5001，子节点示例为 5102、5202，discovery 使用 5003。实际部署可以按网络规划调整，只要 discovery 注册的地址与设备可达地址一致。"
+  },
+  {
+    "id": "deploy-mode",
+    "group": "部署",
+    "question": "支持怎样的部署方式？",
+    "answer": "以 Docker 部署，根节点与子节点分别使用独立的 compose 编排，Manager 与 discovery 可以分开部署，便于按设备规模横向扩展。"
+  },
+  {
+    "id": "offline-config",
+    "group": "部署",
+    "question": "设备离线时还能修改配置吗？",
+    "answer": "不能。Manager 是配置的唯一权威源，设备离线时不接受本地配置修改，恢复连接后以 Manager 下发的最新快照为准。"
+  },
+  {
+    "id": "site-order",
+    "group": "计费",
+    "question": "可以在官网直接下单或登录吗？",
+    "answer": "官网只做产品介绍和接入说明，登录与购买统一跳转到 Manager 完成，官网不保存账号、订单或支付信息。"
+  }
+]

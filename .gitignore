@@ -1,0 +1,20 @@
+# 依赖与构建产物
+web/node_modules/
+web/dist/
+server/site
+server/bin/
+
+# 运行数据（试用申请等）
+data/
+*.jsonl
+*.log
+
+# 环境与编辑器
+.env
+.env.local
+.DS_Store
+.idea/
+.vscode/
+
+# 本地构建产物
+bin/
