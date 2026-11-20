@@ -216,3 +216,20 @@ docker pull docker.m.daocloud.io/library/alpine:3.20; docker tag docker.m.daoclo
 
 - `main`：当前线上版本
 - `main_dev`：日常开发与联调分支，改完合并回 `main` 后再发布
+
+## 管理台演示子应用（/console）
+
+`/console` 不再手写复刻 Manager 界面，而是嵌入 Manager 前端仓库的 demo 构建。两边只共享同一套 Vue 组件，官网不复制业务页面代码。
+
+- 子应用目录：`web/public/console-demo/`，构建时原样进入 `web/dist/console-demo/`，访问 `/console-demo/`
+- 来源：`auto_sjz_manager` 的 `main_dev` 分支，`frontend` 下执行 `npm run build:demo`
+- 演示环境不登录、不连真实后端，接口由 `frontend/src/demo/mock.js` 接管，只保留「业务配置 / 业务状态」
+- 静态服务已支持目录 index，`/console-demo/` 不会回退到官网首页
+
+Manager 界面更新后同步演示产物：
+
+```bash
+cd /tmp/manager_ref/frontend && git pull && npm ci && npm run build:demo && rm -rf /home/user/Doubao/chats/38454246989782786/auto_sjz_site/web/public/console-demo && cp -r dist-demo /home/user/Doubao/chats/38454246989782786/auto_sjz_site/web/public/console-demo
+```
+
+> 生产环境若把 demo 单独部署，可在构建官网时设置 `VITE_CONSOLE_DEMO_URL` 指向外部子应用地址，官网不用再带静态产物。
