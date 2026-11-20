@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
       args:
         NPM_REGISTRY: "${NPM_REGISTRY:-}"
+        MANAGER_REPO: "${MANAGER_REPO:-https://github.com/Lxy417165709/auto_sjz_manager.git}"
+        MANAGER_REF: "${MANAGER_REF:-main_dev}"
         NODE_IMAGE: "${NODE_IMAGE:-node:22-alpine}"
         GO_IMAGE: "${GO_IMAGE:-golang:1.23-alpine}"
         RUNTIME_IMAGE: "${RUNTIME_IMAGE:-alpine:3.20}"

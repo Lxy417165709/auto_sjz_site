@@ -40,7 +40,7 @@
 
       <div class="mt-4 flex flex-col gap-2 text-[12px] leading-6 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
         <p>界面里左侧「业务配置 / 业务状态」就是 Manager 的两个真实工作区；账号、设备、数值均为演示数据。</p>
-        <p class="text-slate-400">移动端可横滑表格查看完整字段</p>
+        <p class="text-slate-400">业务状态表格可横向滚动，账号时效在最右侧</p>
       </div>
     </div>
   </div>

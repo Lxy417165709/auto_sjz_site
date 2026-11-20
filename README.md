@@ -237,7 +237,7 @@ cd /tmp/manager_ref/frontend && git pull && npm ci && npm run build:demo && rm -
 Docker 构建多了一个 `console_demo` 阶段：从 `auto_sjz_manager` 的 `main_dev` 现场执行 `build:demo`，并覆盖进 `/app/web/console-demo`。所以 Manager 前端更新后，重新部署官网即可自动带上新界面，不需要再改官网代码。
 
 ```bash
-docker compose build --build-arg MANAGER_REF=main_dev && docker compose up -d
+MANAGER_REF=feature/console-demo docker compose build && docker compose up -d
 ```
 
-需要锁定版本时把 `MANAGER_REF` 换成具体 commit 或 tag。
+`MANAGER_REF` 默认 `main_dev`；做分支联调时换成 `feature/console-demo`，也可以锁到具体 commit 或 tag。
