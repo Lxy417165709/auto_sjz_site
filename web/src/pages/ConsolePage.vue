@@ -3,12 +3,13 @@
     <PageHero
       eyebrow="管理台演示"
       title="业务配置和业务状态，就长这样"
-      desc="配置页按「设备 → 账号 → 模块」组织，状态页按设备聚合账号数据。下面按 Manager 的两屏做成可点演示，账号与数值均为示意数据。"
+      desc="配置页按「设备 → 账号 → 模块」组织，状态页按设备聚合账号数据。模块只展示信息、生产、出售、仓库四类，账号与数值均为示意数据。"
     >
       <div class="flex flex-wrap gap-2">
         <span class="tag">设备 → 账号 → 模块</span>
         <span class="tag">按设备聚合</span>
         <span class="tag">3 元 / 号 / 月</span>
+        <span class="tag">仅四类模块</span>
         <span class="tag">可交互</span>
         <span class="tag">示意数据</span>
       </div>
@@ -830,18 +831,18 @@ const devices = reactive<Device[]>([
     id: 'd1', key: 'a1b2c3d4e5f6', name: '门店A · 主机01', group: '门店 A', enabled: true, online: true, heartbeatSec: 8, approval: 'approved',
     meta: { os: 'Android 14', model: '小米 14', version: 'v1.0.0(3f8a21c)', battery: 86, charging: true, temp: 31, memory: 62, disk: 71 },
     accounts: [
-      makeAccount({ id: 'a1', deviceId: 'd1', type: 'QQ', account: '124578963', seq: 1, enabled: true, status: '运行中', charName: '林深', level: 62, rank: '钻石Ⅱ', havoc: 428.6, assets: 1286.3, ratio: 62, updated: '11-20 14:32', license: '有效', expire: '2026-12-05 18:00' }, ['profile', 'afk', 'produce', 'sell', 'buy', 'warehouse']),
-      makeAccount({ id: 'a2', deviceId: 'd1', type: '微信', account: 'wxid_lxy8821', seq: 2, enabled: true, status: '挂机中', charName: '陈默', level: 58, rank: '铂金Ⅰ', havoc: 312.4, assets: 942.8, ratio: 48, updated: '11-20 14:28', license: '即将到期', expire: '2026-11-23 12:00' }, ['profile', 'afk', 'produce', 'sell']),
-      makeAccount({ id: 'a3', deviceId: 'd1', type: 'QQ', account: '369258147', seq: 3, enabled: false, status: '已停用', charName: '周野', level: 41, rank: '黄金Ⅲ', havoc: 88.2, assets: 265.9, ratio: 31, updated: '11-19 22:10', license: '已到期', expire: '2026-11-18 09:00' }, ['profile', 'afk']),
+      makeAccount({ id: 'a1', deviceId: 'd1', type: 'QQ', account: '124578963', seq: 1, enabled: true, status: '运行中', charName: '林深', level: 62, rank: '钻石Ⅱ', havoc: 428.6, assets: 1286.3, ratio: 62, updated: '11-20 14:32', license: '有效', expire: '2026-12-05 18:00' }, ['profile', 'produce', 'sell', 'warehouse']),
+      makeAccount({ id: 'a2', deviceId: 'd1', type: '微信', account: 'wxid_lxy8821', seq: 2, enabled: true, status: '运行中', charName: '陈默', level: 58, rank: '铂金Ⅰ', havoc: 312.4, assets: 942.8, ratio: 48, updated: '11-20 14:28', license: '即将到期', expire: '2026-11-23 12:00' }, ['profile', 'produce', 'sell']),
+      makeAccount({ id: 'a3', deviceId: 'd1', type: 'QQ', account: '369258147', seq: 3, enabled: false, status: '已停用', charName: '周野', level: 41, rank: '黄金Ⅲ', havoc: 88.2, assets: 265.9, ratio: 31, updated: '11-19 22:10', license: '已到期', expire: '2026-11-18 09:00' }, ['profile']),
     ],
   },
   {
     id: 'd2', key: 'b7c8d9e0f1a2', name: '门店A · 主机02', group: '门店 A', enabled: true, online: true, heartbeatSec: 34, approval: 'approved',
     meta: { os: 'Android 13', model: 'Redmi K70', version: 'v1.0.0(3f8a21c)', battery: 72, charging: false, temp: 34, memory: 71, disk: 64 },
     accounts: [
-      makeAccount({ id: 'b1', deviceId: 'd2', type: 'QQ', account: '741852963', seq: 1, enabled: true, status: '空闲', charName: '苏晚', level: 66, rank: '钻石Ⅰ', havoc: 501.2, assets: 1533.6, ratio: 70, updated: '11-20 14:31', license: '即将到期', expire: '2026-11-22 20:00' }, ['profile', 'afk', 'produce', 'sell', 'warehouse']),
-      makeAccount({ id: 'b2', deviceId: 'd2', type: '微信', account: 'wxid_sjz_009', seq: 2, enabled: true, status: '运行中', charName: '陆行', level: 55, rank: '铂金Ⅱ', havoc: 288.3, assets: 864.2, ratio: 45, updated: '11-20 14:20', license: '有效', expire: '2026-12-11 10:00' }, ['profile', 'afk', 'produce', 'buy']),
-      makeAccount({ id: 'b3', deviceId: 'd2', type: 'QQ', account: '159357486', seq: 3, enabled: true, status: '异常', charName: '江屿', level: 49, rank: '铂金Ⅲ', havoc: 196.7, assets: 602.5, ratio: 52, updated: '11-20 13:58', license: '有效', expire: '2026-12-18 15:00' }, ['profile', 'afk', 'sell', 'stock']),
+      makeAccount({ id: 'b1', deviceId: 'd2', type: 'QQ', account: '741852963', seq: 1, enabled: true, status: '空闲', charName: '苏晚', level: 66, rank: '钻石Ⅰ', havoc: 501.2, assets: 1533.6, ratio: 70, updated: '11-20 14:31', license: '即将到期', expire: '2026-11-22 20:00' }, ['profile', 'produce', 'sell', 'warehouse']),
+      makeAccount({ id: 'b2', deviceId: 'd2', type: '微信', account: 'wxid_sjz_009', seq: 2, enabled: true, status: '运行中', charName: '陆行', level: 55, rank: '铂金Ⅱ', havoc: 288.3, assets: 864.2, ratio: 45, updated: '11-20 14:20', license: '有效', expire: '2026-12-11 10:00' }, ['profile', 'produce']),
+      makeAccount({ id: 'b3', deviceId: 'd2', type: 'QQ', account: '159357486', seq: 3, enabled: true, status: '异常', charName: '江屿', level: 49, rank: '铂金Ⅲ', havoc: 196.7, assets: 602.5, ratio: 52, updated: '11-20 13:58', license: '有效', expire: '2026-12-18 15:00' }, ['profile', 'sell']),
     ],
   },
   {
@@ -853,18 +854,18 @@ const devices = reactive<Device[]>([
     id: 'd4', key: 'd4e5f6a7b8c9', name: '门店B · 主机04', group: '门店 B', enabled: true, online: true, heartbeatSec: 12, approval: 'approved',
     meta: { os: 'Android 14', model: '小米 14 Pro', version: 'v1.0.0(9b2ce71)', battery: 94, charging: true, temp: 29, memory: 54, disk: 58 },
     accounts: [
-      makeAccount({ id: 'c1', deviceId: 'd4', type: 'QQ', account: '852741963', seq: 1, enabled: true, status: '运行中', charName: '顾北', level: 60, rank: '钻石Ⅲ', havoc: 402.1, assets: 1198.4, ratio: 58, updated: '11-20 14:33', license: '有效', expire: '2026-12-02 09:00' }, ['profile', 'afk', 'produce', 'sell', 'buy', 'warehouse']),
-      makeAccount({ id: 'c2', deviceId: 'd4', type: '微信', account: 'wxid_blue77', seq: 2, enabled: true, status: '挂机中', charName: '沈知', level: 57, rank: '铂金Ⅰ', havoc: 276.9, assets: 812.7, ratio: 41, updated: '11-20 14:27', license: '有效', expire: '2026-12-09 17:00' }, ['profile', 'afk', 'produce', 'buy']),
-      makeAccount({ id: 'c3', deviceId: 'd4', type: 'QQ', account: '963852741', seq: 3, enabled: false, status: '已停用', charName: '韩川', level: 38, rank: '黄金Ⅱ', havoc: 61.5, assets: 188.3, ratio: 27, updated: '11-19 18:45', license: '已到期', expire: '2026-11-19 10:00' }, ['profile', 'afk']),
+      makeAccount({ id: 'c1', deviceId: 'd4', type: 'QQ', account: '852741963', seq: 1, enabled: true, status: '运行中', charName: '顾北', level: 60, rank: '钻石Ⅲ', havoc: 402.1, assets: 1198.4, ratio: 58, updated: '11-20 14:33', license: '有效', expire: '2026-12-02 09:00' }, ['profile', 'produce', 'sell', 'warehouse']),
+      makeAccount({ id: 'c2', deviceId: 'd4', type: '微信', account: 'wxid_blue77', seq: 2, enabled: true, status: '运行中', charName: '沈知', level: 57, rank: '铂金Ⅰ', havoc: 276.9, assets: 812.7, ratio: 41, updated: '11-20 14:27', license: '有效', expire: '2026-12-09 17:00' }, ['profile', 'produce']),
+      makeAccount({ id: 'c3', deviceId: 'd4', type: 'QQ', account: '963852741', seq: 3, enabled: false, status: '已停用', charName: '韩川', level: 38, rank: '黄金Ⅱ', havoc: 61.5, assets: 188.3, ratio: 27, updated: '11-19 18:45', license: '已到期', expire: '2026-11-19 10:00' }, ['profile']),
     ],
   },
   {
     id: 'd5', key: 'e5f6a7b8c9d0', name: '测试组 · 主机05', group: '测试组', enabled: true, online: false, heartbeatSec: 128, approval: 'approved',
     meta: { os: 'Android 13', model: '真我 GT5', version: 'v1.0.0(3f8a21c)', battery: 41, charging: false, temp: 36, memory: 78, disk: 83 },
     accounts: [
-      makeAccount({ id: 'e1', deviceId: 'd5', type: 'QQ', account: '321654987', seq: 1, enabled: true, status: '运行中', charName: '许星河', level: 64, rank: '钻石Ⅱ', havoc: 455.8, assets: 1362.9, ratio: 66, updated: '11-20 14:05', license: '有效', expire: '2026-12-15 12:00' }, ['profile', 'afk', 'produce', 'sell', 'buy', 'warehouse']),
-      makeAccount({ id: 'e2', deviceId: 'd5', type: '微信', account: 'wxid_test01', seq: 2, enabled: true, status: '空闲', charName: '叶青', level: 52, rank: '铂金Ⅲ', havoc: 231.4, assets: 704.8, ratio: 39, updated: '11-20 14:02', license: '即将到期', expire: '2026-11-24 08:00' }, ['profile', 'afk', 'produce', 'stock']),
-      makeAccount({ id: 'e3', deviceId: 'd5', type: 'QQ', account: '654987321', seq: 3, enabled: true, status: '运行中', charName: '温言', level: 59, rank: '钻石Ⅳ', havoc: 366.2, assets: 1089.5, ratio: 54, updated: '11-20 14:12', license: '有效', expire: '2026-12-20 16:00' }, ['profile', 'afk', 'produce', 'sell', 'exchange']),
+      makeAccount({ id: 'e1', deviceId: 'd5', type: 'QQ', account: '321654987', seq: 1, enabled: true, status: '运行中', charName: '许星河', level: 64, rank: '钻石Ⅱ', havoc: 455.8, assets: 1362.9, ratio: 66, updated: '11-20 14:05', license: '有效', expire: '2026-12-15 12:00' }, ['profile', 'produce', 'sell', 'warehouse']),
+      makeAccount({ id: 'e2', deviceId: 'd5', type: '微信', account: 'wxid_test01', seq: 2, enabled: true, status: '空闲', charName: '叶青', level: 52, rank: '铂金Ⅲ', havoc: 231.4, assets: 704.8, ratio: 39, updated: '11-20 14:02', license: '即将到期', expire: '2026-11-24 08:00' }, ['profile', 'produce']),
+      makeAccount({ id: 'e3', deviceId: 'd5', type: 'QQ', account: '654987321', seq: 3, enabled: true, status: '运行中', charName: '温言', level: 59, rank: '钻石Ⅳ', havoc: 366.2, assets: 1089.5, ratio: 54, updated: '11-20 14:12', license: '有效', expire: '2026-12-20 16:00' }, ['profile', 'produce', 'sell']),
     ],
   },
 ])
@@ -974,7 +975,7 @@ function confirmAddAccount() {
   const device = devices.find((d) => d.id === addForm.deviceId)
   if (!device) { addError.value = '设备不存在'; return }
   const source = addForm.copyFrom ? allAccounts.value.find((a) => a.id === addForm.copyFrom) : null
-  const modules = source ? (JSON.parse(JSON.stringify(source.modules)) as ModuleCfg[]) : [makeModule('profile'), makeModule('afk')]
+  const modules = source ? (JSON.parse(JSON.stringify(source.modules)) as ModuleCfg[]) : [makeModule('profile'), makeModule('produce'), makeModule('sell'), makeModule('warehouse')]
   const expire = new Date(Date.now() + 30 * 86400000)
   const account: Account = {
     id: `new-${Date.now()}`, deviceId: device.id, type: addForm.type, account: number, seq: device.accounts.length + 1,
@@ -1010,12 +1011,8 @@ const showAddModule = ref(false)
 const addModuleFor = ref<Account | null>(null)
 const moduleCatalog: { key: ModuleKey; label: string; desc: string }[] = [
   { key: 'profile', label: '信息', desc: '采集角色名、等级、段位与资产' },
-  { key: 'afk', label: '挂机', desc: '自动对局、冷却与执行时段' },
   { key: 'produce', label: '生产', desc: '按特勤部门排产与制造' },
   { key: 'sell', label: '出售', desc: '集市上架与最低价控制' },
-  { key: 'buy', label: '购买', desc: '补货到目标库存，限制最高价' },
-  { key: 'stock', label: '库存', desc: '定时盘点仓库物品数量' },
-  { key: 'exchange', label: '兑换', desc: '按渠道把物品兑换成资源' },
   { key: 'warehouse', label: '仓库', desc: '设备级仓库容量与占用' },
 ]
 const availableModules = computed(() => {
