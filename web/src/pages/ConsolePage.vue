@@ -47,6 +47,8 @@
 </template>
 
 <script setup lang="ts">
+import PageHero from '@/components/PageHero.vue'
+
 const demoBase = (import.meta.env.VITE_CONSOLE_DEMO_URL || `${import.meta.env.BASE_URL}console-demo/`).replace(/\/?$/, '/')
 const demoHref = `${demoBase}#/accounts`
 </script>
