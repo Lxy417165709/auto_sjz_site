@@ -10,7 +10,7 @@
   }
 
   body {
-    @apply bg-white text-slate-800;
+    @apply bg-[#fffaf6] text-slate-800;
   }
 
   ::selection {
@@ -64,11 +64,11 @@
   }
 
   .nav-link {
-    @apply rounded-full px-3 py-1.5 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900;
+    @apply rounded-full px-3 py-1.5 text-sm text-slate-600 transition hover:bg-[#fff5ef] hover:text-brand-700;
   }
 
   .nav-link-active {
-    @apply bg-slate-100 text-slate-900;
+    @apply bg-[#fff1e9] text-brand-700;
   }
 
   .prose-doc {

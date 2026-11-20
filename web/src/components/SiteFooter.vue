@@ -8,8 +8,8 @@
             <path d="M9 21h5.5l3-8.5 4.5 16 3.5-9.5H31" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
             <defs>
               <linearGradient id="footerGradient" x1="0" y1="0" x2="40" y2="40">
-                <stop stop-color="#3763f5" />
-                <stop offset="1" stop-color="#12b892" />
+                <stop stop-color="#ff8a3d" />
+                <stop offset="1" stop-color="#d9401f" />
               </linearGradient>
             </defs>
           </svg>

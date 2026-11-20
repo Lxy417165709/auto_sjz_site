@@ -153,13 +153,13 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
 <style scoped>
 .flow-board {
   overflow: hidden;
-  border: 1px solid #dce5f2;
+  border: 1px solid #f0ded2;
   border-radius: 22px;
   background:
-    radial-gradient(120% 100% at 0% 0%, rgba(47, 107, 255, 0.06), transparent 42%),
-    radial-gradient(100% 100% at 100% 0%, rgba(183, 121, 31, 0.06), transparent 38%),
+    radial-gradient(120% 100% at 0% 0%, rgba(232, 92, 44, 0.065), transparent 42%),
+    radial-gradient(100% 100% at 100% 0%, rgba(247, 181, 44, 0.07), transparent 38%),
     #fff;
-  box-shadow: 0 24px 60px -42px rgba(28, 58, 118, 0.45);
+  box-shadow: 0 24px 60px -42px rgba(86, 44, 24, 0.28);
 }
 .flow-head {
   display: flex;
@@ -167,7 +167,7 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   justify-content: space-between;
   gap: 20px;
   padding: 26px 26px 20px;
-  border-bottom: 1px solid #e8eef7;
+  border-bottom: 1px solid #f0e0d5;
 }
 .owner-legend {
   display: flex;
@@ -190,13 +190,13 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   padding: 7px 12px;
 }
 .legend-pill.is-client {
-  border: 1px solid rgba(47, 107, 255, 0.24);
-  background: rgba(47, 107, 255, 0.09);
-  color: #1d5fd8;
+  border: 1px solid rgba(232, 92, 44, 0.24);
+  background: rgba(232, 92, 44, 0.09);
+  color: #b53616;
 }
 .legend-pill.is-ops {
-  border: 1px solid rgba(183, 121, 31, 0.26);
-  background: rgba(183, 121, 31, 0.1);
+  border: 1px solid rgba(201, 130, 22, 0.26);
+  background: rgba(247, 181, 44, 0.12);
   color: #9a6417;
 }
 .flow-track {
@@ -209,20 +209,20 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid #e6ebf3;
+  border: 1px solid #f0e0d5;
   border-top-width: 3px;
   border-radius: 16px;
   background: #fff;
   padding: 16px 15px 14px;
-  box-shadow: 0 12px 28px -24px rgba(28, 58, 118, 0.5);
+  box-shadow: 0 12px 28px -24px rgba(86, 44, 24, 0.32);
 }
 .flow-card.is-client {
-  border-top-color: #2f6bff;
-  background: linear-gradient(180deg, rgba(47, 107, 255, 0.045), #fff 34%);
+  border-top-color: #e85c2c;
+  background: linear-gradient(180deg, rgba(232, 92, 44, 0.05), #fff 34%);
 }
 .flow-card.is-ops {
-  border-top-color: #b7791f;
-  background: linear-gradient(180deg, rgba(183, 121, 31, 0.05), #fff 34%);
+  border-top-color: #c98216;
+  background: linear-gradient(180deg, rgba(247, 181, 44, 0.06), #fff 34%);
 }
 .flow-ghost {
   position: absolute;
@@ -254,13 +254,13 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   padding: 5px 8px;
 }
 .flow-card.is-client .owner-pill {
-  border: 1px solid rgba(47, 107, 255, 0.24);
-  background: rgba(47, 107, 255, 0.09);
-  color: #1d5fd8;
+  border: 1px solid rgba(232, 92, 44, 0.24);
+  background: rgba(232, 92, 44, 0.09);
+  color: #b53616;
 }
 .flow-card.is-ops .owner-pill {
-  border: 1px solid rgba(183, 121, 31, 0.26);
-  background: rgba(183, 121, 31, 0.1);
+  border: 1px solid rgba(201, 130, 22, 0.26);
+  background: rgba(247, 181, 44, 0.12);
   color: #9a6417;
 }
 .flow-title {
@@ -282,7 +282,7 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   align-items: baseline;
   gap: 8px;
   margin-top: 14px;
-  border-top: 1px dashed #e5eaf2;
+  border-top: 1px dashed #eedfd4;
   padding-top: 10px;
   font-size: 11px;
   line-height: 1.4;
@@ -311,7 +311,7 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  border-top: 1px solid #e8eef7;
+  border-top: 1px solid #f0e0d5;
   padding: 14px 26px;
   color: #64748b;
   font-size: 11px;
@@ -320,20 +320,20 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #2f6bff;
+  background: #e85c2c;
 }
 .foot-dot.is-ops {
   margin-left: 8px;
-  background: #b7791f;
+  background: #c98216;
 }
 .foot-sep {
   width: 1px;
   height: 12px;
   margin: 0 8px;
-  background: #dbe3ef;
+  background: #eedfd4;
 }
 .note-card {
-  border: 1px solid #e3e9f3;
+  border: 1px solid #f0e0d5;
   border-radius: 16px;
   background: #fff;
   padding: 18px 18px 16px;
@@ -345,8 +345,8 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   align-items: center;
   justify-content: center;
   border-radius: 7px;
-  background: #f1f5fb;
-  color: #5d6d84;
+  background: #fff3e8;
+  color: #6a5449;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   font-weight: 700;
@@ -368,9 +368,9 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  border: 1px solid #e3e9f3;
+  border: 1px solid #f0e0d5;
   border-radius: 18px;
-  background: #f8fafc;
+  background: #fffaf5;
   padding: 20px 22px;
 }
 .prep-items {
@@ -380,11 +380,11 @@ const prep = ['设备台数与分布', '每台账号数量', '可访问管理台
   justify-content: flex-end;
 }
 .prep-item {
-  border: 1px solid #dbe4f0;
+  border: 1px solid #efd8ca;
   border-radius: 999px;
   background: #fff;
   padding: 7px 11px;
-  color: #52637a;
+  color: #6a5449;
   font-size: 12px;
   white-space: nowrap;
 }

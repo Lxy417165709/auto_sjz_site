@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur">
+  <header class="sticky top-0 z-40 border-b border-[#f0dfd3] bg-white/85 backdrop-blur">
     <div class="wrap flex h-16 items-center justify-between gap-4">
       <BrandMark />
 
@@ -26,7 +26,7 @@
       </div>
 
       <button
-        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-700 lg:hidden"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#f0dfd3] text-slate-700 lg:hidden"
         :aria-expanded="open"
         aria-controls="mobile-nav"
         aria-label="打开菜单"
@@ -41,18 +41,18 @@
       </button>
     </div>
 
-    <div v-if="open" id="mobile-nav" class="border-t border-slate-200 bg-white lg:hidden">
+    <div v-if="open" id="mobile-nav" class="border-t border-[#f0dfd3] bg-white lg:hidden">
       <div class="wrap flex flex-col gap-1 py-4">
         <router-link
           v-for="item in nav"
           :key="item.href"
           :to="item.href"
-          class="rounded-xl px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50"
-          active-class="bg-slate-100 text-slate-900"
+          class="rounded-xl px-3 py-2.5 text-sm text-slate-700 hover:bg-[#fff5ef]"
+          active-class="bg-[#fff1e9] text-brand-700"
         >
           {{ item.label }}
         </router-link>
-        <div class="mt-2 flex flex-col gap-2 border-t border-slate-100 pt-3">
+        <div class="mt-2 flex flex-col gap-2 border-t border-[#f2e3d8] pt-3">
           <router-link :to="secondary.href" class="btn-secondary w-full">{{ secondary.label }}</router-link>
           <a :href="managerLink" class="btn-primary w-full" rel="noopener">{{ cta.label }}</a>
         </div>

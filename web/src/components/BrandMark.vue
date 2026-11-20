@@ -11,8 +11,8 @@
       />
       <defs>
         <linearGradient id="brandGradient" x1="0" y1="0" x2="40" y2="40">
-          <stop stop-color="#3763f5" />
-          <stop offset="1" stop-color="#12b892" />
+          <stop stop-color="#ff8a3d" />
+          <stop offset="1" stop-color="#d9401f" />
         </linearGradient>
       </defs>
     </svg>

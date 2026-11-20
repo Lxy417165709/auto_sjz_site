@@ -40,7 +40,7 @@
         </div>
       </section>
 
-      <section class="mt-14 rounded-3xl border border-slate-200 bg-slate-50/60 px-5 py-10 sm:px-9">
+      <section class="mt-14 rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] px-5 py-10 sm:px-9">
         <p class="eyebrow">收费方式对比</p>
         <h2 class="h2 mt-2">按设备，还是按号</h2>
         <div class="mt-6 overflow-x-auto">

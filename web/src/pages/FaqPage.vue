@@ -61,7 +61,7 @@
         </section>
 
         <section class="mt-12 grid gap-4 sm:grid-cols-2">
-          <div class="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
+          <div class="rounded-2xl border border-[#f0dfd3] bg-[#fffaf4] p-6">
             <h2 class="text-sm font-semibold text-slate-900">没找到答案？</h2>
             <p class="mt-2 text-[13px] leading-6 text-slate-500">
               把设备数量、每台账号数、当前部署形态发给我们，会更快给出结论。

@@ -122,7 +122,7 @@
         </div>
       </section>
 
-      <section class="rounded-3xl border border-slate-200 bg-slate-50/70 px-5 py-10 sm:px-10">
+      <section class="rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] px-5 py-10 sm:px-10">
         <div class="grid gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
           <div>
             <p class="eyebrow">算一笔账</p>

@@ -1,5 +1,5 @@
 <template>
-  <section class="border-b border-slate-200 bg-slate-50/70">
+  <section class="border-b border-[#f0dfd3] bg-[#fff8f1]">
     <div class="wrap py-12 sm:py-16">
       <p class="eyebrow">{{ eyebrow }}</p>
       <h1 class="h1 mt-3 max-w-4xl">{{ title }}</h1>
