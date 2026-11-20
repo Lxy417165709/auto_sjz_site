@@ -10,7 +10,7 @@
   }
 
   body {
-    @apply bg-[#fafaf9] text-[#26262c];
+    @apply bg-[#f8faff] text-[#2f3b52];
   }
 
   ::selection {
@@ -28,23 +28,23 @@
   }
 
   .h1 {
-    @apply text-[34px] leading-[1.08] font-semibold tracking-[-0.035em] text-[#0a0a0c] sm:text-[44px] lg:text-[54px];
+    @apply text-[34px] leading-[1.08] font-semibold tracking-[-0.035em] text-[#07152e] sm:text-[44px] lg:text-[54px];
   }
 
   .h2 {
-    @apply text-[26px] font-semibold tracking-[-0.025em] text-[#0a0a0c] sm:text-[34px];
+    @apply text-[26px] font-semibold tracking-[-0.025em] text-[#07152e] sm:text-[34px];
   }
 
   .lead {
-    @apply text-[15px] leading-7 text-[#5c5c63] sm:text-base;
+    @apply text-[15px] leading-7 text-[#5f6c82] sm:text-base;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-[0_8px_24px_-10px_rgba(255,90,31,0.65)] transition hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-[0_8px_24px_-10px_rgba(36,71,214,0.6)] transition hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#dedcd7] bg-white px-5 py-2.5 text-sm font-medium text-[#17171b] transition hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#cfd9eb] bg-white px-5 py-2.5 text-sm font-medium text-[#15213a] transition hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200;
   }
 
   .btn-dark {
@@ -52,27 +52,27 @@
   }
 
   .btn-light {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 transition hover:bg-[#fff4ed] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 transition hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60;
   }
 
   .card {
-    @apply rounded-2xl border border-[#e7e5e2] bg-white p-6 shadow-card;
+    @apply rounded-2xl border border-[#dfe6f3] bg-white p-6 shadow-card;
   }
 
   .tag {
-    @apply inline-flex items-center rounded-full border border-[#e7e5e2] bg-[#f7f6f3] px-2.5 py-1 text-[11px] font-medium text-[#5c5c63];
+    @apply inline-flex items-center rounded-full border border-[#dbe5f7] bg-[#f5f8ff] px-2.5 py-1 text-[11px] font-medium text-[#4c5d78];
   }
 
   .field {
-    @apply w-full rounded-xl border border-[#dedcd7] bg-white px-3.5 py-2.5 text-sm text-[#17171b] outline-none transition placeholder:text-[#9a9aa2] focus:border-brand-400 focus:ring-2 focus:ring-brand-100;
+    @apply w-full rounded-xl border border-[#cfd9eb] bg-white px-3.5 py-2.5 text-sm text-[#15213a] outline-none transition placeholder:text-[#95a2b8] focus:border-brand-400 focus:ring-2 focus:ring-brand-100;
   }
 
   .nav-link {
-    @apply rounded-full px-3 py-1.5 text-sm text-white/55 transition hover:bg-white/[0.06] hover:text-white;
+    @apply rounded-full px-3 py-1.5 text-sm text-[#55647c] transition hover:bg-brand-50 hover:text-brand-700;
   }
 
   .nav-link-active {
-    @apply bg-white/[0.08] text-white;
+    @apply bg-brand-50 text-brand-700;
   }
 
   .prose-doc {

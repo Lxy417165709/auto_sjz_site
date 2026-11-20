@@ -1,7 +1,7 @@
 <template>
-  <header class="sticky top-0 z-40 border-b border-white/10 bg-[#08080a]/95 backdrop-blur-xl">
+  <header class="sticky top-0 z-40 border-b border-[#dfe6f3] bg-white/90 backdrop-blur-xl">
     <div class="wrap flex h-16 items-center justify-between gap-4">
-      <BrandMark light />
+      <BrandMark />
 
       <nav class="hidden items-center gap-0.5 lg:flex" aria-label="主导航">
         <router-link
@@ -16,7 +16,7 @@
       </nav>
 
       <div class="hidden items-center gap-2 lg:flex">
-        <router-link :to="secondary.href" class="rounded-full px-4 py-2 text-sm text-white/55 transition hover:bg-white/[0.06] hover:text-white">
+        <router-link :to="secondary.href" class="rounded-full px-4 py-2 text-sm text-[#55647c] transition hover:bg-brand-50 hover:text-brand-700">
           {{ secondary.label }}
         </router-link>
         <a :href="managerLink" class="btn-primary" rel="noopener">
@@ -28,7 +28,7 @@
       </div>
 
       <button
-        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 lg:hidden"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#cfd9eb] text-[#4c5d78] lg:hidden"
         :aria-expanded="open"
         aria-controls="mobile-nav"
         aria-label="打开菜单"
@@ -43,18 +43,18 @@
       </button>
     </div>
 
-    <div v-if="open" id="mobile-nav" class="border-t border-white/10 bg-[#08080a] lg:hidden">
+    <div v-if="open" id="mobile-nav" class="border-t border-[#dfe6f3] bg-white lg:hidden">
       <div class="wrap flex flex-col gap-1 py-4">
         <router-link
           v-for="item in nav"
           :key="item.href"
           :to="item.href"
-          class="rounded-xl px-3 py-2.5 text-sm text-white/65 hover:bg-white/[0.06]"
-          active-class="bg-white/[0.08] text-white"
+          class="rounded-xl px-3 py-2.5 text-sm text-[#4c5d78] hover:bg-brand-50"
+          active-class="bg-brand-50 text-brand-700"
         >
           {{ item.label }}
         </router-link>
-        <div class="mt-2 flex flex-col gap-2 border-t border-white/10 pt-3">
+        <div class="mt-2 flex flex-col gap-2 border-t border-[#e7edf8] pt-3">
           <router-link :to="secondary.href" class="btn-dark w-full">{{ secondary.label }}</router-link>
           <a :href="managerLink" class="btn-primary w-full" rel="noopener">{{ cta.label }}</a>
         </div>

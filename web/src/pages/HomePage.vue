@@ -1,199 +1,200 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hero-bg relative overflow-hidden text-white">
+    <section class="hero-bg relative overflow-hidden">
+      <div class="hero-grid" aria-hidden="true"></div>
       <div class="hero-beam hero-beam-a" aria-hidden="true"></div>
       <div class="hero-beam hero-beam-b" aria-hidden="true"></div>
       <div class="hero-flare" aria-hidden="true"></div>
 
       <div class="wrap relative pt-16 text-center sm:pt-20 lg:pt-24">
-        <div class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] tracking-[0.14em] text-white/65 backdrop-blur">
-          <span class="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_12px_rgba(255,122,61,0.9)]"></span>
+        <div class="mx-auto inline-flex items-center gap-2 rounded-full border border-[#c9d8ff] bg-white/80 px-3.5 py-1.5 text-[11px] tracking-[0.14em] text-brand-700 shadow-[0_8px_24px_-18px_rgba(36,71,214,0.45)] backdrop-blur">
+          <span class="h-1.5 w-1.5 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(55,99,245,0.65)]"></span>
           三角洲业务自动化 · 按号收费
         </div>
 
-        <h1 class="mx-auto mt-7 max-w-5xl text-[38px] font-semibold leading-[1.04] tracking-[-0.045em] sm:text-[54px] lg:text-[68px]">
+        <h1 class="mx-auto mt-7 max-w-5xl text-[38px] font-semibold leading-[1.04] tracking-[-0.045em] text-[#07152e] sm:text-[54px] lg:text-[68px]">
           设备不再按台收费<br />
           <span class="hero-title-fire">一个号 3 元 / 月</span>
         </h1>
 
-        <p class="mx-auto mt-6 max-w-[640px] text-[14px] leading-8 text-white/55 sm:text-[15px]">
+        <p class="mx-auto mt-6 max-w-[640px] text-[14px] leading-8 text-[#5f6c82] sm:text-[15px]">
           炎火为三角洲业务提供一套管理中台，统一管住设备与账号：按账号结算、批量下发配置、异常自动通知。设备多少不额外收钱，账号增减才计费。
         </p>
 
         <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
           <router-link to="/start" class="btn-primary h-11 px-6 text-[15px]">查看接入流程</router-link>
-          <router-link to="/console" class="btn-dark h-11 px-5 text-[15px]">打开管理台演示 →</router-link>
+          <router-link to="/console" class="btn-secondary h-11 px-5 text-[15px]">打开管理台演示 →</router-link>
         </div>
 
-        <div class="mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-mono text-[11px] tracking-wide text-white/35">
+        <div class="mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-mono text-[11px] tracking-wide text-[#8490a5]">
           <span>¥3 / 号 / 月</span>
-          <span class="hidden h-px w-4 bg-white/15 sm:block"></span>
+          <span class="hidden h-px w-4 bg-[#cfd9eb] sm:block"></span>
           <span>设备费 ¥0</span>
-          <span class="hidden h-px w-4 bg-white/15 sm:block"></span>
+          <span class="hidden h-px w-4 bg-[#cfd9eb] sm:block"></span>
           <span>私有化部署</span>
         </div>
       </div>
 
       <div class="wrap relative pb-2 pt-12 sm:pt-16">
         <div class="relative mx-auto max-w-[1040px]">
-          <div class="pointer-events-none absolute inset-x-16 -bottom-6 h-20 rounded-full bg-brand-500/30 blur-3xl" aria-hidden="true"></div>
-          <div class="relative overflow-hidden rounded-[18px] border border-white/[0.12] bg-[#131317] shadow-[0_40px_100px_-36px_rgba(0,0,0,0.9)]">
-            <div class="flex h-10 items-center justify-between border-b border-white/10 px-4">
+          <div class="pointer-events-none absolute inset-x-16 -bottom-6 h-20 rounded-full bg-[#5c86ff]/30 blur-3xl" aria-hidden="true"></div>
+          <div class="relative overflow-hidden rounded-[18px] border border-[#d7e2f5] bg-white shadow-[0_44px_100px_-46px_rgba(36,71,214,0.38)]">
+            <div class="flex h-10 items-center justify-between border-b border-[#e7edf8] bg-[#fbfcff] px-4">
               <div class="flex items-center gap-1.5" aria-hidden="true">
-                <span class="h-2 w-2 rounded-full bg-white/20"></span>
-                <span class="h-2 w-2 rounded-full bg-white/15"></span>
-                <span class="h-2 w-2 rounded-full bg-white/10"></span>
+                <span class="h-2 w-2 rounded-full bg-[#c8d4e7]"></span>
+                <span class="h-2 w-2 rounded-full bg-[#cfd9eb]"></span>
+                <span class="h-2 w-2 rounded-full bg-[#e3e9f3]"></span>
               </div>
-              <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-white/30">Manager / 业务状态</p>
-              <span class="inline-flex items-center gap-1.5 text-[10px] text-white/40">
-                <span class="h-1.5 w-1.5 rounded-full bg-accent-400"></span>
+              <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8490a5]">Manager / 业务状态</p>
+              <span class="inline-flex items-center gap-1.5 text-[10px] text-[#70809a]">
+                <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
                 演示数据
               </span>
             </div>
             <img
-              src="/console-preview.png"
+              src="/console-preview-blue.png"
               alt="炎火 Manager 业务状态界面，按设备聚合账号数据"
               class="block w-full"
               width="2272"
               height="1120"
             />
           </div>
-          <div class="mt-5 flex flex-col items-center justify-between gap-2 text-[11px] text-white/30 sm:flex-row">
+          <div class="mt-5 flex flex-col items-center justify-between gap-2 text-[11px] text-[#8490a5] sm:flex-row">
             <p>真实管理台界面，账号与数值为演示数据</p>
-            <router-link to="/console" class="text-brand-300 transition hover:text-brand-200">打开可交互演示 →</router-link>
+            <router-link to="/console" class="text-brand-600 transition hover:text-brand-700">打开可交互演示 →</router-link>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Stats -->
-    <section class="border-b border-[#e7e5e2] bg-white">
+    <section class="border-b border-[#dfe6f3] bg-white">
       <div class="wrap grid grid-cols-2 sm:grid-cols-4">
         <div
           v-for="(stat, index) in stats"
           :key="stat.label"
           class="py-8 sm:py-9"
           :class="[
-            index > 0 ? 'sm:border-l sm:border-[#e7e5e2] sm:pl-8' : '',
-            index % 2 === 1 ? 'border-l border-[#e7e5e2] pl-5 sm:pl-8' : '',
+            index > 0 ? 'sm:border-l sm:border-[#dfe6f3] sm:pl-8' : '',
+            index % 2 === 1 ? 'border-l border-[#dfe6f3] pl-5 sm:pl-8' : '',
           ]"
         >
-          <p class="text-[28px] font-semibold leading-none tracking-[-0.04em] text-[#0a0a0c] sm:text-[34px]">{{ stat.value }}</p>
-          <p class="mt-2 text-[12px] text-[#77777f]">{{ stat.label }}</p>
+          <p class="text-[28px] font-semibold leading-none tracking-[-0.04em] text-[#07152e] sm:text-[34px]">{{ stat.value }}</p>
+          <p class="mt-2 text-[12px] text-[#77839a]">{{ stat.label }}</p>
         </div>
       </div>
     </section>
 
     <!-- Capabilities -->
-    <section class="bg-[#fafaf9] py-20 sm:py-28">
+    <section class="bg-[#f8faff] py-20 sm:py-28">
       <div class="wrap">
         <div class="max-w-3xl">
           <p class="eyebrow">业务能力</p>
-          <h2 class="mt-3 text-[32px] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0a0c] sm:text-[44px]">
+          <h2 class="mt-3 text-[32px] font-semibold leading-[1.1] tracking-[-0.035em] text-[#07152e] sm:text-[44px]">
             管设备只是手段，<br class="hidden sm:block" />
             <span class="text-brand-600">管住号才是目的</span>
           </h2>
-          <p class="mt-5 max-w-xl text-[15px] leading-7 text-[#5c5c63]">
+          <p class="mt-5 max-w-xl text-[15px] leading-7 text-[#5f6c82]">
             计费、配置、授权都围绕账号展开。设备只是执行载体，不再决定你每个月付多少钱。
           </p>
         </div>
 
         <div class="mt-12 grid gap-4 lg:grid-cols-6">
-          <article class="relative overflow-hidden rounded-[24px] bg-[#0a0a0c] p-8 text-white lg:col-span-4 sm:p-10">
-            <div class="pointer-events-none absolute -right-24 -top-32 h-[360px] w-[360px] rounded-full bg-brand-500/20 blur-3xl" aria-hidden="true"></div>
+          <article class="relative overflow-hidden rounded-[24px] bg-[#2447d6] p-8 text-white lg:col-span-4 sm:p-10">
+            <div class="pointer-events-none absolute -right-24 -top-32 h-[360px] w-[360px] rounded-full bg-[#5c86ff]/30 blur-3xl" aria-hidden="true"></div>
             <div class="relative">
-              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-400">按号计费</p>
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#bfd0ff]">按号计费</p>
               <h3 class="mt-4 max-w-xl text-[26px] font-semibold leading-[1.15] tracking-[-0.035em] sm:text-[34px]">设备不收费，账号才计费</h3>
-              <p class="mt-4 max-w-lg text-[14px] leading-7 text-white/50">一台设备挂 5 个号，就是 5 份授权。加设备不加钱，账号加一个算一个，减一个省一个。</p>
+              <p class="mt-4 max-w-lg text-[14px] leading-7 text-white/70">一台设备挂 5 个号，就是 5 份授权。加设备不加钱，账号加一个算一个，减一个省一个。</p>
               <div class="mt-9 flex items-end gap-2">
                 <span class="font-mono text-[54px] font-medium leading-none tracking-[-0.06em]">¥3</span>
-                <span class="mb-1 text-[13px] text-white/40">/ 号 / 月</span>
+                <span class="mb-1 text-[13px] text-white/60">/ 号 / 月</span>
               </div>
-              <div class="mt-8 grid grid-cols-1 gap-2 border-t border-white/10 pt-5 text-[11px] text-white/45 sm:grid-cols-3">
-                <div class="flex items-center justify-between gap-2 sm:block"><span>设备 10 台</span><span class="ml-2 font-mono text-white/80 sm:ml-0 sm:mt-1 sm:block">¥0</span></div>
-                <div class="flex items-center justify-between gap-2 sm:block"><span>账号 50 个</span><span class="ml-2 font-mono text-white/80 sm:ml-0 sm:mt-1 sm:block">¥150</span></div>
-                <div class="flex items-center justify-between gap-2 sm:block"><span>月费合计</span><span class="ml-2 font-mono text-accent-400 sm:ml-0 sm:mt-1 sm:block">¥150</span></div>
+              <div class="mt-8 grid grid-cols-1 gap-2 border-t border-white/15 pt-5 text-[11px] text-white/55 sm:grid-cols-3">
+                <div class="flex items-center justify-between gap-2 sm:block"><span>设备 10 台</span><span class="ml-2 font-mono text-white sm:ml-0 sm:mt-1 sm:block">¥0</span></div>
+                <div class="flex items-center justify-between gap-2 sm:block"><span>账号 50 个</span><span class="ml-2 font-mono text-white sm:ml-0 sm:mt-1 sm:block">¥150</span></div>
+                <div class="flex items-center justify-between gap-2 sm:block"><span>月费合计</span><span class="ml-2 font-mono text-accent-300 sm:ml-0 sm:mt-1 sm:block">¥150</span></div>
               </div>
             </div>
           </article>
 
-          <article class="rounded-[24px] border border-[#e7e5e2] bg-white p-7 lg:col-span-2">
-            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a9aa2]">统一配置</p>
-            <h3 class="mt-3 text-[21px] font-semibold tracking-[-0.02em] text-[#0a0a0c]">只维护一份配置</h3>
-            <p class="mt-2 text-[13px] leading-6 text-[#6a6a72]">变更在中台改一次，批量下发到设备。离线设备只读，恢复后自动对齐。</p>
-            <div class="mt-7 rounded-xl border border-[#e7e5e2] bg-[#f7f6f3] p-3 font-mono text-[11px]">
-              <div class="flex items-center justify-between border-b border-[#e7e5e2] pb-2"><span class="text-[#8b8b93]">采集频率</span><span class="text-[#17171b]">30s</span></div>
-              <div class="flex items-center justify-between border-b border-[#e7e5e2] py-2"><span class="text-[#8b8b93]">生产队列</span><span class="text-[#17171b]">3 / 3</span></div>
-              <div class="flex items-center justify-between pt-2"><span class="text-[#8b8b93]">同步状态</span><span class="text-brand-600">已下发</span></div>
+          <article class="rounded-[24px] border border-[#dfe6f3] bg-white p-7 lg:col-span-2">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#77839a]">统一配置</p>
+            <h3 class="mt-3 text-[21px] font-semibold tracking-[-0.02em] text-[#07152e]">只维护一份配置</h3>
+            <p class="mt-2 text-[13px] leading-6 text-[#5f6c82]">变更在中台改一次，批量下发到设备。离线设备只读，恢复后自动对齐。</p>
+            <div class="mt-7 rounded-xl border border-[#e2e9f7] bg-[#f5f8ff] p-3 font-mono text-[11px]">
+              <div class="flex items-center justify-between border-b border-[#e2e9f7] pb-2"><span class="text-[#7b87a0]">采集频率</span><span class="text-[#15213a]">30s</span></div>
+              <div class="flex items-center justify-between border-b border-[#e2e9f7] py-2"><span class="text-[#7b87a0]">生产队列</span><span class="text-[#15213a]">3 / 3</span></div>
+              <div class="flex items-center justify-between pt-2"><span class="text-[#7b87a0]">同步状态</span><span class="text-brand-600">已下发</span></div>
             </div>
           </article>
 
-          <article v-for="item in capabilities" :key="item.title" class="rounded-[24px] border border-[#e7e5e2] bg-white p-7 lg:col-span-2">
+          <article v-for="item in capabilities" :key="item.title" class="rounded-[24px] border border-[#dfe6f3] bg-white p-7 lg:col-span-2">
             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
               <span v-html="item.icon" class="[&>svg]:h-5 [&>svg]:w-5"></span>
             </div>
-            <h3 class="mt-5 text-[17px] font-semibold tracking-[-0.02em] text-[#0a0a0c]">{{ item.title }}</h3>
-            <p class="mt-2 text-[13px] leading-6 text-[#6a6a72]">{{ item.desc }}</p>
+            <h3 class="mt-5 text-[17px] font-semibold tracking-[-0.02em] text-[#07152e]">{{ item.title }}</h3>
+            <p class="mt-2 text-[13px] leading-6 text-[#5f6c82]">{{ item.desc }}</p>
           </article>
         </div>
       </div>
     </section>
 
     <!-- Steps -->
-    <section class="border-y border-[#e7e5e2] bg-[#f5f4f1] py-20 sm:py-24">
+    <section class="border-y border-[#dfe6f3] bg-[#f3f7ff] py-20 sm:py-24">
       <div class="wrap">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="eyebrow">接入流程</p>
-            <h2 class="mt-3 text-[32px] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0a0c] sm:text-[42px]">从申请到运行，五步走完</h2>
+            <h2 class="mt-3 text-[32px] font-semibold leading-[1.1] tracking-[-0.035em] text-[#07152e] sm:text-[42px]">从申请到运行，五步走完</h2>
           </div>
           <router-link to="/start" class="text-sm font-medium text-brand-600 transition hover:text-brand-700">看完整接力图 →</router-link>
         </div>
 
         <div class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
-          <router-link v-for="step in startSteps" :key="step.no" to="/start" class="group relative border-t border-[#d7d4ce] pt-6">
+          <router-link v-for="step in startSteps" :key="step.no" to="/start" class="group relative border-t border-[#c9d7eb] pt-6">
             <span class="absolute -top-[5px] left-0 h-2.5 w-2.5 rounded-full" :class="step.owner === '我方' ? 'bg-accent-500' : 'bg-brand-500'"></span>
             <div class="flex items-center justify-between">
-              <span class="font-mono text-[11px] text-[#9a9aa2]">{{ step.no }}</span>
-              <span class="text-[10px] tracking-wide" :class="step.owner === '我方' ? 'text-[#a46a00]' : 'text-brand-600'">{{ step.owner }}</span>
+              <span class="font-mono text-[11px] text-[#77839a]">{{ step.no }}</span>
+              <span class="text-[10px] tracking-wide" :class="step.owner === '我方' ? 'text-accent-600' : 'text-brand-600'">{{ step.owner }}</span>
             </div>
-            <h3 class="mt-5 text-[16px] font-semibold tracking-[-0.01em] text-[#17171b] group-hover:text-brand-600">{{ step.title }}</h3>
-            <p class="mt-2 text-[12px] leading-6 text-[#77777f]">{{ step.desc }}</p>
+            <h3 class="mt-5 text-[16px] font-semibold tracking-[-0.01em] text-[#15213a] group-hover:text-brand-600">{{ step.title }}</h3>
+            <p class="mt-2 text-[12px] leading-6 text-[#77839a]">{{ step.desc }}</p>
           </router-link>
         </div>
       </div>
     </section>
 
     <!-- Pricing -->
-    <section class="bg-white py-20 sm:py-28">
+    <section class="bg-[#f8faff] py-20 sm:py-28">
       <div class="wrap">
-        <div class="overflow-hidden rounded-[28px] border border-[#e7e5e2] bg-white shadow-[0_30px_80px_-50px_rgba(10,10,12,0.4)] lg:grid lg:grid-cols-[1.08fr_0.92fr]">
-          <div class="relative overflow-hidden bg-[#0a0a0c] p-8 text-white sm:p-12">
-            <div class="pointer-events-none absolute -bottom-40 -left-20 h-[420px] w-[420px] rounded-full bg-brand-500/20 blur-3xl" aria-hidden="true"></div>
+        <div class="overflow-hidden rounded-[28px] border border-[#dfe6f3] bg-white shadow-[0_30px_80px_-56px_rgba(36,71,214,0.4)] lg:grid lg:grid-cols-[1.08fr_0.92fr]">
+          <div class="relative overflow-hidden bg-[#eef3ff] p-8 text-[#07152e] sm:p-12">
+            <div class="pointer-events-none absolute -bottom-40 -left-20 h-[420px] w-[420px] rounded-full bg-[#5c86ff]/30 blur-3xl" aria-hidden="true"></div>
             <div class="relative">
-              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-400">算一笔账</p>
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-600">算一笔账</p>
               <h2 class="mt-4 max-w-md text-[26px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[34px]">10 台设备、每台 5 个号，一个月 150 元</h2>
-              <p class="mt-12 font-mono text-[11px] tracking-wide text-white/30">10 台 × 5 个号 × ¥3</p>
+              <p class="mt-12 font-mono text-[11px] tracking-wide text-[#8490a5]">10 台 × 5 个号 × ¥3</p>
               <div class="mt-3 flex items-end gap-2">
-                <span class="text-[60px] font-semibold leading-none tracking-[-0.05em] sm:text-[72px]">150</span>
-                <span class="mb-2 text-[13px] text-white/40">元 / 月</span>
+                <span class="text-[60px] font-semibold leading-none tracking-[-0.05em] text-brand-700 sm:text-[72px]">150</span>
+                <span class="mb-2 text-[13px] text-[#5f6c82]">元 / 月</span>
               </div>
-              <div class="mt-8 space-y-2 border-t border-white/10 pt-5 text-[12px] text-white/45">
-                <div class="flex items-center justify-between"><span>设备费</span><span class="font-mono text-white/80">0 元</span></div>
-                <div class="flex items-center justify-between"><span>账号费</span><span class="font-mono text-white/80">150 元</span></div>
-                <div class="flex items-center justify-between"><span>设备闲置</span><span class="text-accent-400">不影响费用</span></div>
+              <div class="mt-8 space-y-2 border-t border-[#cfd9e8] pt-5 text-[12px] text-[#5f6c82]">
+                <div class="flex items-center justify-between"><span>设备费</span><span class="font-mono text-[#07152e]">0 元</span></div>
+                <div class="flex items-center justify-between"><span>账号费</span><span class="font-mono text-[#07152e]">150 元</span></div>
+                <div class="flex items-center justify-between"><span>设备闲置</span><span class="text-accent-600">不影响费用</span></div>
               </div>
-              <router-link to="/pricing" class="mt-8 inline-flex items-center gap-1 text-sm font-medium text-brand-300 transition hover:text-brand-200">用计算器算你的月费 →</router-link>
+              <router-link to="/pricing" class="mt-8 inline-flex items-center gap-1 text-sm font-medium text-brand-600 transition hover:text-brand-700">用计算器算你的月费 →</router-link>
             </div>
           </div>
 
           <div class="p-8 sm:p-12">
-            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a9aa2]">适用场景</p>
-            <ul class="mt-6 divide-y divide-[#e7e5e2]">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#77839a]">适用场景</p>
+            <ul class="mt-6 divide-y divide-[#dfe6f3]">
               <li v-for="scene in scenes" :key="scene.title" class="py-5 first:pt-0 last:pb-0">
-                <p class="text-[15px] font-semibold tracking-[-0.01em] text-[#0a0a0c]">{{ scene.title }}</p>
-                <p class="mt-1.5 text-[13px] leading-6 text-[#6a6a72]">{{ scene.desc }}</p>
+                <p class="text-[15px] font-semibold tracking-[-0.01em] text-[#07152e]">{{ scene.title }}</p>
+                <p class="mt-1.5 text-[13px] leading-6 text-[#5f6c82]">{{ scene.desc }}</p>
               </li>
             </ul>
           </div>
@@ -202,19 +203,19 @@
     </section>
 
     <!-- Engineering -->
-    <section class="border-t border-[#e7e5e2] bg-[#fafaf9] py-14">
+    <section class="border-t border-[#dfe6f3] bg-white py-14">
       <div class="wrap grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a9aa2]">For engineers</p>
-          <h2 class="mt-3 text-[22px] font-semibold tracking-[-0.025em] text-[#0a0a0c]">架构、端口、授权链路、部署形态</h2>
-          <p class="mt-3 max-w-2xl text-[13px] leading-7 text-[#6a6a72]">
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#77839a]">For engineers</p>
+          <h2 class="mt-3 text-[22px] font-semibold tracking-[-0.025em] text-[#07152e]">架构、端口、授权链路、部署形态</h2>
+          <p class="mt-3 max-w-2xl text-[13px] leading-7 text-[#5f6c82]">
             设备如何找到 Manager、快照怎么落盘、授权如何本地验签、根节点与子节点怎么拆，这些内容集中在技术架构与部署接入里，不和业务介绍混在一起。
           </p>
-          <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] text-[#77777f]">
-            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">Manager</span>
-            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">discovery</span>
-            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">Docker</span>
-            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">license</span>
+          <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] text-[#77839a]">
+            <span class="rounded-md border border-[#dfe6f3] bg-[#f5f8ff] px-2 py-1">Manager</span>
+            <span class="rounded-md border border-[#dfe6f3] bg-[#f5f8ff] px-2 py-1">discovery</span>
+            <span class="rounded-md border border-[#dfe6f3] bg-[#f5f8ff] px-2 py-1">Docker</span>
+            <span class="rounded-md border border-[#dfe6f3] bg-[#f5f8ff] px-2 py-1">license</span>
           </div>
         </div>
         <div class="flex flex-wrap gap-3">
@@ -283,9 +284,21 @@ const scenes = [
 <style scoped>
 .hero-bg {
   background:
-    radial-gradient(70% 48% at 50% 104%, rgba(255, 90, 31, 0.3) 0%, rgba(255, 90, 31, 0) 68%),
-    radial-gradient(38% 32% at 83% 8%, rgba(255, 200, 87, 0.09) 0%, rgba(255, 200, 87, 0) 72%),
-    #08080a;
+    radial-gradient(62% 42% at 50% 0%, rgba(55, 99, 245, 0.14) 0%, rgba(55, 99, 245, 0) 70%),
+    radial-gradient(34% 34% at 84% 18%, rgba(18, 184, 146, 0.08) 0%, rgba(18, 184, 146, 0) 72%),
+    linear-gradient(180deg, #f5f9ff 0%, #ffffff 72%);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(36, 71, 214, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(36, 71, 214, 0.055) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(62% 58% at 50% 18%, #000 0%, rgba(0, 0, 0, 0.55) 52%, transparent 82%);
+  mask-image: radial-gradient(62% 58% at 50% 18%, #000 0%, rgba(0, 0, 0, 0.55) 52%, transparent 82%);
+  pointer-events: none;
 }
 
 .hero-beam {
@@ -293,7 +306,7 @@ const scenes = [
   top: -28%;
   height: 150%;
   width: 34%;
-  background: linear-gradient(180deg, rgba(255, 90, 31, 0) 0%, rgba(255, 90, 31, 0.14) 45%, rgba(255, 90, 31, 0) 100%);
+  background: linear-gradient(180deg, rgba(55, 99, 245, 0) 0%, rgba(55, 99, 245, 0.12) 45%, rgba(55, 99, 245, 0) 100%);
   filter: blur(64px);
   transform: rotate(20deg);
   pointer-events: none;
@@ -304,7 +317,7 @@ const scenes = [
 .hero-beam-b {
   right: 4%;
   width: 26%;
-  background: linear-gradient(180deg, rgba(255, 200, 87, 0) 0%, rgba(255, 200, 87, 0.1) 48%, rgba(255, 200, 87, 0) 100%);
+  background: linear-gradient(180deg, rgba(18, 184, 146, 0) 0%, rgba(18, 184, 146, 0.09) 48%, rgba(18, 184, 146, 0) 100%);
   transform: rotate(-20deg);
 }
 
@@ -315,13 +328,13 @@ const scenes = [
   width: 120%;
   height: 70%;
   transform: translateX(-50%);
-  background: radial-gradient(45% 50% at 50% 50%, rgba(255, 122, 61, 0.28) 0%, rgba(255, 90, 31, 0) 70%);
+  background: radial-gradient(45% 50% at 50% 50%, rgba(55, 99, 245, 0.16) 0%, rgba(55, 99, 245, 0) 70%);
   filter: blur(70px);
   pointer-events: none;
 }
 
 .hero-title-fire {
-  background: linear-gradient(100deg, #ff9a5a 0%, #ffc857 100%);
+  background: linear-gradient(100deg, #2447d6 0%, #6f9bff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
