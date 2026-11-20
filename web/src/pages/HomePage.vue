@@ -7,13 +7,13 @@
 
       <div class="wrap relative grid gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
         <div>
-          <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-400">按号收费 · 设备不按台计费</p>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-400">三角洲业务 · 按号收费</p>
           <h1 class="mt-4 text-[32px] leading-[1.12] font-semibold tracking-tight sm:text-[42px] lg:text-[48px]">
             一个号 3 元/月，<br />
             设备不再按台收费
           </h1>
           <p class="mt-5 max-w-xl text-[15px] leading-7 text-slate-300">
-            auto_sjz 用一个管理中台管住设备与账号：按账号结算、批量下发配置、异常自动通知。设备多少不额外收钱，账号增减才计费。
+            炎火为三角洲业务提供一套管理中台，统一管住设备与账号：按账号结算、批量下发配置、异常自动通知。设备多少不额外收钱，账号增减才计费。
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <router-link to="/start" class="btn-primary px-6">查看接入流程</router-link>
@@ -106,18 +106,18 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="eyebrow">接入流程</p>
-            <h2 class="h2 mt-2">设备、账号、模块，按这个顺序接</h2>
+            <h2 class="h2 mt-2">五步接入，双方各做什么</h2>
           </div>
-          <router-link to="/start" class="text-sm font-medium text-brand-600 hover:text-brand-700">看完整接入流程 →</router-link>
+          <router-link to="/start" class="text-sm font-medium text-brand-600 hover:text-brand-700">看五步接入流程 →</router-link>
         </div>
-        <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <router-link v-for="step in startSteps" :key="step.no" to="/start" class="card group transition hover:border-brand-200">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-2">
               <span class="font-mono text-xs text-brand-600">{{ step.no }}</span>
-              <span class="text-slate-300 transition group-hover:text-brand-500">→</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] text-slate-500">{{ step.owner }}</span>
             </div>
-            <h3 class="mt-3 text-[15px] font-semibold text-slate-900">{{ step.title }}</h3>
-            <p class="mt-2 text-[13px] leading-6 text-slate-500">{{ step.desc }}</p>
+            <h3 class="mt-3 text-[14px] font-semibold text-slate-900">{{ step.title }}</h3>
+            <p class="mt-2 text-[12px] leading-5 text-slate-500">{{ step.desc }}</p>
           </router-link>
         </div>
       </section>
@@ -217,9 +217,11 @@ const highlights = [
 ]
 
 const startSteps = [
-  { no: '01', title: '设备接入云控', desc: '设备装客户端、填 discovery 地址，自动注册上线，归到分组。' },
-  { no: '02', title: '加号并授权', desc: '在设备下新增账号实例，一个号一份授权，3 元/月。' },
-  { no: '03', title: '绑模块跑业务', desc: '选模块、配参数、绑定账号，灰度验证后批量下发。' },
+  { no: '01', owner: '接入方', title: '申请管理中台', desc: '提交设备台数、账号数量与使用场景。' },
+  { no: '02', owner: '我方', title: '部署管理中台', desc: '部署 Manager 与 discovery，交付登录地址。' },
+  { no: '03', owner: '接入方', title: '配置并申请授权', desc: '登录配置设备、账号、模块，提交授权申请。' },
+  { no: '04', owner: '我方', title: '发放令牌', desc: '按账号发放授权令牌，确定账号有效期。' },
+  { no: '05', owner: '接入方', title: '设备运行', desc: '设备拉取配置与令牌，开始执行。' },
 ]
 
 const scenes = [

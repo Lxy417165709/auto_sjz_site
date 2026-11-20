@@ -1,7 +1,7 @@
 {
-  "name": "auto_sjz",
-  "tagline": "按号收费的 Android 设备管理平台",
-  "description": "一个号 3 元/月，设备不按台收费。auto_sjz 用管理中台批量管理设备与账号，配置统一、异常有通知，授权按账号实例结算。",
+  "name": "炎火",
+  "tagline": "三角洲业务自动化管理平台",
+  "description": "一个号 3 元/月，设备不按台收费。炎火为三角洲业务提供管理中台，批量管理设备与账号，配置统一、异常有通知，授权按账号实例结算。",
   "nav": [
     {
       "label": "业务能力",
@@ -95,5 +95,5 @@
     }
   ],
   "icp": "",
-  "copyright": "© 2026 auto_sjz. All rights reserved."
+  "copyright": "© 2026 炎火. All rights reserved."
 }

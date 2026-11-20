@@ -25,7 +25,7 @@
               </svg>
             </span>
             <div class="min-w-0">
-              <p class="truncate text-sm font-semibold text-white">auto_sjz Manager</p>
+              <p class="truncate text-sm font-semibold text-white">炎火 Manager</p>
               <p class="truncate text-[10px] text-slate-400">演示环境 · 不写入真实管理台</p>
             </div>
           </div>

@@ -13,10 +13,10 @@
               </linearGradient>
             </defs>
           </svg>
-          <span class="text-[17px] font-semibold tracking-tight text-white">auto_sjz</span>
+          <span class="text-[17px] font-semibold tracking-tight text-white">炎火</span>
         </div>
         <p class="mt-4 max-w-sm text-sm leading-6 text-slate-400">
-          {{ site?.tagline || 'Android 设备自动化管理平台' }}
+          {{ site?.tagline || '三角洲业务自动化管理平台' }}
         </p>
         <p v-if="contact?.email" class="mt-4 text-sm text-slate-400">
           <a :href="`mailto:${contact.email}`" class="underline decoration-slate-600 underline-offset-4 hover:text-white">{{ contact.email }}</a>
@@ -43,7 +43,7 @@
 
     <div class="border-t border-white/10">
       <div class="wrap flex flex-col gap-3 py-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-        <p>{{ site?.copyright || '© 2026 auto_sjz.' }}</p>
+        <p>{{ site?.copyright || '© 2026 炎火.' }}</p>
         <div class="flex flex-wrap items-center gap-4">
           <span>官网仅做产品介绍，登录与购买在 Manager 完成</span>
           <a v-if="site?.icp" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" class="hover:text-slate-300">

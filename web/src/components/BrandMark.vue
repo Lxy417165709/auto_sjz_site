@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/" class="inline-flex items-center gap-2.5" aria-label="auto_sjz 首页">
+  <router-link to="/" class="inline-flex items-center gap-2.5" aria-label="炎火 首页">
     <svg class="h-8 w-8" viewBox="0 0 40 40" fill="none" aria-hidden="true">
       <rect x="1" y="1" width="38" height="38" rx="11" fill="url(#brandGradient)" />
       <path
@@ -16,6 +16,6 @@
         </linearGradient>
       </defs>
     </svg>
-    <span class="text-[17px] font-semibold tracking-tight text-slate-900">auto_sjz</span>
+    <span class="text-[17px] font-semibold tracking-tight text-slate-900">炎火</span>
   </router-link>
 </template>

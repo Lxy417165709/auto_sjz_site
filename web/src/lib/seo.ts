@@ -12,7 +12,7 @@ function upsertMeta(attr: 'name' | 'property', key: string, value: string) {
 
 /** 每次路由切换更新标题、描述与 canonical，确保单页应用也能被正常索引。 */
 export function applySeo(to: RouteLocationNormalized) {
-  const title = (to.meta.title as string) || 'auto_sjz'
+  const title = (to.meta.title as string) || '炎火'
   const description = (to.meta.description as string) || ''
 
   document.title = title
