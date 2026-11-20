@@ -2,7 +2,10 @@
 FROM node:22-alpine AS web
 WORKDIR /app/web
 COPY web/package.json web/package-lock.json ./
-RUN npm ci --no-audit --no-fund
+# 国内网络可传 --build-arg NPM_REGISTRY=https://registry.npmmirror.com
+ARG NPM_REGISTRY=
+RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi \
+ && npm ci --no-audit --no-fund
 COPY web/ ./
 RUN npm run build
 

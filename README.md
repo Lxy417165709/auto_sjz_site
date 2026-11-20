@@ -95,6 +95,38 @@ SITE_BASE_URL=https://auto-sjz.example.com MANAGER_URL=https://manager.example.c
 - `./data` 挂载到 `/data`，试用申请以 JSONL 追加写入，便于导出或清洗。
 - 健康检查：`GET /api/health`。
 
+### Windows（Docker Desktop）
+
+在仓库根目录用 PowerShell 执行，二选一：
+
+```powershell
+# 方式一：compose（推荐，自动建 data 目录、自动重启）
+Copy-Item .env.example .env
+docker compose up -d --build
+docker compose logs -f site
+```
+
+```powershell
+# 方式二：单容器，改端口或复用已有镜像时更方便
+docker build -t auto_sjz_site:local .
+docker run -d --name auto_sjz_site -p 8080:8080 -e "SITE_BASE_URL=http://localhost:8080" -v "${PWD}\data:/data" auto_sjz_site:local
+```
+
+也可以直接跑脚本（默认 8080，读 `MANAGER_URL` 环境变量）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run-local.ps1
+```
+
+打开 <http://localhost:8080> 即可。常用排查：
+
+- `docker ps` 看容器是否在跑，`docker logs auto_sjz_site` 看端口占用或启动报错。
+- 宿主机 8080 被占用时改映射：`docker run -p 8090:8080 ...`，同时把 `SITE_BASE_URL` 改成 `http://localhost:8090`。
+- 容器内固定监听 8080，`PORT` 环境变量只影响容器内部，映射端口以 `-p 宿主:8080` 为准。
+- 国内拉 npm 包慢时：`docker build --build-arg NPM_REGISTRY=https://registry.npmmirror.com -t auto_sjz_site:local .`（compose 可先设 `$env:NPM_REGISTRY`）。
+- 若 Dockerfile 报 `$'\r'` 一类错误，说明检出时被转成了 CRLF，执行 `git config core.autocrlf false` 后重新检出。
+- 不挂载 `data` 也能跑，但试用申请写在容器内，容器删了就没了。
+
 ### 独立部署要点
 
 - 官网与 Manager、discovery 完全解耦，可以部署在任意公网机器。

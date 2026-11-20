@@ -1,0 +1,5 @@
+# 统一换行，避免 Windows 检出后 Dockerfile / shell 脚本带上 CRLF
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf

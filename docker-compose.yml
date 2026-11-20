@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NPM_REGISTRY: "${NPM_REGISTRY:-}"
     image: auto_sjz_site:local
     container_name: auto_sjz_site
     restart: unless-stopped
