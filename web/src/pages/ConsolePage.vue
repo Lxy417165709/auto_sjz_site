@@ -111,7 +111,7 @@
                   <div>
                     <p class="text-sm font-semibold text-slate-900">账号实例</p>
                     <p class="mt-0.5 text-[11px] text-slate-500">
-                      {{ selectedDevice.accounts.length }} 个号 · {{ selectedDevice.accounts.length * 3 }} 元/月
+                      {{ selectedDevice.accounts.length }} 个号 · {{ authorizedOf(selectedDevice) }} 份授权 · {{ authorizedOf(selectedDevice) * 3 }} 元/月
                     </p>
                   </div>
                   <span class="text-[11px] text-slate-400">一个号一份授权</span>
@@ -587,6 +587,12 @@ function runningOf(device: Device) {
   return device.accounts.filter((account) => account.status === 'running').length
 }
 
+function authorizedOf(device: Device) {
+  return device.accounts.filter((account) => account.status !== 'pending').length
+}
+
+const authorizedTotal = computed(() => devices.reduce((sum, device) => sum + authorizedOf(device), 0))
+
 const kpis = computed(() => [
   {
     label: '在线设备',
@@ -597,7 +603,7 @@ const kpis = computed(() => [
   {
     label: '运行账号',
     value: `${devices.reduce((sum, device) => sum + runningOf(device), 0)} / ${devices.reduce((sum, device) => sum + device.accounts.length, 0)}`,
-    hint: `按号计费，本月 ${devices.reduce((sum, device) => sum + device.accounts.length, 0) * 3} 元`,
+    hint: `按号计费，本月 ${authorizedTotal.value * 3} 元`,
     tone: 'text-brand-700',
   },
   {
