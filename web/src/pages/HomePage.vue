@@ -16,7 +16,7 @@
             auto_sjz 用一个管理中台管住设备与账号：按账号结算、批量下发配置、异常自动通知。设备多少不额外收钱，账号增减才计费。
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <router-link to="/contact" class="btn-primary px-6">预约演示</router-link>
+            <router-link to="/start" class="btn-primary px-6">查看接入流程</router-link>
             <router-link to="/pricing" class="btn-dark px-6">查看按号收费</router-link>
           </div>
           <dl class="mt-10 grid max-w-lg grid-cols-2 gap-x-8 gap-y-4 border-t border-white/10 pt-6 text-sm">
@@ -96,6 +96,26 @@
             <h3 class="mt-4 text-[15px] font-semibold text-slate-900">{{ item.title }}</h3>
             <p class="mt-2 text-[13px] leading-6 text-slate-500">{{ item.desc }}</p>
           </article>
+        </div>
+      </section>
+
+      <section class="mt-16 pb-16">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="eyebrow">接入流程</p>
+            <h2 class="h2 mt-2">设备、账号、模块，按这个顺序接</h2>
+          </div>
+          <router-link to="/start" class="text-sm font-medium text-brand-600 hover:text-brand-700">看完整接入流程 →</router-link>
+        </div>
+        <div class="mt-8 grid gap-4 sm:grid-cols-3">
+          <router-link v-for="step in startSteps" :key="step.no" to="/start" class="card group transition hover:border-brand-200">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs text-brand-600">{{ step.no }}</span>
+              <span class="text-slate-300 transition group-hover:text-brand-500">→</span>
+            </div>
+            <h3 class="mt-3 text-[15px] font-semibold text-slate-900">{{ step.title }}</h3>
+            <p class="mt-2 text-[13px] leading-6 text-slate-500">{{ step.desc }}</p>
+          </router-link>
         </div>
       </section>
 
@@ -191,6 +211,12 @@ const highlights = [
     desc: 'Docker 私有化部署，Manager 与 discovery 可以分开，账号与业务数据留在自己的机器上。',
     icon: '<svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="14" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><circle cx="6.5" cy="6.5" r="1" fill="currentColor"/><circle cx="6.5" cy="13.5" r="1" fill="currentColor"/></svg>',
   },
+]
+
+const startSteps = [
+  { no: '01', title: '设备接入云控', desc: '设备装客户端、填 discovery 地址，自动注册上线，归到分组。' },
+  { no: '02', title: '加号并授权', desc: '在设备下新增账号实例，一个号一份授权，3 元/月。' },
+  { no: '03', title: '绑模块跑业务', desc: '选模块、配参数、绑定账号，灰度验证后批量下发。' },
 ]
 
 const scenes = [

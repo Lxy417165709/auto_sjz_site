@@ -74,15 +74,15 @@ const open = ref(false)
 const fallbackNav: NavItem[] = [
   { label: '业务能力', href: '/features' },
   { label: '按号收费', href: '/pricing' },
+  { label: '接入流程', href: '/start' },
   { label: '技术架构', href: '/tech' },
-  { label: '部署接入', href: '/deploy' },
   { label: '文档', href: '/docs' },
   { label: 'FAQ', href: '/faq' },
 ]
 
 const nav = computed<NavItem[]>(() => siteState.data?.site.nav ?? fallbackNav)
 const cta = computed<LinkItem>(() => siteState.data?.site.cta ?? { label: '登录 / 购买', href: '' })
-const secondary = computed<LinkItem>(() => siteState.data?.site.secondaryCta ?? { label: '预约演示', href: '/contact' })
+const secondary = computed<LinkItem>(() => siteState.data?.site.secondaryCta ?? { label: '接入咨询', href: '/contact' })
 const managerLink = computed(() => managerEntry())
 
 watch(() => route.fullPath, () => { open.value = false })

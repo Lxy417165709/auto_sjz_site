@@ -20,6 +20,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { title: '按号收费 - auto_sjz', description: '3 元/号/月，按账号实例计费，设备台数不计费。一台设备 5 个号即 15 元/月。' },
   },
   {
+    path: '/start',
+    name: 'start',
+    component: () => import('@/pages/StartPage.vue'),
+    meta: { title: '接入流程 - auto_sjz', description: '设备如何接入云控、如何添加账号并授权、如何添加模块：三步接入顺序与常见卡点。' },
+  },
+  {
     path: '/tech',
     name: 'tech',
     component: () => import('@/pages/TechPage.vue'),
@@ -47,7 +53,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/contact',
     name: 'contact',
     component: () => import('@/pages/ContactPage.vue'),
-    meta: { title: '联系与试用 - auto_sjz', description: '预约演示、咨询报价与私有化部署方案。' },
+    meta: { title: '联系与咨询 - auto_sjz', description: '咨询报价、接入方案与私有化部署。' },
   },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]

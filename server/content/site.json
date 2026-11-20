@@ -3,20 +3,92 @@
   "tagline": "按号收费的 Android 设备管理平台",
   "description": "一个号 3 元/月，设备不按台收费。auto_sjz 用管理中台批量管理设备与账号，配置统一、异常有通知，授权按账号实例结算。",
   "nav": [
-    {"label": "业务能力", "href": "/features"},
-    {"label": "按号收费", "href": "/pricing"},
-    {"label": "技术架构", "href": "/tech"},
-    {"label": "部署接入", "href": "/deploy"},
-    {"label": "文档", "href": "/docs"},
-    {"label": "FAQ", "href": "/faq"}
+    {
+      "label": "业务能力",
+      "href": "/features"
+    },
+    {
+      "label": "按号收费",
+      "href": "/pricing"
+    },
+    {
+      "label": "接入流程",
+      "href": "/start"
+    },
+    {
+      "label": "技术架构",
+      "href": "/tech"
+    },
+    {
+      "label": "文档",
+      "href": "/docs"
+    },
+    {
+      "label": "FAQ",
+      "href": "/faq"
+    }
   ],
-  "cta": {"label": "登录 / 购买", "href": ""},
-  "secondaryCta": {"label": "预约演示", "href": "/contact"},
-  "contact": {"email": "contact@auto-sjz.example", "wechat": "", "working": "工作日 9:00 - 18:00（UTC+8）"},
+  "cta": {
+    "label": "登录 / 购买",
+    "href": ""
+  },
+  "secondaryCta": {
+    "label": "接入咨询",
+    "href": "/contact"
+  },
+  "contact": {
+    "email": "contact@auto-sjz.example",
+    "wechat": "",
+    "working": "工作日 9:00 - 18:00（UTC+8）"
+  },
   "footer": [
-    {"title": "产品", "links": [{"label": "业务能力", "href": "/features"}, {"label": "按号收费", "href": "/pricing"}]},
-    {"title": "技术", "links": [{"label": "技术架构", "href": "/tech"}, {"label": "部署接入", "href": "/deploy"}, {"label": "文档", "href": "/docs"}]},
-    {"title": "支持", "links": [{"label": "常见问题", "href": "/faq"}, {"label": "联系与试用", "href": "/contact"}]}
+    {
+      "title": "产品",
+      "links": [
+        {
+          "label": "业务能力",
+          "href": "/features"
+        },
+        {
+          "label": "按号收费",
+          "href": "/pricing"
+        },
+        {
+          "label": "接入流程",
+          "href": "/start"
+        }
+      ]
+    },
+    {
+      "title": "技术",
+      "links": [
+        {
+          "label": "技术架构",
+          "href": "/tech"
+        },
+        {
+          "label": "部署接入",
+          "href": "/deploy"
+        },
+        {
+          "label": "文档",
+          "href": "/docs"
+        }
+      ]
+    },
+    {
+      "title": "支持",
+      "links": [
+        {
+          "label": "常见问题",
+          "href": "/faq"
+        },
+        {
+          "label": "联系与试用",
+          "href": "/contact"
+        }
+      ]
+    }
   ],
   "icp": "",
   "copyright": "© 2026 auto_sjz. All rights reserved."

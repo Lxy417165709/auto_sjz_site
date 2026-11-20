@@ -1,14 +1,14 @@
 <template>
   <div>
     <PageHero
-      eyebrow="联系与试用"
+      eyebrow="联系与咨询"
       title="说说设备规模，我们给出接入方案"
-      desc="需要报价、预约演示或私有化部署，填一下基本信息即可。官网不保存账号与订单，登录和购买仍在 Manager 完成。"
+      desc="需要报价、接入方案或私有化部署，填一下基本信息即可。官网不保存账号与订单，登录和购买仍在 Manager 完成。"
     />
 
     <div class="wrap grid gap-8 py-14 sm:py-16 lg:grid-cols-[1.1fr_0.9fr]">
       <form class="rounded-3xl border border-slate-200 p-6 shadow-card sm:p-8" @submit.prevent="submit">
-        <h2 class="text-lg font-semibold text-slate-900">提交试用申请</h2>
+        <h2 class="text-lg font-semibold text-slate-900">提交接入咨询</h2>
         <p class="mt-1 text-[13px] text-slate-500">带 <span class="text-brand-600">*</span> 为必填，邮箱或电话留一个即可。</p>
 
         <div class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -56,7 +56,7 @@
 
         <div class="mt-6 flex flex-wrap items-center gap-4">
           <button type="submit" class="btn-primary" :disabled="submitting">
-            {{ submitting ? '提交中…' : '提交申请' }}
+            {{ submitting ? '提交中…' : '提交咨询' }}
           </button>
           <span class="text-[11px] text-slate-400">提交后我们会用你留下的方式联系，不会用于其他用途。</span>
         </div>

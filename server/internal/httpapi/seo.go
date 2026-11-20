@@ -14,12 +14,12 @@ func (s *Server) handleRobots(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: %s/sitemap.xml\n", s.cfg.SiteBaseURL)
 }
 
-// handleSitemap 用导航配置生成 sitemap.xml；新增页面只要加入 site.json 的 nav 即可被收录。
+// handleSitemap 用导航配置生成 sitemap.xml；deploy、contact 不在导航里，固定补上。
 func (s *Server) handleSitemap(w http.ResponseWriter, r *http.Request) {
 	site, _, _, _, loaded := s.store.Snapshot()
 	lastmod := loaded.UTC().Format("2006-01-02")
 
-	routes := map[string]bool{"/": true}
+	routes := map[string]bool{"/": true, "/deploy": true, "/contact": true}
 	for _, item := range site.Nav {
 		href := strings.TrimSpace(item.Href)
 		if href == "" || strings.HasPrefix(href, "http") || strings.HasPrefix(href, "#") {
@@ -52,7 +52,7 @@ func (s *Server) handleSitemap(w http.ResponseWriter, r *http.Request) {
 		switch route {
 		case "/":
 			priority = "1.0"
-		case "/pricing", "/deploy":
+		case "/pricing", "/deploy", "/start":
 			priority = "0.8"
 		}
 		fmt.Fprintf(&b, "  <url><loc>%s%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>\n",
