@@ -3,7 +3,19 @@
     "id": "billing-per-account",
     "group": "计费",
     "question": "一台设备登录 5 个账号，怎么计费？",
-    "answer": "按账号实例计费，这台设备占用 5 份授权。设备本身不计费，10 台设备各 5 个账号就是 50 份授权。"
+    "answer": "按账号实例计费，当前 3 元/账号/月。这台设备占用 5 份授权，也就是 15 元/月；10 台设备各 5 个号就是 50 份授权、150 元/月。设备本身不计费。"
+  },
+  {
+    "id": "billing-vs-device",
+    "group": "计费",
+    "question": "和传统按设备收费比，差别在哪？",
+    "answer": "按设备收费时，一台设备不管挂几个号都按一台算，号少不划算、号多也没多收；按号收费则是账号增减直接反映成本，一台设备 5 个号就按 5 份结算，不会为闲置设备容量买单。"
+  },
+  {
+    "id": "billing-standard-price",
+    "group": "计费",
+    "question": "3 元/号/月 是最终价格吗？",
+    "answer": "3 元/号/月 是当前标准价。长期合作、大规模接入或私有化部署可以单独评估，最终以合同与报价单为准。"
   },
   {
     "id": "expire-behavior",
@@ -18,22 +30,22 @@
     "answer": "不会。Auth 签发租约时写入绝对到期时间，设备本地验签后按该时间点执行，在线、离线、关机都按同一个时间失效。"
   },
   {
-    "id": "expire-source",
-    "group": "授权",
-    "question": "到期时间以什么为准？",
-    "answer": "以 Auth 签发的租约中的到期时间为准，设备侧验签后直接按绝对时间判定，不依赖设备本地时间续期。"
+    "id": "batch-management",
+    "group": "管理",
+    "question": "管理中台能批量做什么？",
+    "answer": "设备、分组、账号与配置都在同一个中台里：可以按分组批量下发配置、集中查看设备状态与账号实例、批量处理异常设备，不用逐台登录操作。"
+  },
+  {
+    "id": "monitoring",
+    "group": "管理",
+    "question": "监控通知包括哪些内容？",
+    "answer": "包括设备在线/离线状态、自动化执行异常、授权到期提醒。异常触发后在部署时配置的通知渠道发出，方便尽早处理。"
   },
   {
     "id": "discovery",
     "group": "接入",
     "question": "discovery 是什么？必须和 Manager 部署在同一台机器吗？",
-    "answer": "discovery 是设备用来解析 Manager 地址的服务，设备启动后先访问 discovery 拿到 Manager 地址，再注册和拉取配置。discovery、Manager、设备三者不要求同机，只要 Manager 能访问 discovery，设备能访问 Manager 对外注册的地址即可。"
-  },
-  {
-    "id": "ports",
-    "group": "接入",
-    "question": "默认端口是怎么规划的？",
-    "answer": "Manager 根节点使用 5001，子节点示例为 5102、5202，discovery 使用 5003。实际部署可以按网络规划调整，只要 discovery 注册的地址与设备可达地址一致。"
+    "answer": "discovery 是设备用来解析 Manager 地址的服务。设备启动后先访问 discovery 拿到 Manager 地址，再注册和拉取配置。discovery、Manager、设备三者不要求同机，只要网络互相可达即可。"
   },
   {
     "id": "deploy-mode",

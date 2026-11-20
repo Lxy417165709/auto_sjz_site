@@ -2,13 +2,13 @@
   <div>
     <PageHero
       eyebrow="按号收费"
-      title="授权按账号实例计量，设备台数不额外计费"
-      desc="一台设备配 5 个账号，就是 5 份授权；10 台设备各 5 个账号，就是 50 份授权。授权时效由 Auth 签发，设备按绝对到期时间执行。"
+      title="一个号 3 元/月，设备不按台收费"
+      desc="按账号实例计费：一台设备挂 5 个号，就是 5 份授权、15 元/月。设备台数不参与计费，账号增减直接反映到月费。"
     >
       <div class="flex flex-wrap items-center gap-3">
-        <span class="tag font-mono">1 账号 = 1 授权实例</span>
+        <span class="tag font-mono">3 元 / 号 / 月</span>
+        <span class="tag">设备不计费</span>
         <span class="tag">到期不删号、不登出</span>
-        <span class="tag">离线不顺延</span>
       </div>
     </PageHero>
 
@@ -66,7 +66,7 @@
               <span class="text-xs text-slate-500">参考单价</span>
               <span class="text-sm text-slate-900">
                 <template v-if="pricing.unitPriceCny !== null">
-                  {{ formatCny(pricing.unitPriceCny) }} <span class="text-xs text-slate-500">/ {{ pricing.unitLabel }}</span>
+                  <span class="font-mono">{{ pricing.unitPriceCny }}</span> <span class="text-xs text-slate-500">{{ pricing.unitLabel }}</span>
                 </template>
                 <template v-else>报价以商务确认为准</template>
               </span>
@@ -101,7 +101,7 @@
           <div class="rounded-3xl border border-slate-200 p-7">
             <h2 class="text-lg font-semibold text-slate-900">为什么按账号，而不是按设备</h2>
             <p class="mt-3 text-sm leading-7 text-slate-600">
-              设备是载体，账号才是实际业务单元。按账号实例计量，账号增减能直接反映到授权数量，避免大机器带单账号的浪费，也避免一台设备塞满账号却按一台收费的失真。
+              设备是载体，账号才是实际业务单元。按号收费时，账号增减直接反映到月费：一个号 3 元，10 台设备各 5 个号就是 50 个号、150 元/月。既不会为大机器带单账号多付钱，也不会出现一台设备塞满账号却只按一台收费的失真。
             </p>
             <ul class="mt-5 space-y-3 text-sm text-slate-600">
               <li v-for="item in compare" :key="item" class="flex gap-2.5">
@@ -117,7 +117,6 @@
             <h2 class="text-lg font-semibold text-slate-900">购买前需要确认</h2>
             <ul class="mt-4 space-y-3 text-[13px] leading-6 text-slate-600">
               <li v-for="note in pricing.notes" :key="note">{{ note }}</li>
-              <li>官网不承接下单与支付，开通、续费、账号实例变更都在 Manager 完成。</li>
             </ul>
             <router-link to="/contact" class="btn-secondary mt-5">联系商务</router-link>
           </div>
@@ -125,7 +124,7 @@
 
         <CtaBand
           title="算清授权数量，再决定规模"
-          desc="告诉我们设备台数与每台账号数，我们会给出对应的授权实例数与部署建议。"
+          desc="告诉我们设备台数与每台账号数，我们按 3 元/号/月 给出月费，再给部署建议。"
           primary-label="申请报价"
           primary-to="/contact"
           secondary-label="查看常见问题"
@@ -144,7 +143,7 @@ import { loadSite, siteState } from '@/lib/site'
 
 const pricing = computed(() => siteState.data?.pricing ?? null)
 
-const devices = ref(3)
+const devices = ref(10)
 const accountsPerDevice = ref(5)
 
 watch(
@@ -165,9 +164,9 @@ const totalUnits = computed(() => {
 })
 
 const compare = [
-  '账号增减即授权增减，不浪费空置设备',
-  '同一台设备多账号按实例计费，账目可对',
-  '过期只停执行，账号与配置原样保留',
+  '月费 = 账号数 × 3 元，账单可直接核对',
+  '设备加不加都不影响月费，预算跟着账号走',
+  '到期只停执行，账号与配置原样保留',
 ]
 
 function formatCny(value: number): string {

@@ -1,27 +1,34 @@
 <template>
   <div>
     <PageHero
-      eyebrow="功能"
-      title="从设备接入到授权执行，全链路由一套系统负责"
-      desc="设备端只执行，Manager 只下发，discovery 只解析地址，Auth 只签发时效。职责边界清晰，排障时一眼定位到环节。"
+      eyebrow="业务能力"
+      title="少花冤枉钱，少做重复操作"
+      desc="按号收费、中台批量管理、监控通知——业务上最常被问的三件事放在最前面。架构、端口和部署细节都挪到技术区，不干扰判断。"
     >
       <div class="flex flex-wrap gap-2">
-        <span class="tag">设备注册</span>
-        <span class="tag">快照下发</span>
-        <span class="tag">账号实例</span>
-        <span class="tag">授权租约</span>
-        <span class="tag">多节点</span>
+        <span class="tag">3 元 / 号 / 月</span>
+        <span class="tag">设备不计费</span>
+        <span class="tag">批量管理</span>
+        <span class="tag">监控通知</span>
       </div>
     </PageHero>
 
     <div class="wrap">
-      <section class="py-14 sm:py-16">
-        <p class="eyebrow">功能矩阵</p>
-        <h2 class="h2 mt-2">六件事，覆盖设备自动化日常</h2>
+      <section class="grid gap-4 py-14 sm:grid-cols-3 sm:py-16">
+        <div v-for="stat in stats" :key="stat.label" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+          <p class="font-mono text-2xl font-semibold text-slate-900">{{ stat.value }}</p>
+          <p class="mt-1 text-sm font-medium text-slate-800">{{ stat.label }}</p>
+          <p class="mt-2 text-[13px] leading-6 text-slate-500">{{ stat.desc }}</p>
+        </div>
+      </section>
+
+      <section>
+        <p class="eyebrow">能力清单</p>
+        <h2 class="h2 mt-2">六件事，覆盖日常管理</h2>
         <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <article v-for="item in features" :key="item.title" class="card flex flex-col">
-            <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-600">{{ item.module }}</p>
-            <h3 class="mt-2 text-[15px] font-semibold text-slate-900">{{ item.title }}</h3>
+          <article v-for="item in capabilities" :key="item.title" class="card flex flex-col">
+            <span class="tag w-fit">{{ item.tag }}</span>
+            <h3 class="mt-3 text-[15px] font-semibold text-slate-900">{{ item.title }}</h3>
             <p class="mt-2 text-[13px] leading-6 text-slate-500">{{ item.desc }}</p>
             <ul class="mt-4 space-y-1.5 border-t border-slate-100 pt-4 text-[12px] text-slate-500">
               <li v-for="point in item.points" :key="point" class="flex gap-2">
@@ -33,27 +40,28 @@
         </div>
       </section>
 
-      <section class="rounded-3xl border border-slate-200 bg-slate-50/60 px-5 py-10 sm:px-9">
-        <p class="eyebrow">职责边界</p>
-        <h2 class="h2 mt-2">四个模块，各自只做一件事</h2>
+      <section class="mt-14 rounded-3xl border border-slate-200 bg-slate-50/60 px-5 py-10 sm:px-9">
+        <p class="eyebrow">收费方式对比</p>
+        <h2 class="h2 mt-2">按设备，还是按号</h2>
         <div class="mt-6 overflow-x-auto">
-          <table class="w-full min-w-[720px] border-separate border-spacing-y-2 text-left text-sm">
+          <table class="w-full min-w-[680px] border-separate border-spacing-y-2 text-left text-sm">
             <thead>
               <tr class="text-xs uppercase tracking-[0.12em] text-slate-500">
-                <th class="px-4 py-2 font-medium">模块</th>
-                <th class="px-4 py-2 font-medium">负责</th>
-                <th class="px-4 py-2 font-medium">不做</th>
+                <th class="w-[24%] px-4 py-2 font-medium">对比项</th>
+                <th class="w-[32%] px-4 py-2 font-medium">传统按设备</th>
+                <th class="w-[44%] px-4 py-2 font-medium">按号方案</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="row in modules" :key="row.name" class="rounded-xl bg-white text-slate-700">
-                <td class="rounded-l-xl px-4 py-3 font-medium text-slate-900">{{ row.name }}</td>
-                <td class="px-4 py-3 text-slate-600">{{ row.owns }}</td>
-                <td class="rounded-r-xl px-4 py-3 text-slate-500">{{ row.avoids }}</td>
+              <tr v-for="row in compareRows" :key="row.item" class="bg-white text-slate-700">
+                <td class="rounded-l-xl px-4 py-3 font-medium text-slate-900">{{ row.item }}</td>
+                <td class="px-4 py-3 text-slate-500">{{ row.device }}</td>
+                <td class="rounded-r-xl px-4 py-3 text-brand-700">{{ row.account }}</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p class="mt-4 text-[12px] leading-5 text-slate-500">按号计费以账号实例为单位，3 元/号/月；设备台数不参与计费。</p>
       </section>
 
       <section class="grid gap-4 py-14 sm:py-16 lg:grid-cols-3">
@@ -64,12 +72,12 @@
       </section>
 
       <CtaBand
-        title="把设备接入链路跑通，再谈规模"
-        desc="一套 discovery + Manager 就能支撑起步阶段的设备接入；设备变多时，按子节点拆分即可。"
-        primary-label="查看部署接入"
-        primary-to="/deploy"
-        secondary-label="了解按号收费"
-        secondary-to="/pricing"
+        title="先算清账号，再谈部署"
+        desc="告诉我们设备台数与每台账号数，我们按 3 元/号/月 给出月费，再讨论接入方式。"
+        primary-label="算一下月费"
+        primary-to="/pricing"
+        secondary-label="联系与试用"
+        secondary-to="/contact"
       />
     </div>
   </div>
@@ -79,55 +87,62 @@
 import PageHero from '@/components/PageHero.vue'
 import CtaBand from '@/components/CtaBand.vue'
 
-const features = [
+const stats = [
+  { value: '¥3', label: '单个账号月费', desc: '按账号实例结算，设备台数不额外收费。' },
+  { value: '1 个中台', label: '设备与账号集中管理', desc: '批量下发配置、批量查看状态，不用逐台登录。' },
+  { value: '持续监控', label: '在线、异常、到期', desc: '关键状态集中呈现，异常按配置通知。' },
+]
+
+const capabilities = [
   {
-    module: '设备端',
-    title: '设备注册与快照拉取',
-    desc: '设备启动后自动注册，拉取属于自己的配置快照并落盘，业务按快照执行。',
-    points: ['注册失败自动重试', '快照写入本地 JSON', '离线期间只读'],
+    tag: '收费',
+    title: '按号收费，成本跟着账号走',
+    desc: '一个号 3 元/月，一台设备挂 5 个号就是 15 元/月；加设备不加钱，账号增减直接反映到账单。',
+    points: ['设备台数不计费', '账号按实例结算', '月费可预估、可对账'],
   },
   {
-    module: '设备端',
-    title: '账号实例运行',
-    desc: '一台设备可承载多个账号，每个账号对应一份授权实例，执行时互不干扰。',
-    points: ['账号与实例一一对应', '增减账号即时生效', '执行日志按实例归档'],
+    tag: '管理',
+    title: '管理中台，批量管理',
+    desc: '设备、分组、账号与配置集中在一个后台，批量变更一次下发，异常设备集中处理。',
+    points: ['按分组批量下发', '集中查看设备状态', '账号实例统一维护'],
   },
   {
-    module: 'Manager',
-    title: '统一配置与分组',
-    desc: '按设备、分组维护配置，变更后由设备主动拉取，避免逐台登录改配置。',
-    points: ['单一权威源', '变更审计留痕', '根节点 + 子节点'],
+    tag: '监控',
+    title: '监控通知，异常不漏',
+    desc: '设备在线/离线、执行异常、授权到期集中监控，触发后按配置的通知渠道提醒。',
+    points: ['在线状态可见', '执行异常提醒', '到期提前通知'],
   },
   {
-    module: 'discovery',
-    title: '地址解析与切换',
-    desc: '设备只认 discovery 地址，Manager 地址变更只改登记，不动设备。',
-    points: ['不写死 IP', '迁移机房无需刷机', '故障时可按分组切流'],
+    tag: '配置',
+    title: '统一配置，不用逐台改',
+    desc: '配置只在中台维护，设备拉取快照执行；离线期间只读，恢复后自动对齐最新配置。',
+    points: ['单一配置源', '变更批量生效', '离线不误改'],
   },
   {
-    module: 'Auth',
-    title: '授权租约与验签',
-    desc: '按账号实例签发租约，设备本地验签，按绝对到期时间执行。',
-    points: ['签名不可伪造', '到期不删号不登出', '离线同一时间失效'],
+    tag: '授权',
+    title: '到期只停执行，不删号不登出',
+    desc: '授权按绝对到期时间失效，账号与设备配置原样保留，续费后继续执行，不用重建环境。',
+    points: ['账号不删除', '不强制退出登录', '离线同样按点失效'],
   },
   {
-    module: '部署',
-    title: 'Docker 独立编排',
-    desc: '根节点与子节点 compose 分开，Manager 与 discovery 可跨机部署。',
-    points: ['单机即可起步', '按节点横向扩展', '升级不影响设备执行'],
+    tag: '部署',
+    title: '独立部署，数据自己掌握',
+    desc: 'Docker 私有化部署，Manager 与 discovery 可以分开，账号与业务数据留在自己的机器上。',
+    points: ['单机即可起步', '按规模加子节点', '不依赖厂商云'],
   },
 ]
 
-const modules = [
-  { name: '设备端', owns: '执行业务、缓存快照、本地验签', avoids: '不维护全局配置、不改写他人配置' },
-  { name: 'Manager', owns: '配置权威源、设备注册、快照下发、节点管理', avoids: '不签发授权时效' },
-  { name: 'discovery', owns: 'Manager 地址登记与解析', avoids: '不承载配置与业务数据' },
-  { name: 'Auth', owns: '订单、token、账号实例授权与租约签发', avoids: '不管设备执行与配置内容' },
+const compareRows = [
+  { item: '计费单位', device: '按设备台数', account: '按账号实例（3 元/号/月）' },
+  { item: '设备增减', device: '每加一台就加一份费用', account: '加设备不额外收费' },
+  { item: '账号增减', device: '一台设备挂多少号都一样', account: '加一个号算一个，减一个省一个' },
+  { item: '闲置成本', device: '设备闲着也要付整套', account: '只为实际账号付费' },
+  { item: '账单核对', device: '按台数对，难对应到账号', account: '账号数 × 3 元，账目直接可对' },
 ]
 
 const scenes = [
-  { title: '多设备统一变更', desc: '一次改动下发到全部设备，避免逐台操作导致配置不一致。' },
-  { title: '账号规模化管理', desc: '按账号实例授权与计费，账号增减直接反映在授权数量上。' },
-  { title: '跨机房部署', desc: 'Manager 与 discovery 分开部署，设备只依赖 discovery 与 Manager 可达地址。' },
+  { title: '多账号运营', desc: '一台设备多个号，按号结算更贴近实际成本结构。' },
+  { title: '设备逐步扩容', desc: '先小规模跑通，再按账号数扩，预算跟着业务走。' },
+  { title: '长期稳定运行', desc: '到期不删号、不登出，续费即恢复，减少重复配置。' },
 ]
 </script>

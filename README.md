@@ -25,7 +25,7 @@ auto_sjz 的独立介绍官网：**Go + Vue 3 静态站点**，负责产品介�
 │   ├── internal/httpapi/   # 路由、API、表单、robots/sitemap
 │   └── content/            # 站点文案（site/pricing/faq/docs）
 ├── web/                    # Vue 前端
-│   ├── src/pages/          # 首页 / 功能 / 按号收费 / 部署接入 / 文档 / FAQ / 联系
+│   ├── src/pages/          # 首页 / 业务能力 / 按号收费 / 技术架构 / 部署接入 / 文档 / FAQ / 联系
 │   ├── src/components/     # 导航、页脚、CTA、架构图等
 │   ├── src/lib/            # API 客户端、SEO、类型
 │   └── src/router/         # 路由与页面 meta
@@ -38,9 +38,10 @@ auto_sjz 的独立介绍官网：**Go + Vue 3 静态站点**，负责产品介�
 
 | 路由 | 页面 | 内容来源 |
 | --- | --- | --- |
-| `/` | 首页 | 固定文案 + 架构图 |
-| `/features` | 功能 | 固定文案 + 职责表 |
+| `/` | 首页（业务视角） | 固定文案 + 管理台示意 |
+| `/features` | 业务能力 | 固定文案 + 按设备/按号对比 |
 | `/pricing` | 按号收费 | `/api/site` 的 pricing |
+| `/tech` | 技术架构 | 架构图 + 模块职责 + 授权链路 + 技术栈 |
 | `/deploy` | 部署接入 | 固定文案 + 端口表 |
 | `/docs` | 文档 | `/api/site` 的 docs |
 | `/faq` | FAQ | `/api/site` 的 faq |
@@ -172,7 +173,7 @@ docker pull docker.m.daocloud.io/library/alpine:3.20; docker tag docker.m.daoclo
 | 文件 | 内容 |
 | --- | --- |
 | `site.json` | 品牌名、导航、CTA、联系方式、页脚、备案号 |
-| `pricing.json` | 按号收费的规则、包含项、说明；`unitPriceCny` 为 `null` 时前端显示「报价以商务确认为准」 |
+| `pricing.json` | 按号收费的规则、包含项、说明；当前单价 3 元/号/月，改 `unitPriceCny` 即可调价 |
 | `faq.json` | FAQ 列表（按 `group` 分组） |
 | `docs.json` | 文档正文（分节 + 段落 + 列表） |
 
@@ -182,7 +183,6 @@ docker pull docker.m.daocloud.io/library/alpine:3.20; docker tag docker.m.daoclo
 
 - `site.json` 的 `contact.email`（当前为 `contact@auto-sjz.example`）
 - `site.json` 的 `icp`（备案号）
-- `pricing.json` 的 `unitPriceCny`（正式单价，未定价保持 `null`）
 - 环境变量 `MANAGER_URL`、`SITE_BASE_URL`
 
 ## API

@@ -72,8 +72,9 @@ const route = useRoute()
 const open = ref(false)
 
 const fallbackNav: NavItem[] = [
-  { label: '功能', href: '/features' },
+  { label: '业务能力', href: '/features' },
   { label: '按号收费', href: '/pricing' },
+  { label: '技术架构', href: '/tech' },
   { label: '部署接入', href: '/deploy' },
   { label: '文档', href: '/docs' },
   { label: 'FAQ', href: '/faq' },

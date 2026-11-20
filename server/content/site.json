@@ -1,10 +1,11 @@
 {
   "name": "auto_sjz",
-  "tagline": "Android 设备自动化管理平台",
-  "description": "统一管理 Android 设备、账号与自动化任务。配置由 Manager 统一下发，设备通过 discovery 自动寻址，授权按账号实例计量。",
+  "tagline": "按号收费的 Android 设备管理平台",
+  "description": "一个号 3 元/月，设备不按台收费。auto_sjz 用管理中台批量管理设备与账号，配置统一、异常有通知，授权按账号实例结算。",
   "nav": [
-    {"label": "功能", "href": "/features"},
+    {"label": "业务能力", "href": "/features"},
     {"label": "按号收费", "href": "/pricing"},
+    {"label": "技术架构", "href": "/tech"},
     {"label": "部署接入", "href": "/deploy"},
     {"label": "文档", "href": "/docs"},
     {"label": "FAQ", "href": "/faq"}
@@ -13,8 +14,8 @@
   "secondaryCta": {"label": "预约演示", "href": "/contact"},
   "contact": {"email": "contact@auto-sjz.example", "wechat": "", "working": "工作日 9:00 - 18:00（UTC+8）"},
   "footer": [
-    {"title": "产品", "links": [{"label": "功能总览", "href": "/features"}, {"label": "按号收费", "href": "/pricing"}]},
-    {"title": "接入", "links": [{"label": "部署接入", "href": "/deploy"}, {"label": "文档", "href": "/docs"}]},
+    {"title": "产品", "links": [{"label": "业务能力", "href": "/features"}, {"label": "按号收费", "href": "/pricing"}]},
+    {"title": "技术", "links": [{"label": "技术架构", "href": "/tech"}, {"label": "部署接入", "href": "/deploy"}, {"label": "文档", "href": "/docs"}]},
     {"title": "支持", "links": [{"label": "常见问题", "href": "/faq"}, {"label": "联系与试用", "href": "/contact"}]}
   ],
   "icp": "",
