@@ -14,18 +14,6 @@ RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi 
 COPY web/ ./
 RUN npm run build
 
-# ---- Manager 演示子应用（官网 /console 直接复用 Manager 前端） ----
-FROM ${NODE_IMAGE} AS console_demo
-ARG MANAGER_REPO=https://github.com/Lxy417165709/auto_sjz_manager.git
-ARG MANAGER_REF=main_dev
-ARG NPM_REGISTRY=
-RUN apk add --no-cache git \
- && git clone --depth 1 --branch ${MANAGER_REF} ${MANAGER_REPO} /manager
-WORKDIR /manager/frontend
-RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi \
- && npm ci --no-audit --no-fund \
- && npm run build:demo
-
 # ---- Go 构建 ----
 FROM ${GO_IMAGE} AS server
 WORKDIR /app/server
@@ -44,8 +32,6 @@ RUN apk add --no-cache ca-certificates tzdata \
 WORKDIR /app
 COPY --from=server /out/site /app/site
 COPY --from=web /app/web/dist /app/web
-# 用 Manager 仓库现场构建的 demo 覆盖静态兜底产物
-COPY --from=console_demo /manager/frontend/dist-demo /app/web/console-demo
 COPY server/content /app/content
 
 USER site

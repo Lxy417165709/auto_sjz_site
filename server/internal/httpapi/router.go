@@ -71,21 +71,6 @@ func (s *Server) handleStatic(w http.ResponseWriter, r *http.Request) {
 
 	full := filepath.Join(s.webDir, filepath.FromSlash(rel))
 	info, err := os.Stat(full)
-	if err == nil && info.IsDir() {
-		// 静态子应用（如 /console-demo/）需要目录 index，且不能用 ServeFile
-		// 直接指向 index.html，否则会 301 回目录、再回退到官网首页。
-		indexPath := filepath.Join(full, "index.html")
-		f, openErr := os.Open(indexPath)
-		if openErr == nil {
-			defer f.Close()
-			fi, statErr := f.Stat()
-			if statErr == nil && !fi.IsDir() {
-				w.Header().Set("Cache-Control", "public, max-age=300")
-				http.ServeContent(w, r, "index.html", fi.ModTime(), f)
-				return
-			}
-		}
-	}
 	if err == nil && !info.IsDir() {
 		if strings.HasPrefix(rel, "assets/") {
 			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
