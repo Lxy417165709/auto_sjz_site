@@ -88,6 +88,7 @@ type FAQItem struct {
 
 type Doc struct {
 	Slug     string    `json:"slug"`
+	Audience string    `json:"audience,omitempty"`
 	Title    string    `json:"title"`
 	Summary  string    `json:"summary"`
 	Updated  string    `json:"updated"`

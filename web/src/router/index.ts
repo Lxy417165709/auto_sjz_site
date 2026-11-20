@@ -29,7 +29,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/tech',
     name: 'tech',
     component: () => import('@/pages/TechPage.vue'),
-    meta: { title: '技术架构 - auto_sjz', description: '设备、discovery、Manager、Auth 的职责边界，授权验签链路、默认端口与技术栈。' },
+    meta: { title: '技术架构 - auto_sjz', description: 'Manager 根节点 + 子节点的树形部署、设备节点归属、授权验签链路、默认端口与技术栈。' },
   },
   {
     path: '/deploy',
@@ -41,7 +41,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/docs',
     name: 'docs',
     component: () => import('@/pages/DocsPage.vue'),
-    meta: { title: '文档 - auto_sjz', description: '快速开始、系统架构、授权计费与配置下发说明。' },
+    meta: { title: '文档 - auto_sjz', description: '业务快速开始、系统架构与端口、授权计费、监控通知，以及开发部署文档。' },
   },
   {
     path: '/faq',

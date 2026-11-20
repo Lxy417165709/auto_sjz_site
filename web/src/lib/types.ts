@@ -67,6 +67,7 @@ export interface DocSection {
 
 export interface Doc {
   slug: string
+  audience?: 'business' | 'developer'
   title: string
   summary: string
   updated: string

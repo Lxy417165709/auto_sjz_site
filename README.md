@@ -42,9 +42,9 @@ auto_sjz 的独立介绍官网：**Go + Vue 3 静态站点**，负责产品介�
 | `/features` | 业务能力 | 固定文案 + 按设备/按号对比 |
 | `/pricing` | 按号收费 | `/api/site` 的 pricing |
 | `/start` | 接入流程 | 固定文案：设备接入 / 添加账号 / 添加模块 |
-| `/tech` | 技术架构 | 架构图 + 模块职责 + 授权链路 + 技术栈 |
+| `/tech` | 技术架构 | Manager 树形拓扑图 + 模块职责 + 授权链路 + 技术栈 |
 | `/deploy` | 部署接入 | 固定文案 + 端口表 |
-| `/docs` | 文档 | `/api/site` 的 docs |
+| `/docs` | 文档（业务 / 开发分组） | `/api/site` 的 docs（`audience` 字段分组） |
 | `/faq` | FAQ | `/api/site` 的 faq |
 | `/contact` | 联系 / 咨询 | 表单提交 `/api/lead` |
 

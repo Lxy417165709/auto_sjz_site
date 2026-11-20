@@ -17,15 +17,15 @@
       <section class="py-14 sm:py-16">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p class="eyebrow">链路</p>
-            <h2 class="h2 mt-2">设备是怎么找到 Manager 的</h2>
+            <p class="eyebrow">部署拓扑</p>
+            <h2 class="h2 mt-2">一棵 Manager 树，设备挂在节点下</h2>
           </div>
           <router-link to="/deploy" class="text-sm font-medium text-brand-600 hover:text-brand-700">看部署接入 →</router-link>
         </div>
         <p class="lead mt-4 max-w-3xl">
-          设备不写死 IP：启动后先向 discovery 解析 Manager 地址，再注册并拉取快照，写入本地 JSON 后执行业务。Manager 是配置唯一权威源，离线期间设备只读。
+          根节点是配置唯一权威源，负责节点管理与快照下发；子节点按门店或设备规模拆分，设备只与所属节点注册、拉快照。设备不写死 IP，启动后先用 discovery 解析地址。
         </p>
-        <ArchitectureDiagram class="mt-6" />
+        <ManagerTree class="mt-6" />
       </section>
 
       <section class="rounded-3xl border border-slate-200 bg-slate-50/60 px-5 py-10 sm:px-9">
@@ -123,7 +123,7 @@
 
 <script setup lang="ts">
 import PageHero from '@/components/PageHero.vue'
-import ArchitectureDiagram from '@/components/ArchitectureDiagram.vue'
+import ManagerTree from '@/components/ManagerTree.vue'
 import CtaBand from '@/components/CtaBand.vue'
 
 const modules = [

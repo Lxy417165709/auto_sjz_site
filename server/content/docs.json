@@ -1,39 +1,64 @@
 [
   {
-    "slug": "quickstart",
-    "title": "快速开始：Docker 部署",
-    "summary": "从零跑起一套最小可用的 auto_sjz：discovery + Manager 根节点 + 一台接入设备。",
+    "slug": "business-quickstart",
+    "title": "业务快速开始：一台设备跑起来",
+    "summary": "不涉及服务器部署：从拿到管理台地址开始，把设备接入、加号授权、挂模块三步走完。",
     "updated": "2026-11",
+    "audience": "business",
     "sections": [
       {
-        "heading": "前置条件",
+        "heading": "开始前你会拿到",
         "paragraphs": [
-          "一台能被设备访问的服务器，已安装 Docker 与 Docker Compose。",
-          "部署仓库按根节点、子节点分开维护 compose 编排，Root 与子节点可以部署在不同机器上。"
+          "部署完成后，管理员会给你三样东西，业务侧不需要自己装服务、也不需要碰 Docker。"
         ],
         "bullets": [
-          "服务器开放 Manager 端口与 discovery 端口",
-          "设备侧可以访问 discovery 地址",
-          "准备好授权租约（license lease）"
+          "Manager 管理台地址与登录账号",
+          "discovery 地址（设备接入时填这一个地址）",
+          "设备端安装包与账号命名规则"
         ]
       },
       {
-        "heading": "部署顺序",
+        "heading": "第一步：设备接入云控",
         "paragraphs": [
-          "先启动 discovery，再启动 Manager 根节点，最后让设备接入。顺序反了设备会解析不到地址，表现为反复重试注册。"
+          "设备装好客户端后只填 discovery 地址，启动即自动注册；不需要逐台记录 Manager 的 IP。"
         ],
         "bullets": [
-          "启动 discovery（默认 5003），确认监听正常",
-          "启动 Manager 根节点（默认 5001），确认管理后台可登录",
-          "在 Manager 中登记设备可访问的对外地址",
-          "设备首次启动时配置 discovery 地址，由 discovery 返回 Manager 地址"
+          "在管理台按门店、批次或用途建好分组",
+          "设备启动后在设备列表确认状态为在线",
+          "把设备归到分组，设备会拉取配置快照"
         ]
       },
       {
-        "heading": "验证接入",
+        "heading": "第二步：添加账号并授权",
         "paragraphs": [
-          "设备启动后会向 discovery 请求 Manager 地址，随后向 Manager 注册并拉取配置快照。",
-          "在 Manager 侧看到设备上线、快照成功下发，即表示链路打通；设备本地会落一份 JSON 配置，业务按该配置执行。"
+          "账号是计费单位也是执行单位：一个号对应一份授权，3 元/月，设备台数不叠加费用。在设备或分组下新增账号实例，提交后由 Auth 签发授权。"
+        ],
+        "bullets": [
+          "按统一规则命名，方便对账和排障",
+          "授权按号计算，一台设备 5 个号就是 15 元/月",
+          "首次启动后确认账号运行状态"
+        ]
+      },
+      {
+        "heading": "第三步：添加模块跑业务",
+        "paragraphs": [
+          "模块决定账号做什么，不额外收费。选好模块、配好参数、绑定账号范围，先小范围跑通再批量下发。"
+        ],
+        "bullets": [
+          "先放 1–2 台设备灰度，看执行记录",
+          "确认无误后再绑到整个分组",
+          "后续改参数在管理台重新下发，不用上设备"
+        ]
+      },
+      {
+        "heading": "日常只需要看三件事",
+        "paragraphs": [
+          "接入完成后，业务侧日常关注在线状态、执行异常与授权到期即可；授权到期只停执行，不删号、不登出，续费后继续跑。"
+        ],
+        "bullets": [
+          "设备在线 / 离线",
+          "自动化执行异常",
+          "授权到期与临期提醒"
         ]
       }
     ]
@@ -41,13 +66,24 @@
   {
     "slug": "architecture",
     "title": "系统架构与端口",
-    "summary": "设备端、discovery、Manager 三者的职责边界与默认端口规划。",
+    "summary": "根节点 + 子节点的树形部署、设备节点归属，以及 discovery、Manager 的职责与默认端口。",
     "updated": "2026-11",
     "sections": [
       {
         "heading": "链路",
         "paragraphs": [
           "设备端启动后先访问 discovery，解析出 Manager 地址；再向 Manager 注册并拉取快照，写入本地 JSON 后执行业务。设备不写死 IP，Manager 地址变更只需更新 discovery 登记。"
+        ]
+      },
+      {
+        "heading": "树形部署形态",
+        "paragraphs": [
+          "Manager 以根节点 + 子节点组织：根节点持有全局配置与节点管理，子节点按门店或设备规模拆分，设备挂在所属子节点下。设备规模扩大时加子节点，不需要改动设备侧逻辑。"
+        ],
+        "bullets": [
+          "根节点：配置唯一权威源，设备注册与快照下发的中枢",
+          "子节点：承接一部分设备与账号，独立编排部署",
+          "设备节点：只与所属 Manager 节点注册、拉快照"
         ]
       },
       {
@@ -68,7 +104,8 @@
           "Manager 与 discovery 不要求同机，只要网络互相可达且设备能访问注册出去的地址"
         ]
       }
-    ]
+    ],
+    "audience": "developer"
   },
   {
     "slug": "license",
@@ -99,7 +136,8 @@
           "订单、授权 token 与 account_licenses 记录落在 Manager/Auth 侧，官网不保存任何账号、订单或支付信息。"
         ]
       }
-    ]
+    ],
+    "audience": "business"
   },
   {
     "slug": "snapshot",
@@ -128,7 +166,8 @@
           "设备规模变大时按根节点 + 子节点拆分接入，子节点独立编排部署，配置仍由 Manager 统一管理。"
         ]
       }
-    ]
+    ],
+    "audience": "business"
   },
   {
     "slug": "monitoring",
@@ -165,6 +204,54 @@
           "异常恢复后补一条恢复通知"
         ]
       }
-    ]
+    ],
+    "audience": "business"
+  },
+  {
+    "slug": "deploy-dev",
+    "title": "部署与启动（开发者）",
+    "summary": "面向部署与运维：用 Docker Compose 跑起 discovery 与 Manager 根节点，再让第一台设备接入。",
+    "updated": "2026-11",
+    "sections": [
+      {
+        "heading": "这份文档给谁看",
+        "paragraphs": [
+          "业务同学按「业务快速开始」操作即可，不需要自己部署服务器。这里写给负责部署、网络与运维的开发同学。"
+        ],
+        "bullets": []
+      },
+      {
+        "heading": "前置条件",
+        "paragraphs": [
+          "一台能被设备访问的服务器，已安装 Docker 与 Docker Compose。",
+          "部署仓库按根节点、子节点分开维护 compose 编排，Root 与子节点可以部署在不同机器上。"
+        ],
+        "bullets": [
+          "服务器开放 Manager 端口与 discovery 端口",
+          "设备侧可以访问 discovery 地址",
+          "准备好授权租约（license lease）"
+        ]
+      },
+      {
+        "heading": "部署顺序",
+        "paragraphs": [
+          "先启动 discovery，再启动 Manager 根节点，最后让设备接入。顺序反了设备会解析不到地址，表现为反复重试注册。"
+        ],
+        "bullets": [
+          "启动 discovery（默认 5003），确认监听正常",
+          "启动 Manager 根节点（默认 5001），确认管理后台可登录",
+          "在 Manager 中登记设备可访问的对外地址",
+          "设备首次启动时配置 discovery 地址，由 discovery 返回 Manager 地址"
+        ]
+      },
+      {
+        "heading": "验证接入",
+        "paragraphs": [
+          "设备启动后会向 discovery 请求 Manager 地址，随后向 Manager 注册并拉取配置快照。",
+          "在 Manager 侧看到设备上线、快照成功下发，即表示链路打通；设备本地会落一份 JSON 配置，业务按该配置执行。"
+        ]
+      }
+    ],
+    "audience": "developer"
   }
 ]
