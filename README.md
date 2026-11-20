@@ -127,6 +127,38 @@ powershell -ExecutionPolicy Bypass -File .\scripts\run-local.ps1
 - 若 Dockerfile 报 `$'\r'` 一类错误，说明检出时被转成了 CRLF，执行 `git config core.autocrlf false` 后重新检出。
 - 不挂载 `data` 也能跑，但试用申请写在容器内，容器删了就没了。
 
+#### 基础镜像拉取慢
+
+`node:22-alpine`、`golang:1.23-alpine`、`alpine:3.20` 都要从 Docker Hub 拉，国内经常卡在几十 MB。三种办法，任选其一：
+
+1. 给 Docker Desktop 配镜像加速：Settings → Docker Engine，加上（可用性会变，逐个试）：
+
+```json
+{
+  "registry-mirrors": ["https://docker.m.daocloud.io", "https://docker.1ms.run"]
+}
+```
+
+Apply & Restart 后先单独验证：`docker pull node:22-alpine`。
+
+2. 不改 daemon，直接用镜像站地址构建（Dockerfile 已支持这三个 build-arg）：
+
+```
+docker build --build-arg NODE_IMAGE=docker.m.daocloud.io/library/node:22-alpine --build-arg GO_IMAGE=docker.m.daocloud.io/library/golang:1.23-alpine --build-arg RUNTIME_IMAGE=docker.m.daocloud.io/library/alpine:3.20 -t auto_sjz_site:local .
+```
+
+3. 先拉镜像站版本再打回官方 tag，后续 build 直接命中本地缓存：
+
+```
+docker pull docker.m.daocloud.io/library/node:22-alpine; docker tag docker.m.daocloud.io/library/node:22-alpine node:22-alpine
+docker pull docker.m.daocloud.io/library/golang:1.23-alpine; docker tag docker.m.daocloud.io/library/golang:1.23-alpine golang:1.23-alpine
+docker pull docker.m.daocloud.io/library/alpine:3.20; docker tag docker.m.daocloud.io/library/alpine:3.20 alpine:3.20
+```
+
+有本地代理时也可以走 Docker Desktop 代理：Settings → Resources → Proxies → Manual，HTTP/HTTPS 填 `http://127.0.0.1:7890`（换成你自己的端口），Apply & Restart。
+
+镜像只需拉一次，之后的构建会复用本地层；npm 依赖慢另见上面的 `NPM_REGISTRY`。
+
 ### 独立部署要点
 
 - 官网与 Manager、discovery 完全解耦，可以部署在任意公网机器。

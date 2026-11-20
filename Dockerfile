@@ -1,5 +1,10 @@
+# 基础镜像可通过 build-arg 换成镜像站地址，便于国内网络拉取
+ARG NODE_IMAGE=node:22-alpine
+ARG GO_IMAGE=golang:1.23-alpine
+ARG RUNTIME_IMAGE=alpine:3.20
+
 # ---- 前端构建 ----
-FROM node:22-alpine AS web
+FROM ${NODE_IMAGE} AS web
 WORKDIR /app/web
 COPY web/package.json web/package-lock.json ./
 # 国内网络可传 --build-arg NPM_REGISTRY=https://registry.npmmirror.com
@@ -10,7 +15,7 @@ COPY web/ ./
 RUN npm run build
 
 # ---- Go 构建 ----
-FROM golang:1.23-alpine AS server
+FROM ${GO_IMAGE} AS server
 WORKDIR /app/server
 COPY server/go.mod ./
 RUN go mod download
@@ -18,7 +23,7 @@ COPY server/ ./
 RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o /out/site .
 
 # ---- 运行 ----
-FROM alpine:3.20
+FROM ${RUNTIME_IMAGE}
 RUN apk add --no-cache ca-certificates tzdata \
  && adduser -D -u 10001 site \
  && mkdir -p /app /data \

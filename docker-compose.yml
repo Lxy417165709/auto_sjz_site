@@ -5,6 +5,9 @@ services:
       dockerfile: Dockerfile
       args:
         NPM_REGISTRY: "${NPM_REGISTRY:-}"
+        NODE_IMAGE: "${NODE_IMAGE:-node:22-alpine}"
+        GO_IMAGE: "${GO_IMAGE:-golang:1.23-alpine}"
+        RUNTIME_IMAGE: "${RUNTIME_IMAGE:-alpine:3.20}"
     image: auto_sjz_site:local
     container_name: auto_sjz_site
     restart: unless-stopped
