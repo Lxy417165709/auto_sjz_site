@@ -32,6 +32,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { title: '技术架构 - auto_sjz', description: 'Manager 根节点 + 子节点的树形部署、设备节点归属、授权验签链路、默认端口与技术栈。' },
   },
   {
+    path: '/console',
+    name: 'console',
+    component: () => import('@/pages/ConsolePage.vue'),
+    meta: { title: '管理台演示 - auto_sjz', description: '可交互的管理台示意：业务配置（设备、账号、模块）与业务状态（在线、执行、异常通知）。' },
+  },
+  {
     path: '/deploy',
     name: 'deploy',
     component: () => import('@/pages/DeployPage.vue'),

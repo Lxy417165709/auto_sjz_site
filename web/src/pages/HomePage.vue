@@ -73,6 +73,9 @@
               </div>
             </div>
             <p class="mt-3 text-[11px] text-slate-500">示意数据，不含真实设备与账号信息</p>
+            <router-link to="/console" class="mt-3 inline-flex items-center gap-1 text-[12px] font-medium text-accent-400 transition hover:text-accent-300">
+              打开可交互管理台演示 →
+            </router-link>
           </div>
         </div>
       </div>

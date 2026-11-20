@@ -76,8 +76,8 @@
         desc="告诉我们设备台数与每台账号数，我们按 3 元/号/月 给出月费，再讨论接入方式。"
         primary-label="算一下月费"
         primary-to="/pricing"
-        secondary-label="联系与试用"
-        secondary-to="/contact"
+        secondary-label="看看管理台"
+        secondary-to="/console"
       />
     </div>
   </div>

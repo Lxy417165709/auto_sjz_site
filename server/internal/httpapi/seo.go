@@ -19,7 +19,7 @@ func (s *Server) handleSitemap(w http.ResponseWriter, r *http.Request) {
 	site, _, _, _, loaded := s.store.Snapshot()
 	lastmod := loaded.UTC().Format("2006-01-02")
 
-	routes := map[string]bool{"/": true, "/deploy": true, "/contact": true}
+	routes := map[string]bool{"/": true, "/deploy": true, "/contact": true, "/console": true}
 	for _, item := range site.Nav {
 		href := strings.TrimSpace(item.Href)
 		if href == "" || strings.HasPrefix(href, "http") || strings.HasPrefix(href, "#") {
@@ -52,7 +52,7 @@ func (s *Server) handleSitemap(w http.ResponseWriter, r *http.Request) {
 		switch route {
 		case "/":
 			priority = "1.0"
-		case "/pricing", "/deploy", "/start":
+		case "/pricing", "/deploy", "/start", "/console":
 			priority = "0.8"
 		}
 		fmt.Fprintf(&b, "  <url><loc>%s%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>\n",

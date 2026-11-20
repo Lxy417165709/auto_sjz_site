@@ -82,7 +82,7 @@ const fallbackNav: NavItem[] = [
 
 const nav = computed<NavItem[]>(() => siteState.data?.site.nav ?? fallbackNav)
 const cta = computed<LinkItem>(() => siteState.data?.site.cta ?? { label: '登录 / 购买', href: '' })
-const secondary = computed<LinkItem>(() => siteState.data?.site.secondaryCta ?? { label: '接入咨询', href: '/contact' })
+const secondary = computed<LinkItem>(() => siteState.data?.site.secondaryCta ?? { label: '界面演示', href: '/console' })
 const managerLink = computed(() => managerEntry())
 
 watch(() => route.fullPath, () => { open.value = false })
