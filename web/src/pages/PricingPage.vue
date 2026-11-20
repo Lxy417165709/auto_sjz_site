@@ -81,7 +81,7 @@
           </aside>
         </section>
 
-        <section class="rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] px-5 py-10 sm:px-9">
+        <section class="rounded-3xl border border-[#e7e5e2] bg-[#f7f6f3] px-5 py-10 sm:px-9">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p class="eyebrow">授权包含</p>

@@ -63,7 +63,7 @@
       </form>
 
       <aside class="space-y-4">
-        <div class="rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] p-6">
+        <div class="rounded-3xl border border-[#e7e5e2] bg-[#f7f6f3] p-6">
           <p class="eyebrow">联系方式</p>
           <dl class="mt-4 space-y-4 text-sm">
             <div>

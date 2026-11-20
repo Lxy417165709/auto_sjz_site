@@ -10,7 +10,7 @@
   }
 
   body {
-    @apply bg-[#fffaf6] text-slate-800;
+    @apply bg-[#fafaf9] text-[#26262c];
   }
 
   ::selection {
@@ -24,51 +24,55 @@
   }
 
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600;
+    @apply text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600;
   }
 
   .h1 {
-    @apply text-[30px] leading-[1.15] font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-[44px];
+    @apply text-[34px] leading-[1.08] font-semibold tracking-[-0.035em] text-[#0a0a0c] sm:text-[44px] lg:text-[54px];
   }
 
   .h2 {
-    @apply text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl;
+    @apply text-[26px] font-semibold tracking-[-0.025em] text-[#0a0a0c] sm:text-[34px];
   }
 
   .lead {
-    @apply text-[15px] leading-7 text-slate-600 sm:text-base;
+    @apply text-[15px] leading-7 text-[#5c5c63] sm:text-base;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-[0_8px_24px_-10px_rgba(255,90,31,0.65)] transition hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 transition hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#dedcd7] bg-white px-5 py-2.5 text-sm font-medium text-[#17171b] transition hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200;
   }
 
   .btn-dark {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur transition hover:border-white/40 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white backdrop-blur transition hover:border-white/35 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+  }
+
+  .btn-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 transition hover:bg-[#fff4ed] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60;
   }
 
   .card {
-    @apply rounded-2xl border border-slate-200/80 bg-white p-6 shadow-card;
+    @apply rounded-2xl border border-[#e7e5e2] bg-white p-6 shadow-card;
   }
 
   .tag {
-    @apply inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600;
+    @apply inline-flex items-center rounded-full border border-[#e7e5e2] bg-[#f7f6f3] px-2.5 py-1 text-[11px] font-medium text-[#5c5c63];
   }
 
   .field {
-    @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-2 focus:ring-brand-100;
+    @apply w-full rounded-xl border border-[#dedcd7] bg-white px-3.5 py-2.5 text-sm text-[#17171b] outline-none transition placeholder:text-[#9a9aa2] focus:border-brand-400 focus:ring-2 focus:ring-brand-100;
   }
 
   .nav-link {
-    @apply rounded-full px-3 py-1.5 text-sm text-slate-600 transition hover:bg-[#fff5ef] hover:text-brand-700;
+    @apply rounded-full px-3 py-1.5 text-sm text-white/55 transition hover:bg-white/[0.06] hover:text-white;
   }
 
   .nav-link-active {
-    @apply bg-[#fff1e9] text-brand-700;
+    @apply bg-white/[0.08] text-white;
   }
 
   .prose-doc {

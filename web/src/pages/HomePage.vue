@@ -1,173 +1,230 @@
 <template>
   <div>
-    <section class="relative overflow-hidden bg-ink-900 text-white">
-      <div class="grid-pattern pointer-events-none absolute inset-0 opacity-70" aria-hidden="true"></div>
-      <div class="pointer-events-none absolute -left-32 top-10 h-72 w-72 rounded-full bg-brand-600/30 blur-3xl" aria-hidden="true"></div>
-      <div class="pointer-events-none absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-accent-500/20 blur-3xl" aria-hidden="true"></div>
+    <!-- Hero -->
+    <section class="hero-bg relative overflow-hidden text-white">
+      <div class="hero-beam hero-beam-a" aria-hidden="true"></div>
+      <div class="hero-beam hero-beam-b" aria-hidden="true"></div>
+      <div class="hero-flare" aria-hidden="true"></div>
 
-      <div class="wrap relative grid gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
-        <div>
-          <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-400">三角洲业务 · 按号收费</p>
-          <h1 class="mt-4 text-[32px] leading-[1.12] font-semibold tracking-tight sm:text-[42px] lg:text-[48px]">
-            一个号 3 元/月，<br />
-            设备不再按台收费
-          </h1>
-          <p class="mt-5 max-w-xl text-[15px] leading-7 text-slate-300">
-            炎火为三角洲业务提供一套管理中台，统一管住设备与账号：按账号结算、批量下发配置、异常自动通知。设备多少不额外收钱，账号增减才计费。
-          </p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <router-link to="/start" class="btn-primary px-6">查看接入流程</router-link>
-            <router-link to="/pricing" class="btn-dark px-6">查看按号收费</router-link>
-          </div>
-          <dl class="mt-10 grid max-w-lg grid-cols-2 gap-x-8 gap-y-4 border-t border-white/10 pt-6 text-sm">
-            <div>
-              <dt class="text-slate-400">统一单价</dt>
-              <dd class="mt-1 font-medium text-white">3 元 / 号 / 月</dd>
-            </div>
-            <div>
-              <dt class="text-slate-400">设备费用</dt>
-              <dd class="mt-1 font-medium text-white">不计费</dd>
-            </div>
-            <div>
-              <dt class="text-slate-400">管理方式</dt>
-              <dd class="mt-1 font-medium text-white">中台批量管理</dd>
-            </div>
-            <div>
-              <dt class="text-slate-400">异常提醒</dt>
-              <dd class="mt-1 font-medium text-white">监控通知</dd>
-            </div>
-          </dl>
+      <div class="wrap relative pt-16 text-center sm:pt-20 lg:pt-24">
+        <div class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] tracking-[0.14em] text-white/65 backdrop-blur">
+          <span class="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_12px_rgba(255,122,61,0.9)]"></span>
+          三角洲业务自动化 · 按号收费
         </div>
 
-        <div class="relative">
-          <div class="rounded-2xl border border-white/10 bg-ink-800/80 p-5 shadow-2xl backdrop-blur">
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-medium text-white">管理台 · 设备概览</span>
-              <span class="rounded-full border border-white/15 px-2 py-0.5 text-[10px] text-slate-400">示意</span>
+        <h1 class="mx-auto mt-7 max-w-5xl text-[38px] font-semibold leading-[1.04] tracking-[-0.045em] sm:text-[54px] lg:text-[68px]">
+          设备不再按台收费<br />
+          <span class="hero-title-fire">一个号 3 元 / 月</span>
+        </h1>
+
+        <p class="mx-auto mt-6 max-w-[640px] text-[14px] leading-8 text-white/55 sm:text-[15px]">
+          炎火为三角洲业务提供一套管理中台，统一管住设备与账号：按账号结算、批量下发配置、异常自动通知。设备多少不额外收钱，账号增减才计费。
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <router-link to="/start" class="btn-primary h-11 px-6 text-[15px]">查看接入流程</router-link>
+          <router-link to="/console" class="btn-dark h-11 px-5 text-[15px]">打开管理台演示 →</router-link>
+        </div>
+
+        <div class="mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-mono text-[11px] tracking-wide text-white/35">
+          <span>¥3 / 号 / 月</span>
+          <span class="hidden h-px w-4 bg-white/15 sm:block"></span>
+          <span>设备费 ¥0</span>
+          <span class="hidden h-px w-4 bg-white/15 sm:block"></span>
+          <span>私有化部署</span>
+        </div>
+      </div>
+
+      <div class="wrap relative pb-2 pt-12 sm:pt-16">
+        <div class="relative mx-auto max-w-[1040px]">
+          <div class="pointer-events-none absolute inset-x-16 -bottom-6 h-20 rounded-full bg-brand-500/30 blur-3xl" aria-hidden="true"></div>
+          <div class="relative overflow-hidden rounded-[18px] border border-white/[0.12] bg-[#131317] shadow-[0_40px_100px_-36px_rgba(0,0,0,0.9)]">
+            <div class="flex h-10 items-center justify-between border-b border-white/10 px-4">
+              <div class="flex items-center gap-1.5" aria-hidden="true">
+                <span class="h-2 w-2 rounded-full bg-white/20"></span>
+                <span class="h-2 w-2 rounded-full bg-white/15"></span>
+                <span class="h-2 w-2 rounded-full bg-white/10"></span>
+              </div>
+              <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-white/30">Manager / 业务状态</p>
+              <span class="inline-flex items-center gap-1.5 text-[10px] text-white/40">
+                <span class="h-1.5 w-1.5 rounded-full bg-accent-400"></span>
+                演示数据
+              </span>
             </div>
-            <div class="mt-4 grid grid-cols-2 gap-3">
-              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p class="text-[11px] text-slate-400">在线设备</p>
-                <p class="mt-1 font-mono text-xl text-white">12 / 12</p>
-              </div>
-              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p class="text-[11px] text-slate-400">账号实例</p>
-                <p class="mt-1 font-mono text-xl text-white">60</p>
-              </div>
-              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p class="text-[11px] text-slate-400">本月账单</p>
-                <p class="mt-1 font-mono text-xl text-accent-400">¥180</p>
-              </div>
-              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                <p class="text-[11px] text-slate-400">待处理通知</p>
-                <p class="mt-1 font-mono text-xl text-white">2</p>
-              </div>
-            </div>
-            <div class="mt-3 rounded-xl border border-white/10 bg-white/5 p-4">
-              <div class="flex items-center justify-between text-[11px] text-slate-400">
-                <span>授权周期</span>
-                <span class="font-mono text-slate-300">到期 2026-12-31</span>
-              </div>
-              <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
-                <div class="h-full w-[68%] rounded-full bg-accent-400"></div>
-              </div>
-            </div>
-            <p class="mt-3 text-[11px] text-slate-500">示意数据，不含真实设备与账号信息</p>
-            <router-link to="/console" class="mt-3 inline-flex items-center gap-1 text-[12px] font-medium text-accent-400 transition hover:text-accent-300">
-              打开可交互管理台演示 →
-            </router-link>
+            <img
+              src="/console-preview.png"
+              alt="炎火 Manager 业务状态界面，按设备聚合账号数据"
+              class="block w-full"
+              width="2272"
+              height="1120"
+            />
+          </div>
+          <div class="mt-5 flex flex-col items-center justify-between gap-2 text-[11px] text-white/30 sm:flex-row">
+            <p>真实管理台界面，账号与数值为演示数据</p>
+            <router-link to="/console" class="text-brand-300 transition hover:text-brand-200">打开可交互演示 →</router-link>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="wrap">
-      <section class="py-16 sm:py-20">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p class="eyebrow">我们的特点</p>
-            <h2 class="h2 mt-2">不按设备卖容量，按号卖服务</h2>
-          </div>
-          <router-link to="/features" class="text-sm font-medium text-brand-600 hover:text-brand-700">查看业务能力 →</router-link>
+    <!-- Stats -->
+    <section class="border-b border-[#e7e5e2] bg-white">
+      <div class="wrap grid grid-cols-2 sm:grid-cols-4">
+        <div
+          v-for="(stat, index) in stats"
+          :key="stat.label"
+          class="py-8 sm:py-9"
+          :class="[
+            index > 0 ? 'sm:border-l sm:border-[#e7e5e2] sm:pl-8' : '',
+            index % 2 === 1 ? 'border-l border-[#e7e5e2] pl-5 sm:pl-8' : '',
+          ]"
+        >
+          <p class="text-[28px] font-semibold leading-none tracking-[-0.04em] text-[#0a0a0c] sm:text-[34px]">{{ stat.value }}</p>
+          <p class="mt-2 text-[12px] text-[#77777f]">{{ stat.label }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="bg-[#fafaf9] py-20 sm:py-28">
+      <div class="wrap">
+        <div class="max-w-3xl">
+          <p class="eyebrow">业务能力</p>
+          <h2 class="mt-3 text-[32px] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0a0c] sm:text-[44px]">
+            管设备只是手段，<br class="hidden sm:block" />
+            <span class="text-brand-600">管住号才是目的</span>
+          </h2>
+          <p class="mt-5 max-w-xl text-[15px] leading-7 text-[#5c5c63]">
+            计费、配置、授权都围绕账号展开。设备只是执行载体，不再决定你每个月付多少钱。
+          </p>
         </div>
 
-        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <article v-for="item in highlights" :key="item.title" class="card">
-            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-              <span v-html="item.icon" class="[&>svg]:h-[18px] [&>svg]:w-[18px]"></span>
+        <div class="mt-12 grid gap-4 lg:grid-cols-6">
+          <article class="relative overflow-hidden rounded-[24px] bg-[#0a0a0c] p-8 text-white lg:col-span-4 sm:p-10">
+            <div class="pointer-events-none absolute -right-24 -top-32 h-[360px] w-[360px] rounded-full bg-brand-500/20 blur-3xl" aria-hidden="true"></div>
+            <div class="relative">
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-400">按号计费</p>
+              <h3 class="mt-4 max-w-xl text-[26px] font-semibold leading-[1.15] tracking-[-0.035em] sm:text-[34px]">设备不收费，账号才计费</h3>
+              <p class="mt-4 max-w-lg text-[14px] leading-7 text-white/50">一台设备挂 5 个号，就是 5 份授权。加设备不加钱，账号加一个算一个，减一个省一个。</p>
+              <div class="mt-9 flex items-end gap-2">
+                <span class="font-mono text-[54px] font-medium leading-none tracking-[-0.06em]">¥3</span>
+                <span class="mb-1 text-[13px] text-white/40">/ 号 / 月</span>
+              </div>
+              <div class="mt-8 grid grid-cols-1 gap-2 border-t border-white/10 pt-5 text-[11px] text-white/45 sm:grid-cols-3">
+                <div class="flex items-center justify-between gap-2 sm:block"><span>设备 10 台</span><span class="ml-2 font-mono text-white/80 sm:ml-0 sm:mt-1 sm:block">¥0</span></div>
+                <div class="flex items-center justify-between gap-2 sm:block"><span>账号 50 个</span><span class="ml-2 font-mono text-white/80 sm:ml-0 sm:mt-1 sm:block">¥150</span></div>
+                <div class="flex items-center justify-between gap-2 sm:block"><span>月费合计</span><span class="ml-2 font-mono text-accent-400 sm:ml-0 sm:mt-1 sm:block">¥150</span></div>
+              </div>
             </div>
-            <h3 class="mt-4 text-[15px] font-semibold text-slate-900">{{ item.title }}</h3>
-            <p class="mt-2 text-[13px] leading-6 text-slate-500">{{ item.desc }}</p>
+          </article>
+
+          <article class="rounded-[24px] border border-[#e7e5e2] bg-white p-7 lg:col-span-2">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a9aa2]">统一配置</p>
+            <h3 class="mt-3 text-[21px] font-semibold tracking-[-0.02em] text-[#0a0a0c]">只维护一份配置</h3>
+            <p class="mt-2 text-[13px] leading-6 text-[#6a6a72]">变更在中台改一次，批量下发到设备。离线设备只读，恢复后自动对齐。</p>
+            <div class="mt-7 rounded-xl border border-[#e7e5e2] bg-[#f7f6f3] p-3 font-mono text-[11px]">
+              <div class="flex items-center justify-between border-b border-[#e7e5e2] pb-2"><span class="text-[#8b8b93]">采集频率</span><span class="text-[#17171b]">30s</span></div>
+              <div class="flex items-center justify-between border-b border-[#e7e5e2] py-2"><span class="text-[#8b8b93]">生产队列</span><span class="text-[#17171b]">3 / 3</span></div>
+              <div class="flex items-center justify-between pt-2"><span class="text-[#8b8b93]">同步状态</span><span class="text-brand-600">已下发</span></div>
+            </div>
+          </article>
+
+          <article v-for="item in capabilities" :key="item.title" class="rounded-[24px] border border-[#e7e5e2] bg-white p-7 lg:col-span-2">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <span v-html="item.icon" class="[&>svg]:h-5 [&>svg]:w-5"></span>
+            </div>
+            <h3 class="mt-5 text-[17px] font-semibold tracking-[-0.02em] text-[#0a0a0c]">{{ item.title }}</h3>
+            <p class="mt-2 text-[13px] leading-6 text-[#6a6a72]">{{ item.desc }}</p>
           </article>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="mt-16 pb-16">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <!-- Steps -->
+    <section class="border-y border-[#e7e5e2] bg-[#f5f4f1] py-20 sm:py-24">
+      <div class="wrap">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p class="eyebrow">接入流程</p>
-            <h2 class="h2 mt-2">五步接入，双方各做什么</h2>
+            <h2 class="mt-3 text-[32px] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0a0c] sm:text-[42px]">从申请到运行，五步走完</h2>
           </div>
-          <router-link to="/start" class="text-sm font-medium text-brand-600 hover:text-brand-700">看五步接入流程 →</router-link>
+          <router-link to="/start" class="text-sm font-medium text-brand-600 transition hover:text-brand-700">看完整接力图 →</router-link>
         </div>
-        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          <router-link v-for="step in startSteps" :key="step.no" to="/start" class="card group transition hover:border-brand-200">
-            <div class="flex items-center justify-between gap-2">
-              <span class="font-mono text-xs text-brand-600">{{ step.no }}</span>
-              <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] text-slate-500">{{ step.owner }}</span>
+
+        <div class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
+          <router-link v-for="step in startSteps" :key="step.no" to="/start" class="group relative border-t border-[#d7d4ce] pt-6">
+            <span class="absolute -top-[5px] left-0 h-2.5 w-2.5 rounded-full" :class="step.owner === '我方' ? 'bg-accent-500' : 'bg-brand-500'"></span>
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[11px] text-[#9a9aa2]">{{ step.no }}</span>
+              <span class="text-[10px] tracking-wide" :class="step.owner === '我方' ? 'text-[#a46a00]' : 'text-brand-600'">{{ step.owner }}</span>
             </div>
-            <h3 class="mt-3 text-[14px] font-semibold text-slate-900">{{ step.title }}</h3>
-            <p class="mt-2 text-[12px] leading-5 text-slate-500">{{ step.desc }}</p>
+            <h3 class="mt-5 text-[16px] font-semibold tracking-[-0.01em] text-[#17171b] group-hover:text-brand-600">{{ step.title }}</h3>
+            <p class="mt-2 text-[12px] leading-6 text-[#77777f]">{{ step.desc }}</p>
           </router-link>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] px-5 py-10 sm:px-10">
-        <div class="grid gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
-          <div>
-            <p class="eyebrow">算一笔账</p>
-            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">10 台设备、每台 5 个号，一个月 150 元</h2>
-            <p class="mt-3 text-sm leading-7 text-slate-600">
-              按号收费的好处是账目简单：设备数量不影响费用，账号加一个算一个，减一个省一个。传统按设备收费，设备闲着也要付整套的钱。
-            </p>
-            <div class="mt-6 rounded-2xl bg-ink-900 px-5 py-5 text-white">
-              <p class="font-mono text-[12px] text-slate-400">10 台 × 5 个号</p>
-              <p class="mt-2 font-mono text-lg">
-                50 个号 <span class="text-slate-500">×</span> 3 元 <span class="text-slate-500">=</span>
-                <span class="text-accent-400">150 元 / 月</span>
-              </p>
+    <!-- Pricing -->
+    <section class="bg-white py-20 sm:py-28">
+      <div class="wrap">
+        <div class="overflow-hidden rounded-[28px] border border-[#e7e5e2] bg-white shadow-[0_30px_80px_-50px_rgba(10,10,12,0.4)] lg:grid lg:grid-cols-[1.08fr_0.92fr]">
+          <div class="relative overflow-hidden bg-[#0a0a0c] p-8 text-white sm:p-12">
+            <div class="pointer-events-none absolute -bottom-40 -left-20 h-[420px] w-[420px] rounded-full bg-brand-500/20 blur-3xl" aria-hidden="true"></div>
+            <div class="relative">
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-400">算一笔账</p>
+              <h2 class="mt-4 max-w-md text-[26px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[34px]">10 台设备、每台 5 个号，一个月 150 元</h2>
+              <p class="mt-12 font-mono text-[11px] tracking-wide text-white/30">10 台 × 5 个号 × ¥3</p>
+              <div class="mt-3 flex items-end gap-2">
+                <span class="text-[60px] font-semibold leading-none tracking-[-0.05em] sm:text-[72px]">150</span>
+                <span class="mb-2 text-[13px] text-white/40">元 / 月</span>
+              </div>
+              <div class="mt-8 space-y-2 border-t border-white/10 pt-5 text-[12px] text-white/45">
+                <div class="flex items-center justify-between"><span>设备费</span><span class="font-mono text-white/80">0 元</span></div>
+                <div class="flex items-center justify-between"><span>账号费</span><span class="font-mono text-white/80">150 元</span></div>
+                <div class="flex items-center justify-between"><span>设备闲置</span><span class="text-accent-400">不影响费用</span></div>
+              </div>
+              <router-link to="/pricing" class="mt-8 inline-flex items-center gap-1 text-sm font-medium text-brand-300 transition hover:text-brand-200">用计算器算你的月费 →</router-link>
             </div>
-            <router-link to="/pricing" class="mt-6 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700">
-              用计算器算你的月费 →
-            </router-link>
           </div>
 
-          <div class="rounded-2xl border border-slate-200 bg-white p-6">
-            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">谁适合用</p>
-            <ul class="mt-4 space-y-4">
-              <li v-for="scene in scenes" :key="scene.title">
-                <p class="text-sm font-medium text-slate-900">{{ scene.title }}</p>
-                <p class="mt-1 text-[13px] leading-6 text-slate-500">{{ scene.desc }}</p>
+          <div class="p-8 sm:p-12">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a9aa2]">适用场景</p>
+            <ul class="mt-6 divide-y divide-[#e7e5e2]">
+              <li v-for="scene in scenes" :key="scene.title" class="py-5 first:pt-0 last:pb-0">
+                <p class="text-[15px] font-semibold tracking-[-0.01em] text-[#0a0a0c]">{{ scene.title }}</p>
+                <p class="mt-1.5 text-[13px] leading-6 text-[#6a6a72]">{{ scene.desc }}</p>
               </li>
             </ul>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="mt-20 grid gap-4 rounded-3xl border border-slate-200 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
+    <!-- Engineering -->
+    <section class="border-t border-[#e7e5e2] bg-[#fafaf9] py-14">
+      <div class="wrap grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <p class="eyebrow">给技术同学</p>
-          <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">架构、端口、授权链路、部署形态</h2>
-          <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a9aa2]">For engineers</p>
+          <h2 class="mt-3 text-[22px] font-semibold tracking-[-0.025em] text-[#0a0a0c]">架构、端口、授权链路、部署形态</h2>
+          <p class="mt-3 max-w-2xl text-[13px] leading-7 text-[#6a6a72]">
             设备如何找到 Manager、快照怎么落盘、授权如何本地验签、根节点与子节点怎么拆，这些内容集中在技术架构与部署接入里，不和业务介绍混在一起。
           </p>
+          <div class="mt-5 flex flex-wrap gap-2 font-mono text-[10px] text-[#77777f]">
+            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">Manager</span>
+            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">discovery</span>
+            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">Docker</span>
+            <span class="rounded-md border border-[#e7e5e2] bg-white px-2 py-1">license</span>
+          </div>
         </div>
         <div class="flex flex-wrap gap-3">
           <router-link to="/tech" class="btn-primary">进入技术架构</router-link>
           <router-link to="/deploy" class="btn-secondary">部署接入</router-link>
         </div>
-      </section>
+      </div>
+    </section>
 
+    <div class="wrap">
       <CtaBand
         title="先按 3 元/号/月 算，再决定规模"
         desc="告诉我们设备台数与每台账号数，我们给出对应的账号实例数、月费和部署建议。官网不承接下单，开通与续费在 Manager 完成。"
@@ -183,34 +240,26 @@
 <script setup lang="ts">
 import CtaBand from '@/components/CtaBand.vue'
 
-const highlights = [
+const stats = [
+  { value: '¥3', label: '每个账号 / 月' },
+  { value: '¥0', label: '设备授权费' },
+  { value: '4 类', label: '业务模块' },
+  { value: '1 套', label: '管理中台' },
+]
+
+const capabilities = [
   {
-    title: '按号收费，设备不计费',
-    desc: '一个号 3 元/月，一台设备 5 个号就是 15 元/月。加设备不加钱，账号增减直接影响成本。',
-    icon: '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5v15" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 6.5h7a2 2 0 0 1 0 4H7a2 2 0 0 0 0 4h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-  },
-  {
-    title: '一个中台，批量管理',
-    desc: '设备、分组、账号与配置集中在一个后台，批量下发、集中查看，不用逐台登录操作。',
-    icon: '<svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="3" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 17h8M10 14v3M6.5 8.5h4M6.5 11h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-  },
-  {
-    title: '监控通知，异常不漏',
+    title: '异常先通知，不等你发现',
     desc: '设备在线状态、执行异常、授权到期集中监控，触发后按配置的通知渠道提醒。',
     icon: '<svg viewBox="0 0 20 20" fill="none"><path d="M6 8a4 4 0 0 1 8 0c0 3 1 4 1.5 4.5H4.5C5 12 6 11 6 8Z" stroke="currentColor" stroke-width="1.5"/><path d="M8.5 15a1.5 1.5 0 0 0 3 0" stroke="currentColor" stroke-width="1.5"/></svg>',
   },
   {
-    title: '配置统一，不用逐台改',
-    desc: '配置只在中台维护，变更批量下发到设备。设备离线只读，恢复后自动对齐最新配置。',
-    icon: '<svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 6h3.5A1.5 1.5 0 0 1 14 7.5V11" stroke="currentColor" stroke-width="1.5"/></svg>',
-  },
-  {
-    title: '到期不删号、不登出',
-    desc: '授权到期只停执行，账号与设备配置原样保留，续费后接着跑，不用重新登录。',
+    title: '到期不删号，也不登出',
+    desc: '授权到期只停执行，账号与设备配置原样保留。续费后接着跑，不用重建环境。',
     icon: '<svg viewBox="0 0 20 20" fill="none"><rect x="4" y="8" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 8V6a3 3 0 1 1 6 0v2M10 12v2" stroke="currentColor" stroke-width="1.5"/></svg>',
   },
   {
-    title: '独立部署，数据自持',
+    title: '私有化部署，数据自持',
     desc: 'Docker 私有化部署，Manager 与 discovery 可以分开，账号与业务数据留在自己的机器上。',
     icon: '<svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="14" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><circle cx="6.5" cy="6.5" r="1" fill="currentColor"/><circle cx="6.5" cy="13.5" r="1" fill="currentColor"/></svg>',
   },
@@ -230,3 +279,51 @@ const scenes = [
   { title: '需要长期稳定执行', desc: '到期不删号、离线按同一时间失效，续费即恢复，不用重建环境。' },
 ]
 </script>
+
+<style scoped>
+.hero-bg {
+  background:
+    radial-gradient(70% 48% at 50% 104%, rgba(255, 90, 31, 0.3) 0%, rgba(255, 90, 31, 0) 68%),
+    radial-gradient(38% 32% at 83% 8%, rgba(255, 200, 87, 0.09) 0%, rgba(255, 200, 87, 0) 72%),
+    #08080a;
+}
+
+.hero-beam {
+  position: absolute;
+  top: -28%;
+  height: 150%;
+  width: 34%;
+  background: linear-gradient(180deg, rgba(255, 90, 31, 0) 0%, rgba(255, 90, 31, 0.14) 45%, rgba(255, 90, 31, 0) 100%);
+  filter: blur(64px);
+  transform: rotate(20deg);
+  pointer-events: none;
+}
+.hero-beam-a {
+  left: 8%;
+}
+.hero-beam-b {
+  right: 4%;
+  width: 26%;
+  background: linear-gradient(180deg, rgba(255, 200, 87, 0) 0%, rgba(255, 200, 87, 0.1) 48%, rgba(255, 200, 87, 0) 100%);
+  transform: rotate(-20deg);
+}
+
+.hero-flare {
+  position: absolute;
+  left: 50%;
+  bottom: -20%;
+  width: 120%;
+  height: 70%;
+  transform: translateX(-50%);
+  background: radial-gradient(45% 50% at 50% 50%, rgba(255, 122, 61, 0.28) 0%, rgba(255, 90, 31, 0) 70%);
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.hero-title-fire {
+  background: linear-gradient(100deg, #ff9a5a 0%, #ffc857 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+</style>

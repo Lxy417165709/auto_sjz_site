@@ -31,7 +31,7 @@
       </section>
 
       <section class="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <div class="rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] p-7">
+        <div class="rounded-3xl border border-[#e7e5e2] bg-[#f7f6f3] p-7">
           <p class="eyebrow">端口规划</p>
           <h2 class="mt-2 text-xl font-semibold text-slate-900">默认端口一览</h2>
           <table class="mt-4 w-full text-left text-sm">

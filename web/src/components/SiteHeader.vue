@@ -1,7 +1,7 @@
 <template>
-  <header class="sticky top-0 z-40 border-b border-[#f0dfd3] bg-white/85 backdrop-blur">
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-[#08080a]/95 backdrop-blur-xl">
     <div class="wrap flex h-16 items-center justify-between gap-4">
-      <BrandMark />
+      <BrandMark light />
 
       <nav class="hidden items-center gap-0.5 lg:flex" aria-label="主导航">
         <router-link
@@ -15,8 +15,10 @@
         </router-link>
       </nav>
 
-      <div class="hidden items-center gap-3 lg:flex">
-        <router-link :to="secondary.href" class="btn-secondary">{{ secondary.label }}</router-link>
+      <div class="hidden items-center gap-2 lg:flex">
+        <router-link :to="secondary.href" class="rounded-full px-4 py-2 text-sm text-white/55 transition hover:bg-white/[0.06] hover:text-white">
+          {{ secondary.label }}
+        </router-link>
         <a :href="managerLink" class="btn-primary" rel="noopener">
           {{ cta.label }}
           <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -26,7 +28,7 @@
       </div>
 
       <button
-        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#f0dfd3] text-slate-700 lg:hidden"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 lg:hidden"
         :aria-expanded="open"
         aria-controls="mobile-nav"
         aria-label="打开菜单"
@@ -41,19 +43,19 @@
       </button>
     </div>
 
-    <div v-if="open" id="mobile-nav" class="border-t border-[#f0dfd3] bg-white lg:hidden">
+    <div v-if="open" id="mobile-nav" class="border-t border-white/10 bg-[#08080a] lg:hidden">
       <div class="wrap flex flex-col gap-1 py-4">
         <router-link
           v-for="item in nav"
           :key="item.href"
           :to="item.href"
-          class="rounded-xl px-3 py-2.5 text-sm text-slate-700 hover:bg-[#fff5ef]"
-          active-class="bg-[#fff1e9] text-brand-700"
+          class="rounded-xl px-3 py-2.5 text-sm text-white/65 hover:bg-white/[0.06]"
+          active-class="bg-white/[0.08] text-white"
         >
           {{ item.label }}
         </router-link>
-        <div class="mt-2 flex flex-col gap-2 border-t border-[#f2e3d8] pt-3">
-          <router-link :to="secondary.href" class="btn-secondary w-full">{{ secondary.label }}</router-link>
+        <div class="mt-2 flex flex-col gap-2 border-t border-white/10 pt-3">
+          <router-link :to="secondary.href" class="btn-dark w-full">{{ secondary.label }}</router-link>
           <a :href="managerLink" class="btn-primary w-full" rel="noopener">{{ cta.label }}</a>
         </div>
       </div>

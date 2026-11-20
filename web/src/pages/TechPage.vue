@@ -28,7 +28,7 @@
         <ManagerTree class="mt-6" />
       </section>
 
-      <section class="rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] px-5 py-10 sm:px-9">
+      <section class="rounded-3xl border border-[#e7e5e2] bg-[#f7f6f3] px-5 py-10 sm:px-9">
         <p class="eyebrow">模块职责</p>
         <h2 class="h2 mt-2">谁负责什么，排障时先定位环节</h2>
         <div class="mt-6 overflow-x-auto">
@@ -93,7 +93,7 @@
         </div>
       </section>
 
-      <section class="mt-12 rounded-3xl border border-[#f0dfd3] bg-[#fffaf4] p-7 sm:p-9">
+      <section class="mt-12 rounded-3xl border border-[#e7e5e2] bg-[#f7f6f3] p-7 sm:p-9">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p class="eyebrow">继续往下看</p>
