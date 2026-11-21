@@ -70,11 +70,20 @@ export interface DocStep {
   items: DocStepItem[]
 }
 
+export interface DocFigure {
+  src: string
+  alt: string
+  caption: string
+  width: number
+  height: number
+}
+
 export interface DocSection {
   heading: string
   paragraphs: string[]
   bullets: string[]
   steps?: DocStep[]
+  figures?: DocFigure[]
 }
 
 export interface Doc {

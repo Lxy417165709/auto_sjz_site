@@ -95,6 +95,14 @@
                     </div>
                   </li>
                 </ol>
+                <div v-if="section.figures?.length" class="doc-figures">
+                  <figure v-for="fig in section.figures" :key="fig.src" class="doc-figure">
+                    <a :href="fig.src" target="_blank" rel="noopener" :title="fig.alt">
+                      <img :src="fig.src" :alt="fig.alt" :width="fig.width" :height="fig.height" decoding="async" />
+                    </a>
+                    <figcaption>{{ fig.caption }}</figcaption>
+                  </figure>
+                </div>
               </div>
             </article>
           </section>
@@ -208,5 +216,39 @@ function reload() {
 }
 .doc-step-link:hover {
   text-decoration: underline;
+}
+.doc-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+  margin-top: 16px;
+}
+.doc-figure {
+  overflow: hidden;
+  border: 1px solid #dfe6f3;
+  border-radius: 14px;
+  background: #f8faff;
+}
+.doc-figure a {
+  display: block;
+  background: #edf2fa;
+}
+.doc-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.doc-figure figcaption {
+  border-top: 1px solid #e7edf8;
+  padding: 10px 12px 11px;
+  color: #5f6c82;
+  font-size: 12px;
+  line-height: 1.65;
+}
+@media (max-width: 640px) {
+  .doc-figures {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 </style>
