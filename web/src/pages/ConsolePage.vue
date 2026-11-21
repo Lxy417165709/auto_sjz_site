@@ -565,7 +565,7 @@
         <div class="modal-body">
           <label class="form-row"><span>设备</span>
             <select v-model="addForm.deviceId" class="form-control" @change="addForm.copyFrom = ''">
-              <option v-for="d in devices.filter((x) => x.approval === 'approved')" :key="d.id" :value="d.id">{{ d.name }} · {{ d.key }}</option>
+              <option v-for="d in devices.filter((x) => x.approval === 'approved')" :key="d.id" :value="d.id">{{ d.name === d.key ? d.name : `${d.name} · ${d.key}` }}</option>
             </select>
           </label>
           <div class="form-row"><span>类型</span>
@@ -828,7 +828,7 @@ function makeAccount(base: Omit<Account, 'modules' | 'produce'>, moduleKeys: Mod
 
 const devices = reactive<Device[]>([
   {
-    id: 'd1', key: 'my_device1', name: '门店A · 主机01', group: '门店 A', enabled: true, online: true, heartbeatSec: 8, approval: 'approved',
+    id: 'd1', key: 'my_device1', name: 'my_device1', group: '门店 A', enabled: true, online: true, heartbeatSec: 8, approval: 'approved',
     meta: { os: 'Android 14', model: '小米 14', version: 'v1.0.0(3f8a21c)', battery: 86, charging: true, temp: 31, memory: 62, disk: 71 },
     accounts: [
       makeAccount({ id: 'a1', deviceId: 'd1', type: 'QQ', account: '124578963', seq: 1, enabled: true, status: '运行中', charName: '林深', level: 62, rank: '钻石Ⅱ', havoc: 428.6, assets: 1286.3, ratio: 62, updated: '11-20 14:32', license: '有效', expire: '2026-12-05 18:00' }, ['profile', 'produce', 'sell', 'warehouse']),
@@ -837,7 +837,7 @@ const devices = reactive<Device[]>([
     ],
   },
   {
-    id: 'd2', key: 'my_device2', name: '门店A · 主机02', group: '门店 A', enabled: true, online: true, heartbeatSec: 34, approval: 'approved',
+    id: 'd2', key: 'my_device2', name: 'my_device2', group: '门店 A', enabled: true, online: true, heartbeatSec: 34, approval: 'approved',
     meta: { os: 'Android 13', model: 'Redmi K70', version: 'v1.0.0(3f8a21c)', battery: 72, charging: false, temp: 34, memory: 71, disk: 64 },
     accounts: [
       makeAccount({ id: 'b1', deviceId: 'd2', type: 'QQ', account: '741852963', seq: 1, enabled: true, status: '空闲', charName: '苏晚', level: 66, rank: '钻石Ⅰ', havoc: 501.2, assets: 1533.6, ratio: 70, updated: '11-20 14:31', license: '即将到期', expire: '2026-11-22 20:00' }, ['profile', 'produce', 'sell', 'warehouse']),
@@ -846,12 +846,12 @@ const devices = reactive<Device[]>([
     ],
   },
   {
-    id: 'd3', key: 'my_device3', name: '门店B · 主机03', group: '门店 B', enabled: true, online: false, heartbeatSec: 999, approval: 'pending',
+    id: 'd3', key: 'my_device3', name: 'my_device3', group: '门店 B', enabled: true, online: false, heartbeatSec: 999, approval: 'pending',
     meta: { os: 'Android 14', model: '一加 12', version: '待接入', battery: 0, charging: false, temp: 0, memory: 0, disk: 0 },
     accounts: [],
   },
   {
-    id: 'd4', key: 'my_device4', name: '门店B · 主机04', group: '门店 B', enabled: true, online: true, heartbeatSec: 12, approval: 'approved',
+    id: 'd4', key: 'my_device4', name: 'my_device4', group: '门店 B', enabled: true, online: true, heartbeatSec: 12, approval: 'approved',
     meta: { os: 'Android 14', model: '小米 14 Pro', version: 'v1.0.0(9b2ce71)', battery: 94, charging: true, temp: 29, memory: 54, disk: 58 },
     accounts: [
       makeAccount({ id: 'c1', deviceId: 'd4', type: 'QQ', account: '852741963', seq: 1, enabled: true, status: '运行中', charName: '顾北', level: 60, rank: '钻石Ⅲ', havoc: 402.1, assets: 1198.4, ratio: 58, updated: '11-20 14:33', license: '有效', expire: '2026-12-02 09:00' }, ['profile', 'produce', 'sell', 'warehouse']),
@@ -860,7 +860,7 @@ const devices = reactive<Device[]>([
     ],
   },
   {
-    id: 'd5', key: 'my_device5', name: '测试组 · 主机05', group: '测试组', enabled: true, online: false, heartbeatSec: 128, approval: 'approved',
+    id: 'd5', key: 'my_device5', name: 'my_device5', group: '测试组', enabled: true, online: false, heartbeatSec: 128, approval: 'approved',
     meta: { os: 'Android 13', model: '真我 GT5', version: 'v1.0.0(3f8a21c)', battery: 41, charging: false, temp: 36, memory: 78, disk: 83 },
     accounts: [
       makeAccount({ id: 'e1', deviceId: 'd5', type: 'QQ', account: '321654987', seq: 1, enabled: true, status: '运行中', charName: '许星河', level: 64, rank: '钻石Ⅱ', havoc: 455.8, assets: 1362.9, ratio: 66, updated: '11-20 14:05', license: '有效', expire: '2026-12-15 12:00' }, ['profile', 'produce', 'sell', 'warehouse']),
